@@ -55,9 +55,16 @@ tfr.pred <- tfr.predict(sim.dir = tfr.dir,
 
 tfr.pred <- get.tfr.prediction(tfr.dir)
 
+# Inspect results
+
+par(mfrow=c(1,1))
+tfr.trajectories.plot(tfr.pred, 
+                      country = country, 
+                      nr.traj = 40)
+
 # Export TFR trajectories 
 
-convert.tfr.trajectories(tfr.dir, n = 40, output.dir = "mytfrtrajs")
+# convert.tfr.trajectories(tfr.dir, n = 40, output.dir = "mytfrtrajs") # error
 
 # Obtain trajectories as a matrix -----------------------------------------
 

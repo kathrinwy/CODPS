@@ -41,6 +41,10 @@ adm0.pop <- adm0.pop %>%
                     ifelse(70 <= age & age < 78, "70-74",
                     ifelse(75 <= age & age < 80, "75-79",
                     ifelse(80 <= age           , "80+", NA))))))))))))))))))
+
+NERpopF.adm0 <- filter(adm0.pop, sex == "female")
+NERpopM.adm0 <- filter(adm0.pop, sex == "male")
+
 # Adm1
 
 adm1.pop     <- read_excel("ins-projections-adm1.xlsx")
@@ -66,7 +70,10 @@ adm1.pop <- adm1.pop %>%
                     ifelse(70 <= age & age < 75, "70-74",
                     ifelse(75 <= age & age < 80, "75-79",
                     ifelse(80 <= age           , "80+", NA))))))))))))))))))
-                                                                                                       
+
+NERpopF.adm1 <- filter(adm1.pop, sex == "female")
+NERpopM.adm1 <- filter(adm1.pop, sex == "male")
+
 # Adm2
 
 adm2.pop     <- read_excel("ins-projections-adm2.xlsx")
@@ -93,6 +100,9 @@ adm2.pop <- adm2.pop %>%
                     ifelse(75 <= age & age < 80, "75-79",
                     ifelse(80 <= age           , "80+", NA))))))))))))))))))
 
+NERpopF.adm2 <- filter(adm2.pop, sex == "female")
+NERpopM.adm2 <- filter(adm2.pop, sex == "male")
+
 # Adm3
 
 adm3.pop     <- read_excel("ins-projections-adm3.xlsx")
@@ -118,21 +128,36 @@ adm3.pop <- adm3.pop %>%
                     ifelse(75 <= age & age < 80, "75-79",
                     ifelse(80 <= age           , "80+", NA))))))))))))))))))
 
+NERpopF.adm3 <- filter(adm3.pop, sex == "female")
+NERpopM.adm3 <- filter(adm3.pop, sex == "male")
 
 # Verificaton of boundary changes beween fertility assumptions and --------
 # As the Niger DHS and Census both took place in 2012, boundaries do note change in between them
 
-
 # Export population data --------------------------------------------------
 
-write.csv(CAMpopF, 
-          "~/Documents/UNFPA/sabbatical/Puebla-course-materials/lab-sessions/ALAPworkshop/regdata/CAMpopF.csv", 
-          row.names = TRUE)
-write.csv(CAMpopM, 
-          "~/Documents/UNFPA/sabbatical/Puebla-course-materials/lab-sessions/ALAPworkshop/regdata/CAMpopM.csv", 
-          row.names = TRUE)
-popF0.file <- CAMpopF
-popM0.file <- CAMpopM
+write.csv(NERpopF.adm0, paste0(NER.output, "NERpopF.adm0.csv"), row.names = F)
+write.csv(NERpopM.adm0, paste0(NER.output, "NERpopM.adm0.csv"), row.names = F)
 
+write.csv(NERpopF.adm1, paste0(NER.output, "NERpopF.adm1.csv"), row.names = F)
+write.csv(NERpopM.adm1, paste0(NER.output, "NERpopM.adm1.csv"), row.names = F)
+
+write.csv(NERpopF.adm2, paste0(NER.output, "NERpopF.adm2.csv"), row.names = F)
+write.csv(NERpopM.adm2, paste0(NER.output, "NERpopM.adm2.csv"), row.names = F)
+
+write.csv(NERpopF.adm3, paste0(NER.output, "NERpopF.adm3.csv"), row.names = F)
+write.csv(NERpopM.adm3, paste0(NER.output, "NERpopM.adm3.csv"), row.names = F)
+
+popF0.adm0.file <- NERpopF.adm0
+popM0.adm0.file <- NERpopM.adm0
+
+popF0.adm1.file <- NERpopF.adm1
+popM0.adm1.file <- NERpopM.adm1
+
+popF0.adm2.file <- NERpopF.adm2
+popM0.adm2.file <- NERpopM.adm2
+
+popF0.adm3.file <- NERpopF.adm3
+popM0.adm3.file <- NERpopM.adm3
 
 
