@@ -9,22 +9,23 @@
 ## Maintainers: Kathrin Weny, Romesh Silva
 
 ##---------------------------
-##Estimation of the TFR model
+## Estimation of the TFR model
 ##---------------------------
 
-## Set a location on disk for TFR results:
+setwd(NER.output)
+
+# Set a location on disk for TFR results
 tfr.dir <- "TFRsimulation"
 
-## Run Phase II MCMCs. Here we chose a toy simulation
-## with iterations to save computation time (about 40sec)
+# Run Phase II MCMCs. Here we chose a toy simulation
 
-#run.tfr.mcmc
+# run.tfr.mcmc
 m2 <- run.tfr.mcmc(output.dir = tfr.dir, 
                    iter = 100,#0,                                ##iter=62000
                    nr.chains = 2,
-                   wpp.year = 2015, 
+                   wpp.year = 2017, 
                    start.year = 1950, 
-                   present.year = 2005,
+                   present.year = 2018,
                    replace.output = TRUE)
 
 ## m2 is an object containing all the Phase-II MCMC meta 
@@ -44,7 +45,7 @@ tfr.partraces.plot(m2)
 ## View parameter traces for country-specific 
 ## parameters for a chosen country.
 
-country <- "Cameroon"
+country <- "Niger"
 tfr.partraces.cs.plot(m2, country = country)
 
 ## Plot its double logistic curves.
@@ -224,6 +225,5 @@ get.countries.table(m3)
 #                   index = TRUE)
 
 # Obtain trajectories as a matrix
-trajs <- get.tfr.trajectories(tfr.pred, 
-                              "Cameroon")
+trajs <- get.tfr.trajectories(tfr.pred, "Niger")
 dim(trajs)
