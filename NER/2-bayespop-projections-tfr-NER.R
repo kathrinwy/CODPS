@@ -68,7 +68,7 @@ names(m2$meta)
 length(m2$mcmc.list)
 names(m2$mcmc.list[[1]]) 
 
-# 7. Run Phase III MCMCs, again a toy simulation here (5sec):
+# 7. Run Phase III MCMCs, again a toy simulation here
 
 m3 <- run.tfr3.mcmc(sim.dir = tfr.dir, 
                     iter = 100,                     
@@ -76,7 +76,7 @@ m3 <- run.tfr3.mcmc(sim.dir = tfr.dir,
                     thin = 2,
                     replace.output = TRUE)
 
-# obtain the m3 object for later usage:
+# Save m3 object for later usage
 
 m3 <- get.tfr3.mcmc(tfr.dir)  
 
