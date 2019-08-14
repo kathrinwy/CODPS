@@ -8,8 +8,6 @@
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
-
-
 # Install and set-up ------------------------------------------------------
 
 rm(list = ls())        ## Clear variables etc from cache

@@ -1,16 +1,28 @@
 ##================================================================
-## Project: COD-PS Assessment and Construction, Cameroon
+## Project: COD-PS Assessment and Construction, Niger
 ## Script purpose: script to load census, DHS, MICS input data files
 ##
-## Date created: 25 November, 2018
-## Last updated: 25 November, 2018
+## Date created: 14 August 2019
+## Last updated: 14 August 2019
 ##
-## Author: Romesh Silva
-## Maintainers: Romesh Silva, Kathrin Weny
-##================================================================
-print("+---------------------------+")
-print("Now running read.input.data.R")
-print("+---------------------------+")
+## Author: Kathrin Weny
+## Maintainers: Kathrin Weny, Romesh Silva
+
+# Last census in Niger was in 
+
+
+# Read in data: INS projections -------------------------------------------
+
+# Adm0
+
+# Adm1
+
+# Adm2
+
+# Adm3
+
+
+
 ##================================================================
 ## Section: Read in and prepare IPUMS Census microdata
 CAM.census.2005 <- "input/ipumsi_00030.dat"

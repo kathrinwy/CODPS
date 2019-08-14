@@ -1,15 +1,13 @@
-##---------------
-## Initial Set Up
-##---------------
+##================================================================
+## Project: COD-PS Assessment and Construction, Niger
+## Script purpose: script to project tfr
+##
+## Date created: 14 August 2019
+## Last updated: 14 August 2019
+##
+## Author: Kathrin Weny
+## Maintainers: Kathrin Weny, Romesh Silva
 
-getwd()
-#dir.create("ALAPworkshop")
-## create a directory for all results from this workshop 
-## and set it as the working directory
-setwd("~/Documents/UNFPA/sabbatical/Puebla-course-materials/lab-sessions/ALAPworkshop/")
-## load BayesTFR into R
-library(bayesTFR)
-library(wpp2015)
 ##---------------------------
 ##Estimation of the TFR model
 ##---------------------------
