@@ -139,38 +139,36 @@ names(tfr.pred)
 names(tfr.pred$mcmc.set)
 summary(tfr.pred$mcmc.set)
 
-## Note that one can use the tfr.pred$mcmc.set 
-## object in the functions of the previous
-## Section if an exploration of the collapsed, 
-## thinned and burned chain is desired. In such
-## cases burnin is set to 0. For example, in
+# Note that one can use the tfr.pred$mcmc.set 
+# object in the functions of the previous
+# Section if an exploration of the collapsed, 
+# thinned and burned chain is desired. In such
+# cases burnin is set to 0. For example, in
 
+par(mfrow=c(1,1))
 DLcurve.plot(tfr.pred$mcmc.set, 
              country = country, 
              burnin = 0)
 
-## each curve corresponds to one trajectory in 
-## the prediction.
+# each curve corresponds to one trajectory in the prediction.
 
-## 4. View projection results:
-##    Choose a country & summarize projection results.
+# 4. View projection results
 
-country <- "Cameroon"
 summary(tfr.pred, 
         country = country)
 tfr.trajectories.table(tfr.pred, 
                        country = country,
                        pi=c(80, 90))
 
-## Plot projection trajectories:
+# Plot projection trajectories
 par(mfrow=c(1,1))
 tfr.trajectories.plot(tfr.pred, 
                       country = country, 
                       nr.traj = 40)
 
-## Use tfr.trajectories.plot.all for creating plots 
-## for all countries at once.
-## Generate maps of TFR:
+# Use tfr.trajectories.plot.all for creating plots for all countries at once
+
+# Generate maps of TFR:
 
 tfr.map(tfr.pred)
 tfr.map.gvis(tfr.pred)
