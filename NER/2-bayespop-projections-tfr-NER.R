@@ -21,34 +21,33 @@ tfr.dir <- "TFRsimulation"
 
 # run.tfr.mcmc
 m2 <- run.tfr.mcmc(output.dir = tfr.dir, 
-                   iter = 100,#0,                                ##iter=62000
+                   iter = 100,#0,         # iter=62000
                    nr.chains = 2,
                    wpp.year = 2017, 
                    start.year = 1950, 
-                   present.year = 2018,
+                   present.year = 2012,   # year of census
                    replace.output = TRUE)
 
-## m2 is an object containing all the Phase-II MCMC meta 
-## info and pointing to the disk where MCMC traces are stored.
+# m2 is an object containing all the Phase-II MCMC meta 
 
 m2 <- get.tfr.mcmc(tfr.dir)
 
-## View the content of the simulation directory, 
+# View the content of the simulation directory, 
 
 list.files(tfr.dir)
 head(list.files(file.path(tfr.dir,  "mc1")), 15)
 
-## View parameter traces for world parameters 
+# View parameter traces for world parameters 
 
 tfr.partraces.plot(m2)
 
-## View parameter traces for country-specific 
-## parameters for a chosen country.
+# View parameter traces for country-specific 
+# parameters for a chosen country.
 
 country <- "Niger"
 tfr.partraces.cs.plot(m2, country = country)
 
-## Plot its double logistic curves.
+# Plot its double logistic curves
 
 par(mfrow=c(1,1))
 DLcurve.plot(m2, 
@@ -56,14 +55,12 @@ DLcurve.plot(m2,
              burnin = 30, 
              nr.curves = 30)
 
-## 5. Continue Phase II MCMCs in each chain by 
-##    40 iterations (20sec):
+# 5. Continue Phase II MCMCs in each chain by 40 iterations
 
-m2 <- continue.tfr.mcmc(output.dir = tfr.dir, 
-                        iter = 40)                  ##iter=62000
+m2 <- continue.tfr.mcmc(output.dir = tfr.dir, iter = 40)                  
 summary(m2)
 
-## 6. Inspect the content of the m2 object:
+# 6. Inspect the content of the m2 object:
 
 typeof(m2)
 names(m2)
@@ -71,45 +68,37 @@ names(m2$meta)
 length(m2$mcmc.list)
 names(m2$mcmc.list[[1]]) 
 
-## 7. Run Phase III MCMCs, again a toy simulation here (5sec):
-#run.tfr3.mcmc
+# 7. Run Phase III MCMCs, again a toy simulation here (5sec):
+
 m3 <- run.tfr3.mcmc(sim.dir = tfr.dir, 
-                    iter = 100,#,0,                     ##iter=50000
+                    iter = 100,                     
                     nr.chains = 2, 
                     thin = 2,
                     replace.output = TRUE)
 
-## obtain the m3 object for later usage:
+# obtain the m3 object for later usage:
 
 m3 <- get.tfr3.mcmc(tfr.dir)  
 
-## 8. Check the content of the simulation directory. 
-##    Folder phaseIII was added.
+# 8. Check the content of the simulation directory
 
 list.files(tfr.dir)
-list.files(file.path(tfr.dir, 
-                     "phaseIII"))
-list.files(file.path(tfr.dir, 
-                     "phaseIII", 
-                     "mc1"))
+list.files(file.path(tfr.dir, "phaseIII"))
+list.files(file.path(tfr.dir, "phaseIII", "mc1"))
 
-## 9. View Phase III estimation results:
-##    View parameter traces.
+# 9. View Phase III estimation results/parameter traces.
 
 tfr3.partraces.plot(m3)
-tfr3.partraces.cs.plot(m3, 
-                       country = "Cameroon")
+tfr3.partraces.cs.plot(m3, country = country)
 
 ## Summarize estimation results.
 
-summary(m3, country = "Cameroon")
+summary(m3, country = country)
 
-##----------------------
-## Projecting TFR
-##----------------------
+# Projection tfr ----------------------------------------------------------
 
-## 1. Generate TFR projections for all countries (40sec):
-#tfr.predict
+# 1. Generate TFR projections for all countries
+
 tfr.pred <- tfr.predict(sim.dir = tfr.dir, 
                         end.year = 2030,
                         burnin = 20,#0,              ##burnin=2000
