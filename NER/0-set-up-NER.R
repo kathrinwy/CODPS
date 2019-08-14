@@ -34,6 +34,8 @@ library(ggplot2)
 library(dplyr)
 library(foreign)  ##Package for handling proprietary data formats
 library(devtools)
+library(readxl)
+library(tidyverse)
 
 ##install_github("timriffe/Pyramid",subdir="Pyramid")
 library(Pyramid)
