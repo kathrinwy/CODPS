@@ -1,22 +1,20 @@
+##================================================================
+## Project: COD-PS Assessment and Construction, Niger
+## Script purpose: Population Projection (national level)
 ##
+## Date created: 14 August 2019
+## Last updated: 14 August 2019
 ##
-##=========================================
-## Population Projection (national level)
-##=========================================
-##The main function to generate population projection with bayesPop 
-##is pop.predict.
-##==
-##1. Load the bayesPop library Also, 
-getwd()
-setwd("/Users/romesh/Documents/UNFPA/sabbatical/Puebla-course-materials/lab-sessions/ALAPworkshop")
-##set the I/O directories. 
+## Author: Kathrin Weny
+## Maintainers: Kathrin Weny, Romesh Silva
+
+setwd(NER.output)
+
 tfr.dir <- "TFRsimulation"
 e0.dir <- "e0simulation"
 pop.dir <- "POPsimulation"
-## check with sessionInfo() that version bayesPop_7.0-0 is:
-sessionInfo()
-##==
-##2. Generate projections using our probabilistic TFR and from previous labs:
+
+# generate projections using our probabilistic TFR and from previous labs:
 pop.pred <- pop.predict(
   end.year = 2030, 
   start.year = 1950, 
@@ -29,9 +27,10 @@ pop.pred <- pop.predict(
                 e0M.sim.dir = "joint_"),
   keep.vital.events = FALSE,
   replace.output=TRUE)
-##To retrieve the prediction object from disk e.g. at a later time point, use
+
+# To retrieve the prediction object from disk e.g. at a later time point, use
 pop.pred <- get.pop.prediction(pop.dir)
-##==
+
 ##3. All inputs needed for projections are defined in the argument inputs 
 ##   which is a list with named elements. The following table explains 
 ##   the datasets including their sources:
