@@ -21,6 +21,7 @@ NER.input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/NER/input/"
 NER.output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/NER/output/"
 setwd(NER.directory)
 
+test test t est
 
 # Install/load packages ---------------------------------------------------
 
