@@ -25,22 +25,24 @@ write.csv(NERe0Mtraj, paste0("./regdata/", "NERe0Mtraj.csv"), row.names = F)
 
 # Inputs ------------------------------------------------------------------
 
-##  bayesTFR projections of the national TFR (result of tfr.predict ). We can use either our toy simulation 
-##  in the “TFRsimulation” directory or the converged simulation.
+# bayesTFR projections of the national TFR (result of tfr.predict )
 
 nat.tfr.dir <- "TFRsimulation"
 
-##  data for subnational units (https://bayespop.csss.washington.edu/download/#subnatTFR).
+# Load data for subnational units
+
+# PCode     region
+# NER001    Agadez 
+# NER002    Diffa
+# NER003    Dosso
+# NER004    Maradi
+# NER005    Tahoua 
+# NER006    Tillaberi
+# NER007    Zinder
+# NER008    Niamey 
 
 my.regtfr.file.NER <- "regdata/tfr.NER.txt"
-my.regtfr.file.CAN <- "regdata/tfr.txt"
-
 read.delim(my.regtfr.file.NER, check.names = F)
-read.delim(my.regtfr.file.CAN, check.names = F)
-
-# Required columns are country_code , reg_code , name 
-# and at least one time column that corresponds to the 
-# last observed time period
 
 # Projections -------------------------------------------------------------
 
@@ -57,36 +59,13 @@ regtfr.preds <- tfr.predict.subnat(562,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
-regtfr.preds <- tfr.predict.subnat(124, 
-                                   my.tfr.file = my.regtfr.file.CAN,
-                                   sim.dir = nat.tfr.dir,
-                                   output.dir = reg.tfr.dir)
-
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
-
-##Explore the content of the directory “regTFRsimulation”.
-##  It contains a subdirectory “subnat” with subfolders 
-##  for each country. Each such subfolder contains a 
-##  directory “predictions” of the same structure as the
-##  national predictions directory:
-list.files(file.path(reg.tfr.dir, 
-                     "subnat"))
-list.files(file.path(reg.tfr.dir,
-                     "subnat",
-                     "c120", 
-                     "predictions"))
-##  We store the directory for Cameroon into an object:
+#  Store the directory for Niger
 NERtfr.dir <- file.path(reg.tfr.dir,
                         "subnat",
                         "c562")
-
 # Explore projections
-
-NERtfr <- regtfr.preds[["562"]]
-
-# identical to
-get.countries.table(NERtfr)
 NERtfr <- get.tfr.prediction(NERtfr.dir)
 
 region <- "Diffa"

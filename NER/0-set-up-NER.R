@@ -40,6 +40,8 @@ library(foreign)                        # Package for handling proprietary data 
 library(devtools)
 library(readxl)
 library(tidyverse)
+library(readr)
+library(data.table)
 
 # install_github("timriffe/Pyramid",subdir="Pyramid")
 library(Pyramid)

@@ -20,113 +20,113 @@ setwd(NER.input)
 # Adm0
 
 adm0.pop     <- read_excel("ins-projections-adm0.xlsx")
-adm0.pop     <- gather(adm0.pop, key = "sex", value = "pop", -"age")
+adm0.pop     <- gather(adm0.pop, key = "sex", value = "2012", -"age1")
 
-# Convert into 5-year age groups
+# Convert into 5-year age11 groups
 adm0.pop <- adm0.pop %>%
-  mutate(agegroup = ifelse(0  <= age & age < 5, "0-4",
-                    ifelse(5  <= age & age < 10, "5-9",
-                    ifelse(10 <= age & age < 15, "10-14",
-                    ifelse(15 <= age & age < 20, "15-19",
-                    ifelse(20 <= age & age < 25, "20-24",
-                    ifelse(25 <= age & age < 30, "25-29",
-                    ifelse(30 <= age & age < 35, "30-34",
-                    ifelse(35 <= age & age < 40, "35-39",
-                    ifelse(40 <= age & age < 45, "40-44",
-                    ifelse(45 <= age & age < 50, "45-49",
-                    ifelse(50 <= age & age < 55, "50-54",
-                    ifelse(55 <= age & age < 60, "55-59",
-                    ifelse(60 <= age & age < 65, "60-64",
-                    ifelse(65 <= age & age < 70, "65-69",
-                    ifelse(70 <= age & age < 78, "70-74",
-                    ifelse(75 <= age & age < 80, "75-79",
-                    ifelse(80 <= age           , "80+", NA))))))))))))))))))
+  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
+                    ifelse(5  <= age1 & age1 < 10, "5-9",
+                    ifelse(10 <= age1 & age1 < 15, "10-14",
+                    ifelse(15 <= age1 & age1 < 20, "15-19",
+                    ifelse(20 <= age1 & age1 < 25, "20-24",
+                    ifelse(25 <= age1 & age1 < 30, "25-29",
+                    ifelse(30 <= age1 & age1 < 35, "30-34",
+                    ifelse(35 <= age1 & age1 < 40, "35-39",
+                    ifelse(40 <= age1 & age1 < 45, "40-44",
+                    ifelse(45 <= age1 & age1 < 50, "45-49",
+                    ifelse(50 <= age1 & age1 < 55, "50-54",
+                    ifelse(55 <= age1 & age1 < 60, "55-59",
+                    ifelse(60 <= age1 & age1 < 65, "60-64",
+                    ifelse(65 <= age1 & age1 < 70, "65-69",
+                    ifelse(70 <= age1 & age1 < 78, "70-74",
+                    ifelse(75 <= age1 & age1 < 80, "75-79",
+                    ifelse(80 <= age1            , "80+", NA))))))))))))))))))
 
-NERpopF.adm0 <- filter(adm0.pop, sex == "female")
-NERpopM.adm0 <- filter(adm0.pop, sex == "male")
+NERpopF.adm0  <- filter(adm0.pop, sex == "female")
+NERpopM.adm0  <- filter(adm0.pop, sex == "male")
 
 # Adm1
 
-adm1.pop     <- read_excel("ins-projections-adm1.xlsx")
-adm1.pop     <- gather(adm1.pop, key = "age", value = "pop", -c("adm1", "code.adm1", "sex"))
-adm1.pop$age <- as.numeric(adm1.pop$age)
+adm1.pop      <- read_excel("ins-projections-adm1.xlsx")
+adm1.pop      <- gather(adm1.pop, key = "age1", value = "2012", -c("name", "reg_code", "sex"))
+adm1.pop$age1 <- as.numeric(adm1.pop$age1)
 
-# Convert into 5-year age groups
+# Convert into 5-year age11 groups
 adm1.pop <- adm1.pop %>%
-  mutate(agegroup = ifelse(0  <= age & age < 5, "0-4",
-                    ifelse(5  <= age & age < 10, "5-9",
-                    ifelse(10 <= age & age < 15, "10-14",
-                    ifelse(15 <= age & age < 20, "15-19",
-                    ifelse(20 <= age & age < 25, "20-24",
-                    ifelse(25 <= age & age < 30, "25-29",
-                    ifelse(30 <= age & age < 35, "30-34",
-                    ifelse(35 <= age & age < 40, "35-39",
-                    ifelse(40 <= age & age < 45, "40-44",
-                    ifelse(45 <= age & age < 50, "45-49",
-                    ifelse(50 <= age & age < 55, "50-54",
-                    ifelse(55 <= age & age < 60, "55-59",
-                    ifelse(60 <= age & age < 65, "60-64",
-                    ifelse(65 <= age & age < 70, "65-69",
-                    ifelse(70 <= age & age < 75, "70-74",
-                    ifelse(75 <= age & age < 80, "75-79",
-                    ifelse(80 <= age           , "80+", NA))))))))))))))))))
+  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
+                    ifelse(5  <= age1 & age1 < 10, "5-9",
+                    ifelse(10 <= age1 & age1 < 15, "10-14",
+                    ifelse(15 <= age1 & age1 < 20, "15-19",
+                    ifelse(20 <= age1 & age1 < 25, "20-24",
+                    ifelse(25 <= age1 & age1 < 30, "25-29",
+                    ifelse(30 <= age1 & age1 < 35, "30-34",
+                    ifelse(35 <= age1 & age1 < 40, "35-39",
+                    ifelse(40 <= age1 & age1 < 45, "40-44",
+                    ifelse(45 <= age1 & age1 < 50, "45-49",
+                    ifelse(50 <= age1 & age1 < 55, "50-54",
+                    ifelse(55 <= age1 & age1 < 60, "55-59",
+                    ifelse(60 <= age1 & age1 < 65, "60-64",
+                    ifelse(65 <= age1 & age1 < 70, "65-69",
+                    ifelse(70 <= age1 & age1 < 75, "70-74",
+                    ifelse(75 <= age1 & age1 < 80, "75-79",
+                    ifelse(80 <= age1            , "80+", NA))))))))))))))))))
 
-NERpopF.adm1 <- filter(adm1.pop, sex == "female")
-NERpopM.adm1 <- filter(adm1.pop, sex == "male")
+NERpopF.adm1  <- filter(adm1.pop, sex == "female")
+NERpopM.adm1  <- filter(adm1.pop, sex == "male")
 
 # Adm2
 
-adm2.pop     <- read_excel("ins-projections-adm2.xlsx")
-adm2.pop     <- gather(adm2.pop, key = "age", value = "pop", -c("adm1", "code.adm1", "adm2", "code.adm2", "sex"))
-adm2.pop$age <- as.numeric(adm2.pop$age)
+adm2.pop      <- read_excel("ins-projections-adm2.xlsx")
+adm2.pop      <- gather(adm2.pop, key = "age1", value = "2012", -c("name", "reg_code", "name2", "reg_code2", "sex"))
+adm2.pop$age1 <- as.numeric(adm2.pop$age1)
 
-# Convert into 5-year age groups
+# Convert into 5-year age1 groups
 adm2.pop <- adm2.pop %>%
-  mutate(agegroup = ifelse(0  <= age & age < 5, "0-4",
-                    ifelse(5  <= age & age < 10, "5-9",
-                    ifelse(10 <= age & age < 15, "10-14",
-                    ifelse(15 <= age & age < 20, "15-19",
-                    ifelse(20 <= age & age < 25, "20-24",
-                    ifelse(25 <= age & age < 30, "25-29",
-                    ifelse(30 <= age & age < 35, "30-34",
-                    ifelse(35 <= age & age < 40, "35-39",
-                    ifelse(40 <= age & age < 45, "40-44",
-                    ifelse(45 <= age & age < 50, "45-49",
-                    ifelse(50 <= age & age < 55, "50-54",
-                    ifelse(55 <= age & age < 60, "55-59",
-                    ifelse(60 <= age & age < 65, "60-64",
-                    ifelse(65 <= age & age < 70, "65-69",
-                    ifelse(70 <= age & age < 75, "70-74",
-                    ifelse(75 <= age & age < 80, "75-79",
-                    ifelse(80 <= age           , "80+", NA))))))))))))))))))
+  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
+                    ifelse(5  <= age1 & age1 < 10, "5-9",
+                    ifelse(10 <= age1 & age1 < 15, "10-14",
+                    ifelse(15 <= age1 & age1 < 20, "15-19",
+                    ifelse(20 <= age1 & age1 < 25, "20-24",
+                    ifelse(25 <= age1 & age1 < 30, "25-29",
+                    ifelse(30 <= age1 & age1 < 35, "30-34",
+                    ifelse(35 <= age1 & age1 < 40, "35-39",
+                    ifelse(40 <= age1 & age1 < 45, "40-44",
+                    ifelse(45 <= age1 & age1 < 50, "45-49",
+                    ifelse(50 <= age1 & age1 < 55, "50-54",
+                    ifelse(55 <= age1 & age1 < 60, "55-59",
+                    ifelse(60 <= age1 & age1 < 65, "60-64",
+                    ifelse(65 <= age1 & age1 < 70, "65-69",
+                    ifelse(70 <= age1 & age1 < 75, "70-74",
+                    ifelse(75 <= age1 & age1 < 80, "75-79",
+                    ifelse(80 <= age1           , "80+", NA))))))))))))))))))
 
-NERpopF.adm2 <- filter(adm2.pop, sex == "female")
-NERpopM.adm2 <- filter(adm2.pop, sex == "male")
+NERpopF.adm2  <- filter(adm2.pop, sex == "female")
+NERpopM.adm2  <- filter(adm2.pop, sex == "male")
 
 # Adm3
 
-adm3.pop     <- read_excel("ins-projections-adm3.xlsx")
-adm3.pop     <- gather(adm3.pop, key = "age", value = "pop", -c("adm1", "code.adm1", "adm2", "code.adm2", "adm3", "code.adm3", "sex"))
-adm3.pop$age <- as.numeric(adm3.pop$age)
+adm3.pop      <- read_excel("ins-projections-adm3.xlsx")
+adm3.pop      <- gather(adm3.pop, key = "age1", value = "2012", -c("name", "reg_code", "name2", "reg_code2", "name3", "reg_code3", "sex"))
+adm3.pop$age1 <- as.numeric(adm3.pop$age1)
 
 adm3.pop <- adm3.pop %>%
-  mutate(agegroup = ifelse(0  <= age & age < 5, "0-4",
-                    ifelse(5  <= age & age < 10, "5-9",
-                    ifelse(10 <= age & age < 15, "10-14",
-                    ifelse(15 <= age & age < 20, "15-19",
-                    ifelse(20 <= age & age < 25, "20-24",
-                    ifelse(25 <= age & age < 30, "25-29",
-                    ifelse(30 <= age & age < 35, "30-34",
-                    ifelse(35 <= age & age < 40, "35-39",
-                    ifelse(40 <= age & age < 45, "40-44",
-                    ifelse(45 <= age & age < 50, "45-49",
-                    ifelse(50 <= age & age < 55, "50-54",
-                    ifelse(55 <= age & age < 60, "55-59",
-                    ifelse(60 <= age & age < 65, "60-64",
-                    ifelse(65 <= age & age < 70, "65-69",
-                    ifelse(70 <= age & age < 75, "70-74",
-                    ifelse(75 <= age & age < 80, "75-79",
-                    ifelse(80 <= age           , "80+", NA))))))))))))))))))
+  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
+                    ifelse(5  <= age1 & age1 < 10, "5-9",
+                    ifelse(10 <= age1 & age1 < 15, "10-14",
+                    ifelse(15 <= age1 & age1 < 20, "15-19",
+                    ifelse(20 <= age1 & age1 < 25, "20-24",
+                    ifelse(25 <= age1 & age1 < 30, "25-29",
+                    ifelse(30 <= age1 & age1 < 35, "30-34",
+                    ifelse(35 <= age1 & age1 < 40, "35-39",
+                    ifelse(40 <= age1 & age1 < 45, "40-44",
+                    ifelse(45 <= age1 & age1 < 50, "45-49",
+                    ifelse(50 <= age1 & age1 < 55, "50-54",
+                    ifelse(55 <= age1 & age1 < 60, "55-59",
+                    ifelse(60 <= age1 & age1 < 65, "60-64",
+                    ifelse(65 <= age1 & age1 < 70, "65-69",
+                    ifelse(70 <= age1 & age1 < 75, "70-74",
+                    ifelse(75 <= age1 & age1 < 80, "75-79",
+                    ifelse(80 <= age1           , "80+", NA))))))))))))))))))
 
 NERpopF.adm3 <- filter(adm3.pop, sex == "female")
 NERpopM.adm3 <- filter(adm3.pop, sex == "male")
