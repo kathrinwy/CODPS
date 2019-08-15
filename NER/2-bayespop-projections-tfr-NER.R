@@ -3,7 +3,7 @@
 ## Script purpose: script to project tfr
 ##
 ## Date created: 14 August 2019
-## Last updated: 14 August 2019
+## Last updated: 15 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -49,7 +49,7 @@ tfr.pred <- tfr.predict(sim.dir = tfr.dir,
                         end.year = 2030,
                         burnin = 20,              # burnin=2000
                         burnin3 = 10,             # burnin3=1000
-                        nr.traj = 20,             # nr.traj=5000
+                        nr.traj = 50,             # nr.traj=5000
                         use.correlation = TRUE,
                         replace.output = TRUE)    
 
@@ -60,11 +60,11 @@ tfr.pred <- get.tfr.prediction(tfr.dir)
 par(mfrow=c(1,1))
 tfr.trajectories.plot(tfr.pred, 
                       country = country, 
-                      nr.traj = 40)
+                      nr.traj = 50)
 
 # Export TFR trajectories 
 
-# convert.tfr.trajectories(tfr.dir, n = 40, output.dir = "mytfrtrajs") # error
+convert.tfr.trajectories(tfr.dir, n = 50, output.dir = "mytfrtrajs") 
 
 # Obtain trajectories as a matrix -----------------------------------------
 

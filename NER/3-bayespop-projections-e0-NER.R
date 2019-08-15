@@ -3,7 +3,7 @@
 ## Script purpose: Bayesian Projections of Life Expectancy
 ##
 ## Date created: 14 August 2019
-## Last updated: 14 August 2019
+## Last updated: 15 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -27,7 +27,7 @@ me0 <- get.e0.mcmc(e0.dir)
 
 # Joint projection of female and male -------------------------------------
 
-# The following function estimates the gap model and projects female and male jointly 
+# Estimates gap model and projects female and male jointly 
 e0.pred <- e0.predict(sim.dir = e0.dir, 
                       end.year = 2100,  
                       burnin = 70, 
@@ -35,7 +35,7 @@ e0.pred <- e0.predict(sim.dir = e0.dir,
 
 e0.pred <- get.e0.prediction(e0.dir)
 
-# Plot projection trajectories.
+# Plot projection trajectories
 par(mfrow=c(1,2))
 e0.trajectories.plot(e0.pred, country = country, 
                      both.sexes = TRUE)
@@ -48,9 +48,9 @@ e0.joint.plot(e0.pred, country = country,
 e0M.pred <- get.e0.prediction(e0.dir, joint.male = TRUE)
 e0M.pred <- get.e0.jmale.prediction(e0.pred)
 
-# Retrieve trajectories (female and male):
-trajF <- get.e0.trajectories(e0.pred, country = country)
-trajM <- get.e0.trajectories(e0M.pred, country = country)
-
 # converts both female and male trajectories into ASCII
 convert.e0.trajectories(e0.dir, output.dir = "mye0trajs")
+
+# Obtain trajectories as a matrix -----------------------------------------
+trajF <- get.e0.trajectories(e0.pred, country = country)
+trajM <- get.e0.trajectories(e0M.pred, country = country)

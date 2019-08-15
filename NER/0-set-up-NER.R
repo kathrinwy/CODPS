@@ -3,7 +3,7 @@
 ## Script purpose: load required packages,configure R environment, 
 ##                 set working directory
 ## Date created: 14 August 2019
-## Last updated: 14 August 2019
+## Last updated: 15 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
