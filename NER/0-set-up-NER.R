@@ -64,6 +64,7 @@ library(bayesPop)
 library(wppExplorer)
 library(wpp2015)
 library(wpp2017)
+library(wpp2019)
 
 
 # Source helper functions -------------------------------------------------

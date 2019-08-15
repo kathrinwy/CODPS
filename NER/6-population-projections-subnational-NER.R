@@ -16,26 +16,33 @@ reg.pop.dir <- "regPOPsimulation"
 
 # Location file defining geographical disaggregation
 
-location.file <- file.path(NER.input, 
-                           "NERlocations.txt")
-read.delim(location.file)
-
-# Regions with location_type = 4 will be processed while the rest will be ignored. location_type = 0 (national) 
-# is needed for aggregation as well as for determining the “default” country in pop.predict.subnat
+location.file.NER <- file.path(NER.output, "NERlocations.txt")
+locations.NER     <- read.delim(location.file.NER)
+UNlocations <- read.delim(location.file.NER)
 
 # Locate files with historical age- and sex-specific population. Only population at the present time is required.
  popM0.file     <- file.path(NER.output, "NERpopM.adm1.csv")
  popF0.file     <- file.path(NER.output, "NERpopF.adm1.csv")
  
  NERpopM        <- read.csv(popM0.file, check.names = FALSE)
- NERpopM$'2012' <- ave(NERpopM$'2012', NERpopM$age, FUN=sum) # replace single year pop counts with 5 year counts
- NERpopM        <- NERpopM[,-c(3, 4)]                                   # remove single year age column
+ names(NERpopM) <- c("name", "reg_code", "sex", "age1", "pop", "age")
+ temp        <- NERpopM %>% 
+   group_by(name, age) %>% 
+   dplyr::summarize(new = sum(pop)) # replace single year pop counts with 5 year counts
+ NERpopM        <- NERpopM[,-c(3, 4, 5)]                                   # remove single year age column
  NERpopM        <- distinct(NERpopM)
-
+ NERpopM$'2012' <- temp$new 
+ head(NERpopM)
+ 
  NERpopF <- read.csv(popF0.file, check.names = FALSE)
- NERpopF$'2012' <- ave(NERpopF$'2012', NERpopF$age, FUN=sum) # replace single year pop counts with 5 year counts
- NERpopF        <- NERpopF[,-4]                                   # remove single year age column
+ names(NERpopF) <- c("name", "reg_code", "sex", "age1", "pop", "age")
+ temp        <- NERpopF %>% 
+   group_by(name, age) %>% 
+   dplyr::summarize(new = sum(pop)) # replace single year pop counts with 5 year counts
+ NERpopF        <- NERpopF[,-c(3,4,5)]                                   # remove single year age column
  NERpopF        <- distinct(NERpopF)
+ NERpopF$'2012' <- temp$new 
+ 
 
 # Save in regdata 
 
@@ -45,10 +52,9 @@ write.table(NERpopF, file="regdata/NERpopF.txt", sep = "\t", row.names = FALSE)
 NERpopM <- read.delim(file="regdata/NERpopM.txt", comment.char='#', check.names=FALSE)
 NERpopF <- read.delim(file="regdata/NERpopF.txt", comment.char='#', check.names=FALSE)
 
+head(NERpopM)
 # Optionally, if region-specific net migration counts are not available, migration patterns for
 # distributing national migration can be specified. Locate the example file with migration shares.
-# pattern.file <- file.path(data.dir, "CANpatterns.txt")
-# read.delim(pattern.file)
 
 NERpatterns <- data.table(read.delim(file="regdata/NERpopM.txt", comment.char='#', check.names=FALSE))
 NERpatterns <- unique(NERpatterns[, .(reg_code, name)])
@@ -73,8 +79,8 @@ e0Mtraj <- read.csv(paste0(NER.output, "mye0trajs/M/ascii_trajectories_wide.csv"
 # find Niger's column
 grep("Niger", colnames(e0Ftraj)) # results in 119 (and 120 which is Nigeria)
 
-NERe0Ftraj <- cbind(rep(120,nrow(e0Ftraj)), e0Ftraj[c(2,3,119)]) 
-NERe0Mtraj <- cbind(rep(120,nrow(e0Mtraj)), e0Mtraj[c(2,3,119)]) 
+NERe0Ftraj <- cbind(rep(562,nrow(e0Ftraj)), e0Ftraj[c(2,3,119)]) 
+NERe0Mtraj <- cbind(rep(562,nrow(e0Mtraj)), e0Mtraj[c(2,3,119)]) 
 
 colnames(NERe0Ftraj) <- c("LocID","Year","Trajectory","e0")
 colnames(NERe0Mtraj) <- c("LocID","Year","Trajectory","e0")
@@ -86,23 +92,17 @@ write.csv(NERe0Mtraj,file= paste0(NER.output, "regdata/NERe0Mtraj.csv"), row.nam
 # the wpp2017 package. Note that such approach does not deal with the between-region migration.
 
 # Generate subnational trajectories for all regions of one country.
-getwd()
-sim.dir <- tempfile()  
-regpop.pred <- pop.predict.subnat(end.year = 2030, 
-                                  start.year = 1950, 
-                                  present.year = 2012, 
+ 
+regpop.pred <- pop.predict.subnat(present.year = 2012, 
                                   wpp.year = 2017, 
                                   output.dir = reg.pop.dir,
-                                  locations = location.file,
-                                  inputs = list(popM = file.path(NER.output, "/regdata", "NERpopM.txt"),
-                                                popF = file.path(NER.output, "/regdata", "NERpopF.txt"),
+                                  locations = "C:/Users/kathrinweny/COD-PS/NER/output/NERlocations.txt" ,
+                                  inputs = list(popM = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERpopM.txt",
+                                                popF = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERpopF.txt",
                                                 tfr.sim.dir = NERtfr.dir,
-                                                e0F.file = file.path(NER.output, "/regdata", "NERe0Ftraj.csv"),
-                                                e0M.file = file.path(NER.output, "/regdata", "NERe0Mtraj.csv"),
-                                                patterns = pattern.file),
-                                  verbose = TRUE, 
-                                  nr.traj =30,
-                                  replace.output=TRUE)
+                                                e0F.file = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERe0Ftraj.csv",
+                                                e0M.file = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERe0Mtraj.csv",
+                                                patterns = pattern.file))
 
 regpop.pred <- get.pop.prediction(reg.pop.dir)
 
