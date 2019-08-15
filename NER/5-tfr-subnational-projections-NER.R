@@ -1,103 +1,70 @@
-##======================================================
-##References
-##======================================================
-##Ševčíková, H., Raftery, A.E. and Gerland, P. (2018). 
-##Probabilistic projection of subnational total fertility 
-##rates. Demographic Research, Vol. 38(60): 1843-1884.
-##(https://www.demographic-research.org/volumes/vol38/60/default.htm)
+##================================================================
+## Project: COD-PS Assessment and Construction, Niger
+## Script purpose: subnational TFR projections
 ##
-##======================================================
-##Prerequisites
-##======================================================
-## Directory “TFRsimulation” with (TFR projections on the national level):
-## Phase II MCMC ( run.tfr.mcmc (../tfr/TFRlabs.html#tfr-phase2),
-##   continue.tfr.mcmc (../tfr/TFRlabs.html#tfr-phase2-cont))
-## Phase III MCMC ( run.tfr3.mcmc (../tfr/TFRlabs.html#tfr-phase3))
-## TFR predictions ( tfr.predict (../tfr/TFRlabs.html#tfr-pred))
+## Date created: 15 August 2019
+## Last updated: 15 August 2019
 ##
-##======================================================
-## Goals
-##======================================================
-##  Projecting subnational total fertility rate using bayesTFR,
-##  projecting subnational population using bayesPop,
-##  exploring results.
-##        
-##======================================================
-## Setup
-##======================================================
-##1. Use setwd() to navigate into your working directory 
-##   and load bayesPop (which automatically loads bayesTFR):
-getwd()
-setwd("~/Documents/UNFPA/sabbatical/Puebla-course-materials/lab-sessions/ALAPworkshop/")
-library(bayesPop)
+## Author: Kathrin Weny
+## Maintainers: Kathrin Weny, Romesh Silva
 
-##2. We will use a few external datasets. If you have 
-##   not done already, run the following code which 
-##   creates a directory regdata and downloads the 
-##   datasets into it.
-path <- "http://bayespop.csss.washington.edu/data/ALAP2018/regdata/"
-files <- c("tfr.txt", 
-           "MALe0Ftraj.csv", 
-           "MALe0Mtraj.csv")
+# Setup -------------------------------------------------------------------
+
+setwd(NER.output)
 dir.create("regdata")
-Map(function(u, d) download.file(u, d), 
-    paste0(path, files), 
-    file.path("regdata", files))
 
-##======================================================
-##Subnational TFR Projections
-##======================================================
-## The bayesTFR package implements a method for generating 
-## probabilistic TFR for subnational units, as described
-## in Ševčíková et al. (2018).
-##
-##======================================================
-##Inputs
-##======================================================
-##You need the following inputs:
-##  bayesTFR projections of the national TFR (result of 
-##  tfr.predict ). We can use either our toy simulation 
-##  in the “TFRsimulation” directory or the converged 
-##  simulation.
+# Retrieve e0 trajectories ------------------------------------------------
+
+NERe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+    select(-Period)
+write.csv(NERe0Ftraj, paste0("./regdata/", "NERe0Ftraj.csv"), row.names = F)
+
+NERe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+    select(-Period)
+write.csv(NERe0Mtraj, paste0("./regdata/", "NERe0Mtraj.csv"), row.names = F)
+
+# Inputs ------------------------------------------------------------------
+
+##  bayesTFR projections of the national TFR (result of tfr.predict ). We can use either our toy simulation 
+##  in the “TFRsimulation” directory or the converged simulation.
+
 nat.tfr.dir <- "TFRsimulation"
-##  data for subnational units. We will use a dataset for Canada. Data for additional countries
-##  can be downloaded from here (https://bayespop.csss.washington.edu/download/#subnatTFR).
-#my.regtfr.file <- "regdata/tfr.txt"
-#read.delim(my.regtfr.file, 
-#           check.names = FALSE)  
-my.regtfr.file <- "regdata/tfr_cameroon.txt"
-read.delim(my.regtfr.file,
-           check.names = FALSE)
 
-can.regtfr.file <- "regdata/tfr.txt"
-read.delim(can.regtfr.file,
-           check.names = FALSE)
-##  Required columns are country_code , reg_code , name 
-##  and at least one time column that corresponds to the 
-##  last observed time period.
-##
-##======================================================
-##Projections
-##======================================================
-##1. Set a location on disk where results will be stored. 
-##   If not set, results are stored into the directory 
-##   of the national simulation.
+##  data for subnational units (https://bayespop.csss.washington.edu/download/#subnatTFR).
+
+my.regtfr.file.NER <- "regdata/tfr.NER.txt"
+my.regtfr.file.CAN <- "regdata/tfr.txt"
+
+read.delim(my.regtfr.file.NER, check.names = F)
+read.delim(my.regtfr.file.CAN, check.names = F)
+
+# Required columns are country_code , reg_code , name 
+# and at least one time column that corresponds to the 
+# last observed time period
+
+# Projections -------------------------------------------------------------
+
+# Set a location on disk where results will be stored
+
+dir.create("regTFRsimulation")
+
 reg.tfr.dir <- "regTFRsimulation"
-##2. Here we will generate projections for one country 
-##   (Cameroon), but the function can be used to
-##   project multiple countries at once.    
-regtfr.preds <- tfr.predict.subnat(120, 
-                                   my.tfr.file = my.regtfr.file,
+
+# Generate projections for Niger (562)
+
+regtfr.preds <- tfr.predict.subnat(562, 
+                                   my.tfr.file = my.regtfr.file.NER,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
 regtfr.preds <- tfr.predict.subnat(124, 
-                                   my.tfr.file = can.regtfr.file,
+                                   my.tfr.file = my.regtfr.file.CAN,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
-##To retrieve the regtfr.preds object at later time, use
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
+
+
 ##Explore the content of the directory “regTFRsimulation”.
 ##  It contains a subdirectory “subnat” with subfolders 
 ##  for each country. Each such subfolder contains a 
@@ -110,173 +77,22 @@ list.files(file.path(reg.tfr.dir,
                      "c120", 
                      "predictions"))
 ##  We store the directory for Cameroon into an object:
-CAMtfr.dir <- file.path(reg.tfr.dir,
+NERtfr.dir <- file.path(reg.tfr.dir,
                         "subnat",
-                        "c120")
+                        "c562")
 
-CANtfr.dir <-  file.path(reg.tfr.dir,
-                         "subnat",
-                         "c124")
-##4. Explore projections.
-##   The regtfr.preds object is a list with one element
-##   per country. We’ll explore results for Cameroon
-names(regtfr.preds)
-CAMtfr <- regtfr.preds[["120"]]
-CANtfr <- regtfr.preds[["124"]]
+# Explore projections
 
-class(CAMtfr)
-names(CAMtfr)
+NERtfr <- regtfr.preds[["562"]]
+
 # identical to
-get.countries.table(CAMtfr)
-CANtfr <- get.tfr.prediction(CANtfr.dir)
+get.countries.table(NERtfr)
+NERtfr <- get.tfr.prediction(NERtfr.dir)
 
-##    Results can be viewed in the same way as results 
-##    from the national projections (../tfr/TFRlabs.html#tfr-pred-view).
-region <- "Adamaoua"
-tfr.trajectories.plot(CAMtfr, 
+region <- "Diffa"
+tfr.trajectories.plot(NERtfr, 
                       region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
 
-region <- "Nord"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
+# Retrieve trajectories as a matrix ---------------------------------------
+trajs <- get.tfr.trajectories(NERtfr, region)
 
-region <- "Extreme Nord"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Centre"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Sud"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Est"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Ouest"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Littoral"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Nord Ouest"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-region <- "Sud Ouest"
-tfr.trajectories.plot(CAMtfr, 
-                      region)
-tfr.trajectories.table(CAMtfr, 
-                       region)
-summary(CAMtfr, 
-        region)
-
-##     Compare national to regional projections
-region <- "Adamaoua"
-nat.tfr.pred <- get.tfr.prediction(nat.tfr.dir)
-tfr.trajectories.plot(CAMtfr, 
-                      region, 
-                      pi = 80, 
-                      half.child.variant = FALSE)
-tfr.trajectories.plot(nat.tfr.pred,
-                      "Cameroon",
-                      half.child.variant = FALSE, 
-                      pi = 80,
-                      add = TRUE, 
-                      col = rep("darkgreen", 5),
-                      nr.traj = 0, 
-                      show.legend = FALSE)
-
-region <- "Nord"
-nat.tfr.pred <- get.tfr.prediction(nat.tfr.dir)
-tfr.trajectories.plot(CAMtfr, 
-                      region, 
-                      pi = 80, 
-                      half.child.variant = FALSE)
-tfr.trajectories.plot(nat.tfr.pred,
-                      "Cameroon",
-                      half.child.variant = FALSE, 
-                      pi = 80,
-                      add = TRUE, 
-                      col = rep("darkgreen", 5),
-                      nr.traj = 0, 
-                      show.legend = FALSE)
-
-region <- "Extreme Nord"
-nat.tfr.pred <- get.tfr.prediction(nat.tfr.dir)
-tfr.trajectories.plot(CAMtfr, 
-                      region, 
-                      pi = 80, 
-                      half.child.variant = FALSE)
-tfr.trajectories.plot(nat.tfr.pred,
-                      "Cameroon",
-                      half.child.variant = FALSE, 
-                      pi = 80,
-                      add = TRUE, 
-                      col = rep("darkgreen", 5),
-                      nr.traj = 0, 
-                      show.legend = FALSE)
-
-region <- "Nord Ouest"
-nat.tfr.pred <- get.tfr.prediction(nat.tfr.dir)
-tfr.trajectories.plot(CAMtfr, 
-                      region, 
-                      pi = 80, 
-                      half.child.variant = FALSE)
-tfr.trajectories.plot(nat.tfr.pred,
-                      "Cameroon",
-                      half.child.variant = FALSE, 
-                      pi = 80,
-                      add = TRUE, 
-                      col = rep("darkgreen", 5),
-                      nr.traj = 0, 
-                      show.legend = FALSE)
-
-
-##      Retrieve trajectories as a matrix
-trajs <- get.tfr.trajectories(CAMtfr, 
-                              region)
-
-dim(trajs)
-summary(t(trajs))
