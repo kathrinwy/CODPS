@@ -3,7 +3,7 @@
 ## Script purpose: Bayesian Projections of Life Expectancy
 ##
 ## Date created: 14 August 2019
-## Last updated: 15 August 2019
+## Last updated: 16 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -14,11 +14,11 @@ country <- "Niger"
 
 # Run MCMCs to estimate the female model. 
 me0 <- run.e0.mcmc(sex = "Female", output.dir = e0.dir, 
-                   iter = 1000,          
+                   iter = 80,          
                    nr.chains = 2,     
                    thin = 5,           
                    verbose.iter = 20,  
-                   wpp.year = 2017, 
+                   wpp.year = 2019, 
                    start.year = 1873, 
                    present.year = 2012,
                    replace.output = TRUE)
@@ -29,7 +29,7 @@ me0 <- get.e0.mcmc(e0.dir)
 
 # Estimates gap model and projects female and male jointly 
 e0.pred <- e0.predict(sim.dir = e0.dir, 
-                      end.year = 2100,  
+                      end.year = 2030,  
                       burnin = 70, 
                       nr.traj = 50)
 
@@ -50,7 +50,3 @@ e0M.pred <- get.e0.jmale.prediction(e0.pred)
 
 # converts both female and male trajectories into ASCII
 convert.e0.trajectories(e0.dir, output.dir = "mye0trajs")
-
-# Obtain trajectories as a matrix -----------------------------------------
-trajF <- get.e0.trajectories(e0.pred, country = country)
-trajM <- get.e0.trajectories(e0M.pred, country = country)

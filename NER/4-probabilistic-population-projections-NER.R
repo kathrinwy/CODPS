@@ -3,7 +3,7 @@
 ## Script purpose: Population Projection (national level)
 ##
 ## Date created: 14 August 2019
-## Last updated: 15 August 2019
+## Last updated: 16 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -15,18 +15,17 @@ e0.dir <- "e0simulation"
 pop.dir <- "POPsimulation"
 
 # Projections using our probabilistic TFR and from previous labs:
-pop.pred <- pop.predict(
-  end.year = 2030, 
-  start.year = 1950, 
-  #present.year = 2010,  # 2012 not availbe
-  wpp.year = 2017, 
-  output.dir = pop.dir, 
-  nr.traj = 50,
-  inputs = list(tfr.sim.dir = tfr.dir,
-                e0F.sim.dir = e0.dir,
-                e0M.sim.dir = "joint_"),
-  keep.vital.events = FALSE,
-  replace.output=TRUE)
+pop.pred <- pop.predict( end.year = 2030, 
+                         start.year = 1950, 
+                         #present.year = 2020,  # 2012 not availbe
+                         wpp.year = 2017,       # ERROR MESSAGE: vwBaseYear2019 not found: migration error
+                         output.dir = pop.dir, 
+                         nr.traj = 50,
+                         inputs = list(tfr.sim.dir = tfr.dir,
+                                      e0F.sim.dir = e0.dir,
+                                      e0M.sim.dir = "joint_"),
+                         keep.vital.events = FALSE,
+                         replace.output=TRUE)
 
 pop.pred <- get.pop.prediction(pop.dir)
 

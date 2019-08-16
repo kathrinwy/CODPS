@@ -3,7 +3,7 @@
 ## Script purpose: script to project tfr
 ##
 ## Date created: 14 August 2019
-## Last updated: 15 August 2019
+## Last updated: 16 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -20,19 +20,19 @@ country <- "Niger"
 
 # Run Phase II MCMCs ------------------------------------------------------
 
+# This is a toy simulation and not enough to make the series converge.
+
 m2 <- run.tfr.mcmc(output.dir = tfr.dir, 
                    iter = 100,            # iter=62000
                    nr.chains = 2,
-                   wpp.year = 2017,       # wpp 2017
+                   wpp.year = 2019,       # wpp 2019
                    start.year = 1950, 
                    present.year = 2012,   # year of census
                    replace.output = TRUE)
 
 m2 <- get.tfr.mcmc(tfr.dir)
 
-
 # Run Phase III MCMCs -----------------------------------------------------
-
 m3 <- run.tfr3.mcmc(sim.dir = tfr.dir, 
                     iter = 100,                     
                     nr.chains = 2, 
@@ -44,7 +44,6 @@ m3 <- get.tfr3.mcmc(tfr.dir)
 # No simulations are run as Niger has not yet entered Phase III
 
 # Projection tfr ----------------------------------------------------------
-
 tfr.pred <- tfr.predict(sim.dir = tfr.dir, 
                         end.year = 2030,
                         burnin = 20,              # burnin=2000
@@ -56,16 +55,10 @@ tfr.pred <- tfr.predict(sim.dir = tfr.dir,
 tfr.pred <- get.tfr.prediction(tfr.dir)
 
 # Inspect results
-
 par(mfrow=c(1,1))
 tfr.trajectories.plot(tfr.pred, 
                       country = country, 
                       nr.traj = 50)
 
 # Export TFR trajectories 
-
 convert.tfr.trajectories(tfr.dir, n = 50, output.dir = "mytfrtrajs") 
-
-# Obtain trajectories as a matrix -----------------------------------------
-
-trajs <- get.tfr.trajectories(tfr.pred, country)

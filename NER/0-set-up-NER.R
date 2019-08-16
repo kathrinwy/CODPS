@@ -65,11 +65,3 @@ library(wppExplorer)
 library(wpp2015)
 library(wpp2017)
 library(wpp2019)
-
-
-# Source helper functions -------------------------------------------------
-
-#source(paste(NER.directory,
- #            "/src/useful.functions.R", 
-  #           sep="")
-#)
