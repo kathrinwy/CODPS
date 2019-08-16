@@ -26,13 +26,19 @@ UNlocations <- read.delim(location.file.NER)
  
  NERpopM        <- read.csv(popM0.file, check.names = FALSE)
  names(NERpopM) <- c("name", "reg_code", "sex", "age1", "pop", "age")
+ 
  temp        <- NERpopM %>% 
-   group_by(name, age) %>% 
-   dplyr::summarize(new = sum(pop)) # replace single year pop counts with 5 year counts
+   group_by(name, age) %>%
+   dplyr::summarize(new  = sum(pop ))       # replace single year pop counts with 5 year counts
+
  NERpopM        <- NERpopM[,-c(3, 4, 5)]                                   # remove single year age column
  NERpopM        <- distinct(NERpopM)
  NERpopM$'2012' <- temp$new 
- head(NERpopM)
+ 
+ # extrapolate population to 2015
+ NERpopM$'2013' <- NERpopM$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
+ NERpopM$'2014' <- NERpopM$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
+ NERpopM$'2015' <- NERpopM$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
  
  NERpopF <- read.csv(popF0.file, check.names = FALSE)
  names(NERpopF) <- c("name", "reg_code", "sex", "age1", "pop", "age")
@@ -43,6 +49,10 @@ UNlocations <- read.delim(location.file.NER)
  NERpopF        <- distinct(NERpopF)
  NERpopF$'2012' <- temp$new 
  
+ # extrapolate population to 2015
+ NERpopF$'2013' <- NERpopF$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
+ NERpopF$'2014' <- NERpopF$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
+ NERpopF$'2015' <- NERpopF$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
 
 # Save in regdata 
 
@@ -51,6 +61,10 @@ write.table(NERpopF, file="regdata/NERpopF.txt", sep = "\t", row.names = FALSE)
 
 NERpopM <- read.delim(file="regdata/NERpopM.txt", comment.char='#', check.names=FALSE)
 NERpopF <- read.delim(file="regdata/NERpopF.txt", comment.char='#', check.names=FALSE)
+
+# Reorder columns just in case
+NERpopM <- NERpopM[,c(2,1,3,4,5,6,7)]
+NERpopF <- NERpopF[,c(2,1,3,4,5,6,7)]
 
 head(NERpopM)
 # Optionally, if region-specific net migration counts are not available, migration patterns for
@@ -77,10 +91,10 @@ e0Ftraj <- read.csv(paste0(NER.output, "mye0trajs/F/ascii_trajectories_wide.csv"
 e0Mtraj <- read.csv(paste0(NER.output, "mye0trajs/M/ascii_trajectories_wide.csv"), skip = 1)
 
 # find Niger's column
-grep("Niger", colnames(e0Ftraj)) # results in 119 (and 120 which is Nigeria)
+grep("Niger", colnames(e0Ftraj)) # results in 134 (and 135 which is Nigeria)
 
-NERe0Ftraj <- cbind(rep(562,nrow(e0Ftraj)), e0Ftraj[c(2,3,119)]) 
-NERe0Mtraj <- cbind(rep(562,nrow(e0Mtraj)), e0Mtraj[c(2,3,119)]) 
+NERe0Ftraj <- cbind(rep(562,nrow(e0Ftraj)), e0Ftraj[c(2,3,134)]) 
+NERe0Mtraj <- cbind(rep(562,nrow(e0Mtraj)), e0Mtraj[c(2,3,134)]) 
 
 colnames(NERe0Ftraj) <- c("LocID","Year","Trajectory","e0")
 colnames(NERe0Mtraj) <- c("LocID","Year","Trajectory","e0")
@@ -93,15 +107,15 @@ write.csv(NERe0Mtraj,file= paste0(NER.output, "regdata/NERe0Mtraj.csv"), row.nam
 
 # Generate subnational trajectories for all regions of one country.
  
-regpop.pred <- pop.predict.subnat(present.year = 2012, 
+regpop.pred <- pop.predict.subnat(present.year = 2015, 
                                   wpp.year = 2017, 
                                   output.dir = reg.pop.dir,
-                                  locations = "C:/Users/kathrinweny/COD-PS/NER/output/NERlocations.txt" ,
-                                  inputs = list(popM = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERpopM.txt",
-                                                popF = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERpopF.txt",
+                                  locations = locations.NER ,
+                                  inputs = list(popM = file.path("regdata", "NERpopM.txt"),
+                                                popF = file.path("regdata", "NERpopF.txt"),
                                                 tfr.sim.dir = NERtfr.dir,
-                                                e0F.file = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERe0Ftraj.csv",
-                                                e0M.file = "C:/Users/kathrinweny/COD-PS/NER/output/regdata/NERe0Mtraj.csv",
+                                                e0F.file = file.path("regdata", "NERe0Ftraj.csv"),
+                                                e0M.file = file.path("regdata", "NERe0Mtraj.csv"),
                                                 patterns = pattern.file))
 
 regpop.pred <- get.pop.prediction(reg.pop.dir)

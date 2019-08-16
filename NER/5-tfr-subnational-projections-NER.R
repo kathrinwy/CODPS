@@ -67,6 +67,10 @@ NERtfr.dir <- file.path(reg.tfr.dir, "subnat", "c562")
 # Explore projections
 NERtfr <- get.tfr.prediction(NERtfr.dir)
 
+par(mfrow=c(1,2))
+
 region <- "Diffa"
-par(mfrow=c(1,1))
+tfr.trajectories.plot(NERtfr, region)
+
+region <- "Agadez"
 tfr.trajectories.plot(NERtfr, region)

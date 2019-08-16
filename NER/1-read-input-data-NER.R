@@ -52,9 +52,9 @@ adm0.pop <- adm0.pop %>%
                     ifelse(75 <= age1 & age1 < 80, "75-79",
                     ifelse(80 <= age1            , "80+", NA))))))))))))))))))
 
-adm0.pop$'2013' <- adm0.pop$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
-adm0.pop$'2014' <- adm0.pop$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
-adm0.pop$'2015' <- adm0.pop$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
+#adm0.pop$'2013' <- adm0.pop$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
+#adm0.pop$'2014' <- adm0.pop$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
+#adm0.pop$'2015' <- adm0.pop$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
 
 NERpopF.adm0  <- filter(adm0.pop, sex == "female")
 NERpopM.adm0  <- filter(adm0.pop, sex == "male")
@@ -85,10 +85,6 @@ adm1.pop <- adm1.pop %>%
                     ifelse(75 <= age1 & age1 < 80, "75-79",
                     ifelse(80 <= age1            , "80+", NA))))))))))))))))))
 
-adm1.pop$'2013' <- adm1.pop$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
-adm1.pop$'2014' <- adm1.pop$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
-adm1.pop$'2015' <- adm1.pop$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
-
 NERpopF.adm1  <- filter(adm1.pop, sex == "female")
 NERpopM.adm1  <- filter(adm1.pop, sex == "male")
 
@@ -118,10 +114,6 @@ adm2.pop <- adm2.pop %>%
                     ifelse(75 <= age1 & age1 < 80, "75-79",
                     ifelse(80 <= age1           , "80+", NA))))))))))))))))))
 
-adm2.pop$'2013' <- adm2.pop$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
-adm2.pop$'2014' <- adm2.pop$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
-adm2.pop$'2015' <- adm2.pop$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
-
 NERpopF.adm2  <- filter(adm2.pop, sex == "female")
 NERpopM.adm2  <- filter(adm2.pop, sex == "male")
 
@@ -149,10 +141,6 @@ adm3.pop <- adm3.pop %>%
                     ifelse(70 <= age1 & age1 < 75, "70-74",
                     ifelse(75 <= age1 & age1 < 80, "75-79",
                     ifelse(80 <= age1           , "80+", NA))))))))))))))))))
-
-adm3.pop$'2013' <- adm3.pop$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
-adm3.pop$'2014' <- adm3.pop$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
-adm3.pop$'2015' <- adm3.pop$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
 
 NERpopF.adm3 <- filter(adm3.pop, sex == "female")
 NERpopM.adm3 <- filter(adm3.pop, sex == "male")
