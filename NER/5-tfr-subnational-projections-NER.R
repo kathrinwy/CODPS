@@ -68,4 +68,5 @@ NERtfr.dir <- file.path(reg.tfr.dir, "subnat", "c562")
 NERtfr <- get.tfr.prediction(NERtfr.dir)
 
 region <- "Diffa"
+par(mfrow=c(1,1))
 tfr.trajectories.plot(NERtfr, region)

@@ -3,7 +3,7 @@
 ## Script purpose: script to load census, DHS, MICS input data files
 ##
 ## Date created: 14 August 2019
-## Last updated: 14 August 2019
+## Last updated: 16 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
