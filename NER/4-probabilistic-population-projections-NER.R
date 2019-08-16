@@ -17,8 +17,8 @@ pop.dir <- "POPsimulation"
 # Projections using our probabilistic TFR and from previous labs:
 pop.pred <- pop.predict( end.year = 2030, 
                          start.year = 1950, 
-                         #present.year = 2020,  # 2012 not availbe
-                         wpp.year = 2017,       # ERROR MESSAGE: vwBaseYear2019 not found: migration error
+                         present.year = 2015,   # 2015 projected from 2012 
+                         wpp.year = 2017,       # ERROR MESSAGE: vwBaseYear2019 not found: migration error, so use wpp2017
                          output.dir = pop.dir, 
                          nr.traj = 50,
                          inputs = list(tfr.sim.dir = tfr.dir,

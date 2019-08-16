@@ -18,9 +18,9 @@ me0 <- run.e0.mcmc(sex = "Female", output.dir = e0.dir,
                    nr.chains = 2,     
                    thin = 5,           
                    verbose.iter = 20,  
-                   wpp.year = 2019, 
+                   wpp.year = 2017, 
                    start.year = 1873, 
-                   present.year = 2012,
+                   present.year = 2015,
                    replace.output = TRUE)
 
 me0 <- get.e0.mcmc(e0.dir)

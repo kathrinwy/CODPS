@@ -62,16 +62,10 @@ regtfr.preds <- tfr.predict.subnat(562,
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
 #  Store the directory for Niger
-NERtfr.dir <- file.path(reg.tfr.dir,
-                        "subnat",
-                        "c562")
+NERtfr.dir <- file.path(reg.tfr.dir, "subnat", "c562")
+
 # Explore projections
 NERtfr <- get.tfr.prediction(NERtfr.dir)
 
 region <- "Diffa"
-tfr.trajectories.plot(NERtfr, 
-                      region)
-
-# Retrieve trajectories as a matrix ---------------------------------------
-trajs <- get.tfr.trajectories(NERtfr, region)
-
+tfr.trajectories.plot(NERtfr, region)

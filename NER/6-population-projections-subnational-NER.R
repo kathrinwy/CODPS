@@ -3,7 +3,7 @@
 ## Script purpose: subnational population projections
 ##
 ## Date created: 15 August 2019
-## Last updated: 15 August 2019
+## Last updated: 16 August 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva

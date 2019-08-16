@@ -25,9 +25,9 @@ country <- "Niger"
 m2 <- run.tfr.mcmc(output.dir = tfr.dir, 
                    iter = 100,            # iter=62000
                    nr.chains = 2,
-                   wpp.year = 2019,       # wpp 2019
+                   wpp.year = 2017,       # wpp 2017
                    start.year = 1950, 
-                   present.year = 2012,   # year of census
+                   present.year = 2015,   # year of census
                    replace.output = TRUE)
 
 m2 <- get.tfr.mcmc(tfr.dir)
