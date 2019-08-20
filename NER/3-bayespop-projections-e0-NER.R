@@ -52,3 +52,5 @@ e0M.pred <- get.e0.jmale.prediction(e0.pred)
 
 # converts both female and male trajectories into ASCII
 convert.e0.trajectories(e0.dir, output.dir = "mye0trajs")
+
+setwd(NER.code)

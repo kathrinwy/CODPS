@@ -174,4 +174,4 @@ popM0.adm2.file <- NERpopM.adm2
 popF0.adm3.file <- NERpopF.adm3
 popM0.adm3.file <- NERpopM.adm3
 
-
+setwd(NER.code)

@@ -32,3 +32,5 @@ regtrajM <- copy.national.to.regional.e0(e0M.pred, regions)
 
 write.csv(regtrajF, file = file.path(out.dir, "CAMe0Ftraj.csv"), row.names = FALSE, quote = FALSE)
 write.csv(regtrajM, file = file.path(out.dir, "CAMe0Mtraj.csv"), row.names = FALSE, quote = FALSE)
+
+setwd(NER.code)

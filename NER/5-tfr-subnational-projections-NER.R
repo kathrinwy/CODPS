@@ -74,3 +74,5 @@ tfr.trajectories.plot(NERtfr, region)
 
 region <- "Agadez"
 tfr.trajectories.plot(NERtfr, region)
+
+setwd(NER.code)

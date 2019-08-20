@@ -154,10 +154,10 @@ pop.trajectories.plot(regpop.pred,
                       add = TRUE,
                       show.legend = FALSE)
 legend("topright", 
-       legend = c("West",
-                  "East"),
-       col = c("red", 
-               "blue"), 
+       legend = c("West", "East"),
+       col = c("red", "blue"), 
        lty = 1, 
        bty= "n",
        lwd = 2)
+
+setwd(NER.code)

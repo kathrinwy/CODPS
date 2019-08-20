@@ -10,8 +10,8 @@
 
 # Install and set-up ------------------------------------------------------
 
-rm(list = ls())                          # Clear variables etc from cache
 options(scipen = 999)                    # Disable scientific notation in R
+setwd(NER.directory)
 
 # Install/load packages ---------------------------------------------------
 
@@ -56,3 +56,5 @@ library(wppExplorer)
 library(wpp2015)
 library(wpp2017)
 library(wpp2019)
+
+setwd(NER.code)

@@ -61,3 +61,5 @@ tfr.trajectories.plot(tfr.pred, country = country, nr.traj = 500)
 
 # Export TFR trajectories 
 convert.tfr.trajectories(tfr.dir, n = 50, output.dir = "mytfrtrajs") 
+
+setwd(NER.code)

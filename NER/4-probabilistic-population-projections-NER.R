@@ -31,5 +31,6 @@ pop.pred <- pop.predict( end.year = 2030,
 pop.pred <- get.pop.prediction(pop.dir)
 
 # Plot projection trajectories.
-pop.trajectories.plot(pop.pred, country = country,
-                      sum.over.ages = TRUE, nr.traj = 30) 
+pop.trajectories.plot(pop.pred, country = country, sum.over.ages = TRUE, nr.traj = 30) 
+
+setwd(NER.code)
