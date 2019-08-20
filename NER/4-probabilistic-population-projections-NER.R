@@ -11,7 +11,7 @@
 setwd(NER.output)
 
 tfr.dir <- "TFRsimulation"
-e0.dir <- "e0simulation"
+e0.dir  <- "e0simulation"
 pop.dir <- "POPsimulation"
 
 # Projections using our probabilistic TFR ---------------------------------

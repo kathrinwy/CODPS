@@ -13,18 +13,6 @@
 rm(list = ls())                          # Clear variables etc from cache
 options(scipen = 999)                    # Disable scientific notation in R
 
-# At work
-NER.directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/NER"
-NER.input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/NER/input/"
-NER.output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/NER/output/"
-
-# At home
-NER.directory <- "C:/Users/kathrinweny/COD-PS/NER"
-NER.input     <- "C:/Users/kathrinweny/COD-PS/NER/input/"
-NER.output    <- "C:/Users/kathrinweny/COD-PS/NER/output/"
-
-setwd(NER.directory)
-
 # Install/load packages ---------------------------------------------------
 
 ## IPUMS data import:
