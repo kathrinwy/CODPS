@@ -18,7 +18,6 @@ reg.pop.dir <- "regPOPsimulation"
 
 location.file.NER <- file.path(NER.output, "NERlocations.txt")
 locations.NER     <- read.delim(location.file.NER)
-UNlocations <- read.delim(location.file.NER)
 
 # Locate files with historical age- and sex-specific population. Only population at the present time is required.
  popM0.file     <- file.path(NER.output, "NERpopM.adm1.csv")
@@ -53,20 +52,14 @@ UNlocations <- read.delim(location.file.NER)
  NERpopF$'2013' <- NERpopF$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
  NERpopF$'2014' <- NERpopF$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
  NERpopF$'2015' <- NERpopF$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
+ 
+ # convert to tab delimited file
+ write.table(NERpopM[,c(2,1,3,7)],file="regdata/NERpopM.txt",sep = "\t") # \t tab separated
+ write.table(NERpopF[,c(2,1,3,7)],file="regdata/NERpopF.txt",sep = "\t")
+ 
+# NERpopM <- read.delim(file="regdata/NERpopM.txt", comment.char='#', check.names=FALSE)
+# NERpopF <- read.delim(file="regdata/NERpopF.txt", comment.char='#', check.names=FALSE)
 
-# Save in regdata 
-
-write.table(NERpopM, file="regdata/NERpopM.txt", sep = "\t", row.names = FALSE)
-write.table(NERpopF, file="regdata/NERpopF.txt", sep = "\t", row.names = FALSE)
-
-NERpopM <- read.delim(file="regdata/NERpopM.txt", comment.char='#', check.names=FALSE)
-NERpopF <- read.delim(file="regdata/NERpopF.txt", comment.char='#', check.names=FALSE)
-
-# Reorder columns just in case
-NERpopM <- NERpopM[,c(2,1,3,4,5,6,7)]
-NERpopF <- NERpopF[,c(2,1,3,4,5,6,7)]
-
-head(NERpopM)
 # Optionally, if region-specific net migration counts are not available, migration patterns for
 # distributing national migration can be specified. Locate the example file with migration shares.
 
@@ -79,9 +72,7 @@ NERpatterns <- unique(NERpatterns[, .(reg_code, name)])
  NERpatterns$outmigrationF_share <- 
   rep(0.001,nrow(NERpatterns))
 
-write_delim(NERpatterns, 
-            path = file.path(NER.output,"regdata/NERpatterns.txt"),
-            delim = "\t")
+write_delim(NERpatterns, path = file.path(NER.output,"regdata/NERpatterns.txt"), delim = "\t")
 
 pattern.file <- file.path(NER.output,"regdata/NERpatterns.txt")
 
@@ -119,7 +110,8 @@ regpop.pred <- pop.predict.subnat(present.year = 2015,
                                                 patterns = pattern.file))
 
 regpop.pred <- get.pop.prediction(reg.pop.dir)
-
+dim(NERe0Mtraj)
+dim(NERpopM)
 # Explore results.
 pop.trajectories.plot(regpop.pred,
                       "Nord Ouest", 
