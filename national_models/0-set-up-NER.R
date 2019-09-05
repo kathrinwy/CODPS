@@ -8,9 +8,20 @@
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
+
+data("iso3166", package = "bayesTFR")
+head(iso3166)
+
 # Install and set-up ------------------------------------------------------
 
 options(scipen = 999)                    # Disable scientific notation in R
+
+# Directories
+
+NER.directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
+NER.code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
+NER.output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
+
 setwd(NER.directory)
 
 # Install/load packages ---------------------------------------------------
