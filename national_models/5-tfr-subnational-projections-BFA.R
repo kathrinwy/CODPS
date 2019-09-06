@@ -2,26 +2,26 @@
 ## Project: COD-PS Assessment and Construction, Niger
 ## Script purpose: subnational TFR projections
 ##
-## Date created: 15 August 2019
-## Last updated: 15 August 2019
+## Date created: 6 September 2019
+## Last updated: 6 September 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
 # Setup -------------------------------------------------------------------
 
-setwd(NER.output)
+setwd(output)
 dir.create("regdata")
 
 # Retrieve e0 trajectories ------------------------------------------------
 
-NERe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+BFAe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
     select(-Period)
-write.csv(NERe0Ftraj, paste0("./regdata/", "NERe0Ftraj.csv"), row.names = F)
+write.csv(BFAe0Ftraj, paste0("./regdata/", "BFAe0Ftraj.csv"), row.names = F)
 
-NERe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
     select(-Period)
-write.csv(NERe0Mtraj, paste0("./regdata/", "NERe0Mtraj.csv"), row.names = F)
+write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 
 # Inputs ------------------------------------------------------------------
 
@@ -32,17 +32,22 @@ nat.tfr.dir <- "TFRsimulation"
 # Load data for subnational units
 
 # PCode     region
-# NER001    Agadez 
-# NER002    Diffa
-# NER003    Dosso
-# NER004    Maradi
-# NER005    Tahoua 
-# NER006    Tillaberi
-# NER007    Zinder
-# NER008    Niamey 
+# 01	      Boucle de Mouhoun
+# 02	      Cascades
+# 03	      Centre including Ouagadougou
+# 04	      Centre-Est
+# 05	      Centre-Nord
+# 06	      Centre-Ouest
+# 07	      Centre-Sud
+# 08	      Est
+# 09	      Hauts Basins
+# 10	      Nord
+# 11	      Plateau Central
+# 12	      Sahel
+# 13	      Sud-Ouest
 
-my.regtfr.file.NER <- "regdata/tfr.NER.txt"
-read.delim(my.regtfr.file.NER, check.names = F)
+my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
+read.delim(my.regtfr.file.BFA, check.names = F)
 
 # Projections -------------------------------------------------------------
 
@@ -52,27 +57,27 @@ dir.create("regTFRsimulation")
 
 reg.tfr.dir <- "regTFRsimulation"
 
-# Generate projections for Niger (562)
+# Generate projections for BFA (854)
 
-regtfr.preds <- tfr.predict.subnat(562, 
-                                   my.tfr.file = my.regtfr.file.NER,
+regtfr.preds <- tfr.predict.subnat(854, 
+                                   my.tfr.file = my.regtfr.file.BFA,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
 #  Store the directory for Niger
-NERtfr.dir <- file.path(reg.tfr.dir, "subnat", "c562")
+BFAtfr.dir <- file.path(reg.tfr.dir, "subnat", "c854")
 
 # Explore projections
-NERtfr <- get.tfr.prediction(NERtfr.dir)
+BFAtfr <- get.tfr.prediction(BFAtfr.dir)
 
 par(mfrow=c(1,2))
 
-region <- "Diffa"
-tfr.trajectories.plot(NERtfr, region)
+region <- "Cascades"
+tfr.trajectories.plot(BFAtfr, region)
 
-region <- "Agadez"
-tfr.trajectories.plot(NERtfr, region)
+region <- "Sahel"
+tfr.trajectories.plot(BFAtfr, region)
 
-setwd(NER.code)
+setwd(code)

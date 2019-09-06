@@ -2,15 +2,15 @@
 ## Project: COD-PS Assessment and Construction, Niger
 ## Script purpose: Bayesian Projections of Life Expectancy
 ##
-## Date created: 14 August 2019
-## Last updated: 16 August 2019
+## Date created: 6 September 2019
+## Last updated: 6 September 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
-setwd(NER.output)
+setwd(output)
 e0.dir <- "e0simulation"
-country <- "Niger"
+country <- "Burkina Faso"
 
 # Run MCMCs to estimate the female model. 
 # me0 <- run.e0.mcmc(sex = "Female", output.dir = e0.dir, 
@@ -53,4 +53,4 @@ e0M.pred <- get.e0.jmale.prediction(e0.pred)
 # converts both female and male trajectories into ASCII
 convert.e0.trajectories(e0.dir, output.dir = "mye0trajs")
 
-setwd(NER.code)
+setwd(code)

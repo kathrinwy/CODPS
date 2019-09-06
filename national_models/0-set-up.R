@@ -18,11 +18,12 @@ options(scipen = 999)                    # Disable scientific notation in R
 
 # Directories
 
-NER.directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
-NER.code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
-NER.output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
+directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
+code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
+output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
+input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/"
 
-setwd(NER.directory)
+setwd(directory)
 
 # Install/load packages ---------------------------------------------------
 
@@ -68,4 +69,4 @@ library(wpp2015)
 library(wpp2017)
 library(wpp2019)
 
-setwd(NER.code)
+setwd(code)

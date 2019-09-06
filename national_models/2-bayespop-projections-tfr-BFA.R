@@ -2,8 +2,8 @@
 ## Project: COD-PS Assessment and Construction, Niger
 ## Script purpose: script to project tfr
 ##
-## Date created: 14 August 2019
-## Last updated: 16 August 2019
+## Date created: 6 September 2019
+## Last updated: 6 September 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -13,9 +13,9 @@
 ##---------------------------
 
 # Set a location on disk for TFR results
-setwd(NER.output)
+setwd(output)
 tfr.dir <- "TFRsimulation"
-country <- "Niger"
+country <- "Burkina Faso"
 
 # Run Phase II MCMCs ------------------------------------------------------
 
@@ -62,4 +62,4 @@ tfr.trajectories.plot(tfr.pred, country = country, nr.traj = 500)
 # Export TFR trajectories 
 convert.tfr.trajectories(tfr.dir, n = 50, output.dir = "mytfrtrajs") 
 
-setwd(NER.code)
+setwd(code)
