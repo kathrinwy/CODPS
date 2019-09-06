@@ -11,7 +11,7 @@
 # Setup -------------------------------------------------------------------
 
 setwd(output)
-dir.create("regdata")
+#dir.create("regdata")
 
 # Retrieve e0 trajectories ------------------------------------------------
 
@@ -47,7 +47,7 @@ nat.tfr.dir <- "TFRsimulation"
 # 13	      Sud-Ouest
 
 my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
-read.delim(my.regtfr.file.BFA, check.names = F)
+read.delim(my.regtfr.file.BFA , check.names = F)
 
 # Projections -------------------------------------------------------------
 
@@ -66,7 +66,11 @@ regtfr.preds <- tfr.predict.subnat(854,
 
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
-#  Store the directory for Niger
+BFAtfr <- regtfr.preds[["854"]]
+trajs <- get.tfr.trajectories(BFAtfr, region)
+get.countries.table(BFAtfr)
+
+#  Store the directory for Burkina Faso
 BFAtfr.dir <- file.path(reg.tfr.dir, "subnat", "c854")
 
 # Explore projections
@@ -79,5 +83,6 @@ tfr.trajectories.plot(BFAtfr, region)
 
 region <- "Sahel"
 tfr.trajectories.plot(BFAtfr, region)
+
 
 setwd(code)
