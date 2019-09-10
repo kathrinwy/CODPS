@@ -70,4 +70,5 @@ pop.trajectories.plot(regpop.pred, "Boucle du Mouhoun", sum.over.ages = TRUE)
 
 pop.pyramid(regpop.pred, "Boucle du Mouhoun", year = 2050)
 
+setwd(code)
 

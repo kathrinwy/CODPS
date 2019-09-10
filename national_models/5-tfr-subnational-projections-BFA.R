@@ -84,5 +84,4 @@ tfr.trajectories.plot(BFAtfr, region)
 region <- "Sahel"
 tfr.trajectories.plot(BFAtfr, region)
 
-
 setwd(code)

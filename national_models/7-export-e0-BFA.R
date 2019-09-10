@@ -1,4 +1,14 @@
-library(bayesLife)
+##================================================================
+## Project: COD-PS Assessment and Construction, Niger
+## Script purpose: subnational population projections
+##
+## Date created: 10 September 2019
+## Last updated: 10 September 2019
+##
+## Author: Kathrin Weny
+## Maintainers: Kathrin Weny, Romesh Silva
+
+setwd(output)
 
 out.dir <- "regdata"
 
@@ -30,7 +40,7 @@ copy.national.to.regional.e0 <- function(e0.pred, regions) {
 regtrajF <- copy.national.to.regional.e0(e0F.pred, regions)
 regtrajM <- copy.national.to.regional.e0(e0M.pred, regions)
 
-write.csv(regtrajF, file = file.path(out.dir, "CAMe0Ftraj.csv"), row.names = FALSE, quote = FALSE)
-write.csv(regtrajM, file = file.path(out.dir, "CAMe0Mtraj.csv"), row.names = FALSE, quote = FALSE)
+write.csv(regtrajF, file = file.path(out.dir, "BFAe0Ftraj.csv"), row.names = FALSE, quote = FALSE)
+write.csv(regtrajM, file = file.path(out.dir, "BFAe0Mtraj.csv"), row.names = FALSE, quote = FALSE)
 
-setwd(NER.code)
+setwd(code)

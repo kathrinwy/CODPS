@@ -263,3 +263,4 @@ popM0.file <- BFApopM
 BFApopF <- read_delim("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.txt", delim="\t")
 BFApopM <- read_delim("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.txt", delim="\t")
 
+setwd(code)
