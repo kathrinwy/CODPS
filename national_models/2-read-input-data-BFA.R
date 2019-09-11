@@ -263,4 +263,43 @@ popM0.file <- BFApopM
 BFApopF <- read_delim("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.txt", delim="\t")
 BFApopM <- read_delim("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.txt", delim="\t")
 
+setwd(output)
+
+# Retrieve e0 trajectories ------------------------------------------------
+
+BFAe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+  select(-Period)
+write.csv(BFAe0Ftraj, paste0("./regdata/", "BFAe0Ftraj.csv"), row.names = F)
+
+BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+  select(-Period)
+write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
+
 setwd(code)
+
+
+# TFR input ------------------------------------------------------------------
+
+# bayesTFR projections of the national TFR (result of tfr.predict )
+
+# Load data for subnational units
+
+# PCode     region
+# 01	      Boucle de Mouhoun
+# 02	      Cascades
+# 03	      Centre including Ouagadougou
+# 04	      Centre-Est
+# 05	      Centre-Nord
+# 06	      Centre-Ouest
+# 07	      Centre-Sud
+# 08	      Est
+# 09	      Hauts Basins
+# 10	      Nord
+# 11	      Plateau Central
+# 12	      Sahel
+# 13	      Sud-Ouest
+
+my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
+read.delim(my.regtfr.file.BFA , check.names = F)
+
+
