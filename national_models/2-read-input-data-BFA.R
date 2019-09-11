@@ -1,17 +1,16 @@
-##================================================================
-## Project: COD-PS Assessment and Construction, Niger
-## Script purpose: script to load census, DHS, MICS input data files
-##
-## Date created: 6 September 2019
-## Last updated: 6 September 2019
-##
-## Author: Kathrin Weny
-## Maintainers: Kathrin Weny, Romesh Silva
 
-# Last census in Niger was in 2012, the same year a DHS took place. 
-# No micro data are available for the 2012 census, however, INS has published single year 
-# population estimates. The latest DHS was conducted in 2017, but deemed to low
-# quality to be published (https://dhsprogram.com/pubs/pdf/OD76/OD76.pdf). 
+# Background --------------------------------------------------------------
+
+# Project: COD-PS Construction
+# Script purpose: load subnational population data, DHS/MICS fertilty data
+
+# Date created: 11 September 2019
+# Last updated: 11 September 2019
+
+# Author: Kathrin Weny
+# Maintainers: Kathrin Weny, Romesh Silva
+
+# Last census in Burkina Faso took place in 2006
 
 # Read in data: INS projections -------------------------------------------
 
@@ -24,7 +23,7 @@ GET(url1, write_disk(tf <- tempfile(fileext = ".xlsx")))
 growth     <- read_excel(tf, 1L, skip = 16)
 
 growth <- growth %>%
-  select(c("Region, subregion, country or area *", "2010-2015"))%>%
+  select(c("Region, subregion, country or area *", "2005-2010", "2010-2015"))%>%
   filter(`Region, subregion, country or area *` == "Burkina Faso")
 
 ## Section: Read in and prepare IPUMS Census microdata
@@ -222,26 +221,31 @@ BFApopM <-   male.pop.2005[,c(6,5,4,3)]
 
 # Project to 2015 ---------------------------------------------------------
 
+# use growth rate for 2005-2010
 BFApopM$'2007' <- BFApopM$'sum_age'*(as.numeric(growth[1,2])/100 +1)
 BFApopM$'2008' <- BFApopM$'2007'*(as.numeric(growth[1,2])/100 +1)
 BFApopM$'2009' <- BFApopM$'2008'*(as.numeric(growth[1,2])/100 +1)
 BFApopM$'2010' <- BFApopM$'2009'*(as.numeric(growth[1,2])/100 +1)
-BFApopM$'2011' <- BFApopM$'2010'*(as.numeric(growth[1,2])/100 +1)
-BFApopM$'2012' <- BFApopM$'2011'*(as.numeric(growth[1,2])/100 +1)
-BFApopM$'2013' <- BFApopM$'2012'*(as.numeric(growth[1,2])/100 +1)
-BFApopM$'2014' <- BFApopM$'2013'*(as.numeric(growth[1,2])/100 +1)
-BFApopM$'2015' <- BFApopM$'2014'*(as.numeric(growth[1,2])/100 +1)
 
+# use growth rate for 2020-2015
+BFApopM$'2011' <- BFApopM$'2010'*(as.numeric(growth[1,3])/100 +1)
+BFApopM$'2012' <- BFApopM$'2011'*(as.numeric(growth[1,3])/100 +1)
+BFApopM$'2013' <- BFApopM$'2012'*(as.numeric(growth[1,3])/100 +1)
+BFApopM$'2014' <- BFApopM$'2013'*(as.numeric(growth[1,3])/100 +1)
+BFApopM$'2015' <- BFApopM$'2014'*(as.numeric(growth[1,3])/100 +1)
 
+# use growth rate for 2005-2010
 BFApopF$'2007' <- BFApopF$'sum_age'*(as.numeric(growth[1,2])/100 +1)
 BFApopF$'2008' <- BFApopF$'2007'*(as.numeric(growth[1,2])/100 +1)
 BFApopF$'2009' <- BFApopF$'2008'*(as.numeric(growth[1,2])/100 +1)
 BFApopF$'2010' <- BFApopF$'2009'*(as.numeric(growth[1,2])/100 +1)
-BFApopF$'2011' <- BFApopF$'2010'*(as.numeric(growth[1,2])/100 +1)
-BFApopF$'2012' <- BFApopF$'2011'*(as.numeric(growth[1,2])/100 +1)
-BFApopF$'2013' <- BFApopF$'2012'*(as.numeric(growth[1,2])/100 +1)
-BFApopF$'2014' <- BFApopF$'2013'*(as.numeric(growth[1,2])/100 +1)
-BFApopF$'2015' <- BFApopF$'2014'*(as.numeric(growth[1,2])/100 +1)
+
+# use growth rate for 2020-2015
+BFApopF$'2011' <- BFApopF$'2010'*(as.numeric(growth[1,3])/100 +1)
+BFApopF$'2012' <- BFApopF$'2011'*(as.numeric(growth[1,3])/100 +1)
+BFApopF$'2013' <- BFApopF$'2012'*(as.numeric(growth[1,3])/100 +1)
+BFApopF$'2014' <- BFApopF$'2013'*(as.numeric(growth[1,3])/100 +1)
+BFApopF$'2015' <- BFApopF$'2014'*(as.numeric(growth[1,3])/100 +1)
 
 BFApopF <- BFApopF[,c(1,2,3,13)]
 BFApopM <- BFApopM[,c(1,2,3,13)]
@@ -275,9 +279,6 @@ BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRU
   select(-Period)
 write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 
-setwd(code)
-
-
 # TFR input ------------------------------------------------------------------
 
 # bayesTFR projections of the national TFR (result of tfr.predict )
@@ -301,5 +302,7 @@ setwd(code)
 
 my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
 read.delim(my.regtfr.file.BFA , check.names = F)
+
+setwd(code)
 
 
