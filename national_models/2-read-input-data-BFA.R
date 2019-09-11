@@ -18,9 +18,9 @@ setwd(input)
 
 # Adm0 population growth from WPP -----------------------------------------
 
-url1       <- "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/1_Population/WPP2019_POP_F02_POPULATION_GROWTH_RATE.xlsx"
+url1                    <- "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/1_Population/WPP2019_POP_F02_POPULATION_GROWTH_RATE.xlsx"
 GET(url1, write_disk(tf <- tempfile(fileext = ".xlsx")))
-growth     <- read_excel(tf, 1L, skip = 16)
+growth                  <- read_excel(tf, 1L, skip = 16)
 
 growth <- growth %>%
   select(c("Region, subregion, country or area *", "2005-2010", "2010-2015"))%>%
@@ -28,24 +28,24 @@ growth <- growth %>%
 
 ## Section: Read in and prepare IPUMS Census microdata
 BFA.census.2006 <- "ipumsi_00012.dat"
-census.ddi <- read_ipums_ddi("ipumsi_00012.xml")
-census.data <- read_ipums_micro(census.ddi,
-                                verbose = FALSE)
+census.ddi      <- read_ipums_ddi("ipumsi_00012.xml")
+census.data     <- read_ipums_micro(census.ddi, verbose = FALSE)
 unique(census.data$DHS_IPUMSI_BF)
-## DHS_IPUMSI_CM		DHS-IPUMS-I BFA regions,  1996-2010  [consistent boundaries, GIS]
-#01	Boucle de Mouhoun
-#02	Cascades
-#03	Centre including Ouagadougou
-#04	Centre-Est
-#05	Centre-Nord
-#06	Centre-Ouest
-#07	Centre-Sud
-#08	Est
-#09	Hauts Basins
-#10	Nord
-#11	Plateau Central
-#12	Sahel
-#13	Sud-Ouest
+
+# DHS_IPUMSI_CM		DHS-IPUMS-I BFA regions,  1996-2010  [consistent boundaries, GIS]
+# 01	Boucle de Mouhoun
+# 02	Cascades
+# 03	Centre including Ouagadougou
+# 04	Centre-Est
+# 05	Centre-Nord
+# 06	Centre-Ouest
+# 07	Centre-Sud
+# 08	Est
+# 09	Hauts Basins
+# 10	Nord
+# 11	Plateau Central
+# 12	Sahel
+# 13	Sud-Ouest
 
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 ##adm0
@@ -250,6 +250,7 @@ BFApopF$'2015' <- BFApopF$'2014'*(as.numeric(growth[1,3])/100 +1)
 BFApopF <- BFApopF[,c(1,2,3,13)]
 BFApopM <- BFApopM[,c(1,2,3,13)]
 
+
 # Export ------------------------------------------------------------------
 
 colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
@@ -282,23 +283,6 @@ write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 # TFR input ------------------------------------------------------------------
 
 # bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Load data for subnational units
-
-# PCode     region
-# 01	      Boucle de Mouhoun
-# 02	      Cascades
-# 03	      Centre including Ouagadougou
-# 04	      Centre-Est
-# 05	      Centre-Nord
-# 06	      Centre-Ouest
-# 07	      Centre-Sud
-# 08	      Est
-# 09	      Hauts Basins
-# 10	      Nord
-# 11	      Plateau Central
-# 12	      Sahel
-# 13	      Sud-Ouest
 
 my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
 read.delim(my.regtfr.file.BFA , check.names = F)

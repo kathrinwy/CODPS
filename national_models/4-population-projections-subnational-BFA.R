@@ -1,12 +1,13 @@
-##================================================================
-## Project: COD-PS Assessment and Construction, Niger
-## Script purpose: subnational population projections
-##
-## Date created: 6 September 2019
-## Last updated: 6 September 2019
-##
-## Author: Kathrin Weny
-## Maintainers: Kathrin Weny, Romesh Silva
+# Background --------------------------------------------------------------
+
+# Project: COD-PS Construction
+# Script purpose: subnational projections
+
+# Date created: 11 September 2019
+# Last updated: 11 September 2019
+
+# Author: Kathrin Weny
+# Maintainers: Kathrin Weny, Romesh Silva
 
 # Setup -------------------------------------------------------------------
 setwd(output)
@@ -17,8 +18,8 @@ data.dir <- file.path("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/outp
 
 # Location file defining geographical disaggregation
 
-location.file <- file.path(output, "BFAlocations.txt")
-locations     <- read.delim(location.file.BFA)
+location.file <- file.path(output, "regdata/BFAlocations.txt")
+locations     <- read.delim(location.file)
 
 # Locate files with historical age- and sex-specific population. Only population at the present time is required.
 
@@ -48,8 +49,6 @@ write.csv(BFAe0Mtraj,file= paste0(output, "regdata/BFAe0Mtraj.csv"), row.names =
 
 # Generate subnational trajectories for all regions of one country.
 
-sim.dir <- tempfile()  
-
 regpop.pred <- pop.predict.subnat(present.year = 2015, 
                                   wpp.year = 2017, 
                                   output.dir = reg.pop.dir,
@@ -68,7 +67,7 @@ get.countries.table(regpop.pred)
 # Explore results.
 pop.trajectories.plot(regpop.pred, "Boucle du Mouhoun", sum.over.ages = TRUE)
 
-pop.pyramid(regpop.pred, "Boucle du Mouhoun", year = 2050)
+pop.pyramid(regpop.pred, "Boucle du Mouhoun", year = 2021)
 
 setwd(code)
 

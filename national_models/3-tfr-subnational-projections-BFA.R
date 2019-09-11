@@ -1,13 +1,14 @@
-##================================================================
-## Project: COD-PS Assessment and Construction, Niger
-## Script purpose: subnational TFR projections
-##
-## Date created: 6 September 2019
-## Last updated: 6 September 2019
-##
-## Author: Kathrin Weny
-## Maintainers: Kathrin Weny, Romesh Silva
 
+# Background --------------------------------------------------------------
+
+# Project: COD-PS Construction
+# Script purpose: subnational TFR projections
+
+# Date created: 11 September 2019
+# Last updated: 11 September 2019
+
+# Author: Kathrin Weny
+# Maintainers: Kathrin Weny, Romesh Silva
 
 # Inputs ------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ reg.tfr.dir <- "regTFRsimulation"
 
 # Generate projections for BFA (854)
 
-regtfr.preds <- tfr.predict.subnat(854, 
+regtfr.preds <- tfr.predict.subnat(854,
                                    my.tfr.file = my.regtfr.file.BFA,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)

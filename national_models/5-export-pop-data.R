@@ -1,49 +1,53 @@
-##================================================================
-## Project: COD-PS Assessment and Construction, Niger
-## Script purpose: subnational population projections
-##
-## Date created: 10 September 2019
-## Last updated: 10 September 2019
-##
-## Author: Kathrin Weny
-## Maintainers: Kathrin Weny, Romesh Silva
+# Background --------------------------------------------------------------
+
+# Project: COD-PS Construction
+# Script purpose: export
+
+# Date created: 11 September 2019
+# Last updated: 11 September 2019
+
+# Author: Kathrin Weny
+# Maintainers: Kathrin Weny, Romesh Silva
 
 setwd(output)
 
 out.dir <- "regdata"
 
-##e0.sim.dir <- "regdata/e0/e0simulationPredExtra"
-e0.sim.dir <- "e0simulation/predictions/prediction.rda"
+# e0.sim.dir <- "regdata/e0/e0simulationPredExtra"
+# e0.sim.dir <- "e0simulation/predictions/prediction.rda"
 
-e0F.pred <- get.e0.prediction(e0.sim.dir)
+# e0F.pred <- get.e0.prediction(e0.sim.dir)
 # e0F.pred <- get.e0.prediction(sim.dir = file.path(getwd(),"e0simulation"))
-e0M.pred <- get.e0.jmale.prediction(e0F.pred)
+# e0M.pred <- get.e0.jmale.prediction(e0F.pred)
 
 # Sub-regional
-location.file <- file.path(output, "BFAlocations.txt")
-locations     <- read.delim(location.file.BFA)
+location.file  <- file.path(output, "BFAlocations.txt")
+regions        <- (subset(read.delim(location.file), location_type == 4))[,3:4]
 
-regions <- subset(read.delim(location.file), location_type == 4)$reg_code
+# 2015 and 2020 populations for 13 rebions in BFA
+traj <- get.pop.prediction(reg.pop.dir)
 
-copy.national.to.regional.e0 <- function(e0.pred, regions) {
-  
-  traj <- get.e0.trajectories(e0.pred, "Burkina Faso")
-  ntraj <- ncol(traj)
-  colnames(traj) <- paste0("e0_", 1:ntraj)
-  trajw <- cbind(Year = rownames(traj), data.frame(traj))
-  trajl <- reshape(trajw, direction = "long", varying = 2:(ntraj+1), 
-                   sep = "_", timevar = "Trajectory")
-  trajl$id <- NULL
-  
-  reg.e0traj <- NULL
-  
-  for(reg in regions) 
-    reg.e0traj <- rbind(reg.e0traj, cbind(LocID = reg, trajl))
-  reg.e0traj
-}
+# Male
+popM_2015  <- as.data.frame(traj$'quantilesMage'[1:13,1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
+popM_2015  <- rownames_to_column(popM_2015, "reg_code")
+popM_2015  <- popM %>%
+  gather(age, popM_2015, -reg_code)
 
-regtrajF <- copy.national.to.regional.e0(e0F.pred, regions)
-regtrajM <- copy.national.to.regional.e0(e0M.pred, regions)
+
+popM_2020 <- as.data.frame(traj$'quantilesMage'[1:13,1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2020
+popM_2020  <- rownames_to_column(popM_2020, "reg_code")
+popM_2020  <- popM %>%
+  gather(age, popM_2020, -reg_code)
+
+
+
+popM <- merge(popM_2015, by = c("reg_code", "age"))
+
+# intrapolate years between 2015 and 2020
+i <- 1
+test2$'2016' <- test2[i,]+(test2[i,4] - test2[i,3])/5
+
+
 
 write.csv(regtrajF, file = file.path(out.dir, "BFAe0Ftraj.csv"), row.names = FALSE, quote = FALSE)
 write.csv(regtrajM, file = file.path(out.dir, "BFAe0Mtraj.csv"), row.names = FALSE, quote = FALSE)
