@@ -63,4 +63,21 @@ library(wpp2017)
 library(wpp2019)
 library(gridExtra)
 
+
+# for mapping -------------------------------------------------------------
+
+library(rgdal)                           # Read in shapfiles
+library(tmap)
+library(tmaptools)
+library(leaflet)
+library(rgeos)
+library(ggmap)
+library(mapdata)
+library(maptools)
+library(maps)
+library(rio)
+library(raster)
+library(broom)
+
+
 setwd(code)
