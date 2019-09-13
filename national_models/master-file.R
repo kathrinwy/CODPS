@@ -35,8 +35,8 @@ source("1-bayespop-projections.R")              # using converged tfr/e0 project
 country <- "Niger"
 
 source("2-read-input-data-NER.R")                           # Read INS data
-source("5-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
-source("6-population-projections-subnational-NER.R")    
+source("3-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational-NER.R")    
 source("5-export-pop-data.R")                        
 source("6-visualizations.R") 
 
@@ -46,8 +46,8 @@ source("6-visualizations.R")
 country <- "Burkina Faso"
 
 source("2-read-input-data-BFA.R")                           # Read IPUMS data, Census 2006
-source("5-tfr-subnational-projections-BFA.R")               # pre-requisite: downloaded tfr file in regdata
-source("6-population-projections-subnational-BFA.R")    
+source("3-tfr-subnational-projections-BFA.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational-BFA.R")    
 source("5-export-pop-data.R")                        
 source("6-visualizations.R") 
 

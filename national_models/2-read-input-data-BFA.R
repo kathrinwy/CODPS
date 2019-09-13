@@ -88,6 +88,10 @@ total.adm1.census1 <- census.data %>%
   group_by(AGE, DHS_IPUMSI_BF) %>%  
   dplyr::summarize(sum_age = sum(PERWT))
 
+###########################################################################################
+# Smoothing
+###########################################################################################
+
 male.adm1.census5 <- census.data %>% 
   filter(SEX==1) %>%
   group_by(AGE2, DHS_IPUMSI_BF) %>%  
@@ -227,7 +231,7 @@ BFApopM$'2008' <- BFApopM$'2007'*(as.numeric(growth[1,2])/100 +1)
 BFApopM$'2009' <- BFApopM$'2008'*(as.numeric(growth[1,2])/100 +1)
 BFApopM$'2010' <- BFApopM$'2009'*(as.numeric(growth[1,2])/100 +1)
 
-# use growth rate for 2020-2015
+# use growth rate for 2010-2015
 BFApopM$'2011' <- BFApopM$'2010'*(as.numeric(growth[1,3])/100 +1)
 BFApopM$'2012' <- BFApopM$'2011'*(as.numeric(growth[1,3])/100 +1)
 BFApopM$'2013' <- BFApopM$'2012'*(as.numeric(growth[1,3])/100 +1)
@@ -240,7 +244,7 @@ BFApopF$'2008' <- BFApopF$'2007'*(as.numeric(growth[1,2])/100 +1)
 BFApopF$'2009' <- BFApopF$'2008'*(as.numeric(growth[1,2])/100 +1)
 BFApopF$'2010' <- BFApopF$'2009'*(as.numeric(growth[1,2])/100 +1)
 
-# use growth rate for 2020-2015
+# use growth rate for 2010-2015
 BFApopF$'2011' <- BFApopF$'2010'*(as.numeric(growth[1,3])/100 +1)
 BFApopF$'2012' <- BFApopF$'2011'*(as.numeric(growth[1,3])/100 +1)
 BFApopF$'2013' <- BFApopF$'2012'*(as.numeric(growth[1,3])/100 +1)

@@ -67,7 +67,7 @@ get.countries.table(regpop.pred)
 # Explore results.
 pop.trajectories.plot(regpop.pred, "Boucle du Mouhoun", sum.over.ages = TRUE)
 
-pop.pyramid(regpop.pred, "Boucle du Mouhoun", year = 2021)
+pop.pyramid(regpop.pred, "Boucle du Mouhoun", year = 2017)
 
 setwd(code)
 
