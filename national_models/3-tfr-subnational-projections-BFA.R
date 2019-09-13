@@ -31,6 +31,8 @@
 # 12	      Sahel
 # 13	      Sud-Ouest
 
+setwd(output)
+
 my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
 read.delim(my.regtfr.file.BFA , check.names = F)
 
