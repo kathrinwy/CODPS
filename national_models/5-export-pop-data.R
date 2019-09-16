@@ -45,7 +45,6 @@ for(i in 1:nrow(popM)){
 
 popM$sex <- "male"
 
-
 # Female population
 popF_2015  <- as.data.frame(traj$'quantilesFage'[1:13,1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
 popF_2015  <- rownames_to_column(popF_2015, "reg_code")
@@ -131,6 +130,6 @@ names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2015", "pop_2016", 
 
 # Export ------------------------------------------------------------------
 
-write.csv(pop, file = file.path("BFA_adm1_pop_2015_2020.csv"), row.names = FALSE, quote = FALSE)
+# write.csv(pop, file = file.path("BFA_adm1_pop_2015_2020.csv"), row.names = FALSE, quote = FALSE)
 
 setwd(code)

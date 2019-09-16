@@ -23,7 +23,7 @@ GET(url1, write_disk(tf <- tempfile(fileext = ".xlsx")))
 growth                  <- read_excel(tf, 1L, skip = 16)
 
 growth <- growth %>%
-  select(c("Region, subregion, country or area *", "2005-2010", "2010-2015"))%>%
+  dplyr::select(c("Region, subregion, country or area *", "2005-2010", "2010-2015"))%>%
   filter(`Region, subregion, country or area *` == "Burkina Faso")
 
 ## Section: Read in and prepare IPUMS Census microdata
@@ -277,11 +277,11 @@ setwd(output)
 # Retrieve e0 trajectories ------------------------------------------------
 
 BFAe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  select(-Period)
+  dplyr::select(-Period)
 write.csv(BFAe0Ftraj, paste0("./regdata/", "BFAe0Ftraj.csv"), row.names = F)
 
 BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  select(-Period)
+  dplyr::select(-Period)
 write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 
 # TFR input ------------------------------------------------------------------
