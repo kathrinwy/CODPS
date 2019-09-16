@@ -78,6 +78,8 @@ library(maps)
 library(rio)
 library(raster)
 library(broom)
-
+library(grid)  # to label maps
+library(png)
+library(raster)
 
 setwd(code)
