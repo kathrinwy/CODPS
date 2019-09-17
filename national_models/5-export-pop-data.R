@@ -115,7 +115,6 @@ pop <-
 pop$age <- as.factor(pop$age)
 pop$age = factor(pop$age, levels(pop$age)[c(1,2, 17, 3,10:16, 18:27, 4:9)]) 
 
-
 # Filter age groups that do not exist between 2015 and 2020
 
 pop <- pop %>%

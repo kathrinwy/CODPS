@@ -15,7 +15,6 @@
 # Set up and national models have to run before subnational models 
 # codes containaing country specific ISO codes (e. g. BFA for Burkina Faso) are specific to that country
 
-
 # Directories
 
 directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
@@ -28,7 +27,7 @@ setwd(code)
 source("0-set-up.R")   
 
 # National models ---------------------------------------------------------
-source("1-bayespop-projections.R")              # using converged tfr/e0 projections and retriev pop projections
+source("1-bayespop-projections.R")                          # using converged tfr/e0 projections and retriev pop projections
 
 # NIGER -------------------------------------------------------------------
 
@@ -39,7 +38,6 @@ source("3-tfr-subnational-projections-NER.R")               # pre-requisite: dow
 source("4-population-projections-subnational-NER.R")    
 source("5-export-pop-data.R")                        
 source("6-visualizations.R") 
-
 
 # BURKINA FASO ------------------------------------------------------------
 

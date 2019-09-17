@@ -25,6 +25,8 @@
 
 # Probabilistic population pyramids (2019) ---------------------------------------
 
+pop      <- read.csv("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/BFA_adm1_pop_2015_2020.csv")
+
 pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2019")))
 
 # Prepare data for pop-pyramid
