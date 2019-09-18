@@ -256,8 +256,8 @@ BFApopM <- BFApopM[,c(1,2,3,13)]
 
 # Export ------------------------------------------------------------------
 
-colnames(BFApopF) <- c("reg_code","name","age","2006") # Why 2015?
-colnames(BFApopM) <- c("reg_code","name","age","2006") # Why 2015?
+colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
+colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
 
 write.csv(BFApopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.csv", row.names = TRUE)
 write.csv(BFApopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.csv", row.names = TRUE)

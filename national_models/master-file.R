@@ -37,7 +37,8 @@ source("2-read-input-data-NER.R")                           # Read INS data
 source("3-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
 source("4-population-projections-subnational-NER.R")    
 source("5-export-pop-data.R")                        
-source("6-visualizations.R") 
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-NER.R")                      # Not coded yet
 
 # BURKINA FASO ------------------------------------------------------------
 
@@ -47,9 +48,21 @@ source("2-read-input-data-BFA.R")                           # Read IPUMS data, C
 source("3-tfr-subnational-projections-BFA.R")               # pre-requisite: downloaded tfr file in regdata
 source("4-population-projections-subnational-BFA.R")    
 source("5-export-pop-data.R")                        
-source("6-visualizations.R") 
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-BFA.R")
 
 
+
+# Bangladesh --------------------------------------------------------------
+
+country <- "Bangladesh"
+
+source("2-read-input-data-BGD.R")                           # Read IPUMS data, Census 2006
+source("3-tfr-subnational-projections-BGD.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational-BGD.R")    
+source("5-export-pop-data.R")                        
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-BGD.R")
 
 
 
