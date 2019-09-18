@@ -1,4 +1,3 @@
-
 # Background --------------------------------------------------------------
 
 # Project: COD-PS Construction
@@ -17,19 +16,19 @@
 setwd(input)
 
 # Adm0 population growth from WPP -----------------------------------------
-
 url1                    <- "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/1_Population/WPP2019_POP_F02_POPULATION_GROWTH_RATE.xlsx"
 GET(url1, write_disk(tf <- tempfile(fileext = ".xlsx")))
 growth                  <- read_excel(tf, 1L, skip = 16)
 
-growth <- growth %>%
-  dplyr::select(c("Region, subregion, country or area *", "2005-2010", "2010-2015"))%>%
-  filter(`Region, subregion, country or area *` == "Burkina Faso")
+growth                  <- growth %>%
+                           dplyr::select(c("Region, subregion, country or area *", "2005-2010", "2010-2015"))%>%
+                           filter(`Region, subregion, country or area *` == "Burkina Faso")
 
 ## Section: Read in and prepare IPUMS Census microdata
-BFA.census.2006 <- "ipumsi_00012.dat"
-census.ddi      <- read_ipums_ddi("ipumsi_00012.xml")
-census.data     <- read_ipums_micro(census.ddi, verbose = FALSE)
+BFA.census.2006         <- "ipumsi_00012.dat"
+census.ddi              <- read_ipums_ddi("ipumsi_00012.xml")
+census.data             <- read_ipums_micro(census.ddi, verbose = FALSE)
+
 unique(census.data$DHS_IPUMSI_BF)
 
 # DHS_IPUMSI_CM		DHS-IPUMS-I BFA regions,  1996-2010  [consistent boundaries, GIS]
@@ -240,7 +239,7 @@ BFApopM$'2015' <- BFApopM$'2014'*(as.numeric(growth[1,3])/100 +1)
 
 # use growth rate for 2005-2010
 BFApopF$'2007' <- BFApopF$'sum_age'*(as.numeric(growth[1,2])/100 +1)
-BFApopF$'2008' <- BFApopF$'2007'*(as.numeric(growth[1,2])/100 +1)
+BFApopF$'2008' <- BFApopF$'2007'*(as.numeric(growth[1,2])/100 +1) 
 BFApopF$'2009' <- BFApopF$'2008'*(as.numeric(growth[1,2])/100 +1)
 BFApopF$'2010' <- BFApopF$'2009'*(as.numeric(growth[1,2])/100 +1)
 
@@ -257,8 +256,8 @@ BFApopM <- BFApopM[,c(1,2,3,13)]
 
 # Export ------------------------------------------------------------------
 
-colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
-colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
+colnames(BFApopF) <- c("reg_code","name","age","2006") # Why 2015?
+colnames(BFApopM) <- c("reg_code","name","age","2006") # Why 2015?
 
 write.csv(BFApopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.csv", row.names = TRUE)
 write.csv(BFApopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.csv", row.names = TRUE)

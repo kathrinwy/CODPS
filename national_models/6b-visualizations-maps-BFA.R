@@ -160,9 +160,9 @@ plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Da
                        breaks = c(0, 200000, 400000, 600000, 800000),
                        labels=c("0", "200,000", "400,000", "600,000", "800000"))+
   labs(title = "Youth (10-24), by Administrative Region 1", 
-       fill  = "Number of women \n of reproductive age (15-49)")+
+       fill  = "Youth (10-24)")+
   theme_void()+
-  theme(legend.position = c(0.15, 0.8))+
+  theme(legend.position = c(0.12, 0.8))+
   coord_equal()
 
 plot.label <- plot +

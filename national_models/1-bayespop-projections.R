@@ -102,7 +102,7 @@ pop.dir <- "POPsimulation"
 
 pop.pred <- pop.predict( end.year = 2030, 
                          start.year = 1950, 
-                         present.year = 2015,   # 2015 projected from 2012 at later stage for Niger/BFA
+                         present.year = 2015,   # 2006 not possible as only mutliple of 5
                          wpp.year = 2017,       # ERROR MESSAGE: vwBaseYear2019 not found: migration error, so use wpp2017
                          output.dir = pop.dir, 
                          nr.traj = 50,

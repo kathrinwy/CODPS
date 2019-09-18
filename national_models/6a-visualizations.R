@@ -24,6 +24,7 @@
 # BFA13     Sud-Ouest
 
 # Probabilistic population pyramids (2019) ---------------------------------------
+setwd(output)
 
 pop      <- read.csv("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/BFA_adm1_pop_2015_2020.csv")
 
@@ -33,9 +34,13 @@ pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "
 pop.plot$pop_2019 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2019, pop.plot$pop_2019)
 
 # Adjust levels (age is stored as factor)
-levels(pop.plot$Age) <- c("0-4", "0-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",  
-                          "40-44", "45-49", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80+", "80+",
-                          "80+",  "80+",  "80+",  "80+",  "80+",  "80+",  "80+",  "80+",  "80+")
+levels(pop.plot$Age) <- c("0-4", "0-4",  "10-14", "80+",  "80+",  "80+",  "80+",  "80+",  "80+",
+                          "15-19", "20-24", "25-29", "30-34", "35-39",   "40-44", "45-49",
+                          "5-9", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80+", "80+",
+                          "80+",  "80+")
+
+# Order age groups
+pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 11, 2, 4:10,  12:17, 3)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
 regions   <- unique(pop.plot$ADM1_EN)
@@ -64,7 +69,7 @@ g <- grid.arrange(plot.list[[1]], plot.list[[2]],plot.list[[3]],plot.list[[4]],p
              plot.list[[6]], plot.list[[7]],plot.list[[8]],plot.list[[9]],plot.list[[10]],
              plot.list[[11]], plot.list[[12]],plot.list[[13]], ncol = 3)
 
-ggsave(file = "plots/BFA/subnat.pyramids.png", g, height = 40, width=27, units = "cm")
+ggsave(file = "plots/BFA/subnat.pyramids.png", g, height = 40, width=35, units = "cm")
 
 # Poptrajectories plot ----------------------------------------------------
 
