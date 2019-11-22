@@ -100,6 +100,8 @@ pop.dir <- "POPsimulation"
 
 # Projections using our probabilistic TFR ---------------------------------
 
+vwBaseYear2019 <- read.delim(file='vwBaseYear2019.txt', comment.char='#', check.names=FALSE)
+
 pop.pred <- pop.predict( end.year = 2030, 
                          start.year = 1950, 
                          present.year = 2015,   # 2006 not possible as only mutliple of 5

@@ -47,61 +47,116 @@ unique(census.data$DHS_IPUMSI_BF)
 # 13	Sud-Ouest
 
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
-##adm0
-male.adm0.census1 <- census.data %>% 
-  filter(SEX==1) %>%
-  group_by(AGE) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))  					    
-female.adm0.census1 <- census.data %>%
-  filter(SEX==2) %>%
-  group_by(AGE) %>%  
-  dplyr::summarize(sum_age = sum(PERWT)) 
-total.adm0.census1 <- census.data %>% 
-  group_by(AGE) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))
 
 
-male.adm0.census5 <- census.data %>% 
-  filter(SEX==1) %>%
-  group_by(AGE2) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))  					    
-female.adm0.census5 <- census.data %>%
-  filter(SEX==2) %>%
-  group_by(AGE2) %>%  
-  dplyr::summarize(sum_age = sum(PERWT)) 
-total.adm0.census5 <- census.data %>% 
-  group_by(AGE2) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))
+## Age-Sex distribution, ADM0
+asd.adm0 <- 10 * table(census.data$AGE,
+                       census.data$SEX)
 
-
-##adm1
-male.adm1.census1 <- census.data %>% 
-  filter(SEX==1) %>%
-  group_by(AGE, DHS_IPUMSI_BF) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))
-female.adm1.census1 <- census.data %>%
-  filter(SEX==2) %>%
-  group_by(AGE, DHS_IPUMSI_BF) %>%  
-  dplyr::summarize(sum_age = sum(PERWT)) 
-total.adm1.census1 <- census.data %>% 
-  group_by(AGE, DHS_IPUMSI_BF) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))
+## Age-Sex distribution, ADM1
+asd.adm1 <- table(census.data$AGE,
+                  census.data$SEX,
+                  census.data$DHS_IPUMSI_BF)*10
 
 ###########################################################################################
 # Smoothing
+
+f.pop.all <- list()
+m.pop.all   <- list()
+##Calculate Noumbissi Index for ADM1 level data:
+
+for(i in 1:13){
+female.Noumbissi0 <- rep(0,length(asd.adm1[i,1,]))
+male.Noumbissi0 <- rep(0,length(asd.adm1[i,1,]))
+for (j in 1:length(asd.adm1[i,1,])){
+  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:99,ageMin = 20, ageMax = 85,digit=0)
+  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:99,ageMin = 20, ageMax = 85,digit=0)
+} 
+female.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
+
+male.Noumbissi5 <- rep(0,length(asd.adm1[i,1,]))
+for (j in 1:length(asd.adm1[1,1,])){
+  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:99,ageMin = 20, ageMax = 85,digit=5)
+  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:99,ageMin = 20, ageMax = 85,digit=5)
+} 
+
+##Calculate mean relative difference for digit preference between ages 
+## ending in -0 and -5  
+rel.diff.female.05 <- 100*(female.Noumbissi0 - female.Noumbissi5)/(0.5*(female.Noumbissi0 + female.Noumbissi5))
+rel.diff.male.05 <- 100*(male.Noumbissi0 - male.Noumbissi5)/(0.5*(male.Noumbissi0 + male.Noumbissi5))
+mean(rel.diff.female.05)
+mean(rel.diff.male.05)
+
+##If female age preference for ages ending  0s and 5s differs by moe than 15%,
+##then smooth single-year ages for females using Spencer's smoothing technique 
+##(for ages 10-89), else use the raw data directly
+ifelse(mean(rel.diff.female.05) > 15, 
+       f.pop <- spencer(asd.adm1[,1,1],0:99),
+       f.pop <- asd.adm1[,1,]
+)
+# Replace 0-9 and ages above 90 with asd.adm1 by default
+f.pop[1:10]    <- asd.adm1[1:10,2,1]
+f.pop[91:100]  <- c(asd.adm1[91:99,2,1], NA)
+
+f.pop.all[[i]] <- f.pop
+
+##If male age preference for ages ending  0s and 5s differs by moe than 15%,
+##then smooth single-year ages for males using Spencer's smoothing technique 
+##(for ages 10-89), else use the raw data directly
+ifelse(mean(rel.diff.male.05) > 15, 
+       m.pop <- spencer(asd.adm1[,2,1],0:99),
+       m.pop <- asd.adm1[,1,]
+)
+
+# Replace 0-9 and ages above 90 with asd.adm1 by default
+m.pop[1:10]    <- asd.adm1[1:10,1,1]
+m.pop[91:100]  <- c(asd.adm1[91:99,1,1], NA)
+
+m.pop.all[[i]] <- m.pop
+
+}
+
+
 ###########################################################################################
 
-male.adm1.census5 <- census.data %>% 
-  filter(SEX==1) %>%
-  group_by(AGE2, DHS_IPUMSI_BF) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))  					    
-female.adm1.census5 <- census.data %>%
-  filter(SEX==2) %>%
+
+# Flat dataset
+male.adm1.census5 <- data.frame(matrix(, nrow=0, ncol=3))
+names(male.adm1.census5) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+
+for(i in 1:13){
+data <- as.data.frame(m.pop.all[i]) %>%
+  mutate(DHS_IPUMSI_BF = i)
+data  <- tibble::rownames_to_column(data , "VALUE")
+names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+
+male.adm1.census5 <- rbind(male.adm1.census5, data)
+
+}
+
+female.adm1.census5 <- data.frame(matrix(, nrow=0, ncol=3))
+names(female.adm1.census5) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+
+for(i in 1:13){
+  data <- as.data.frame(f.pop.all[i]) %>%
+    mutate(DHS_IPUMSI_BF = i)
+  data  <- tibble::rownames_to_column(data , "VALUE")
+  names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+  
+  female.adm1.census5 <- rbind(female.adm1.census5, data)
+  
+}
+
+# Create 5-year age groups
+
+male.adm1.census5 <- male.adm1.census5 %>%
   group_by(AGE2, DHS_IPUMSI_BF) %>%  
   dplyr::summarize(sum_age = sum(PERWT)) 
-total.adm1.census5 <- census.data %>% 
+
+female.adm1.census5 <- census.data %>%
   group_by(AGE2, DHS_IPUMSI_BF) %>%  
-  dplyr::summarize(sum_age = sum(PERWT))  		
+  dplyr::summarize(sum_age = sum(PERWT)) 
+		
 
 ## convert age2 to age.cat
 ## convert region.no to region-name 
