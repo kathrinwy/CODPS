@@ -65,9 +65,10 @@ regpop.pred <- get.pop.prediction(reg.pop.dir)
 get.countries.table(regpop.pred)
 
 # Explore results.
+par(mfrow = c(1,2))
 pop.trajectories.plot(regpop.pred, "Boucle du Mouhoun", sum.over.ages = TRUE)
 
-pop.pyramid(regpop.pred, "Boucle du Mouhoun", year = 2017)
+pop.pyramid(regpop.pred, "Sud-Ouest", year = 2015)
 
 setwd(code)
 

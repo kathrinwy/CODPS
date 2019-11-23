@@ -2,8 +2,8 @@
 ## Project: COD-PS Assessment and Construction, Niger
 ## Script purpose: maps
 ##
-## Date created: 11 September 2019
-## Last updated: 16 September 2019
+## Date created: 11 September 2020
+## Last updated: 16 September 2020
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -16,20 +16,20 @@ options(scipen = 999)  # disable scientific notation in R
 options(survey.lonely.psu = "adjust")
 
 # Prepare data for pop-pyramid
-pop.plot$pop_2019 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2019, pop.plot$pop_2019)
+pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
 WRA <- pop.plot %>%
   filter(Age == "15-19" | Age == "20-24" | Age == "25-29	" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
   filter(Sex == "female") %>%
   group_by(ADM1_EN) %>%  
-  dplyr::summarise(pop = sum(pop_2019))  
+  dplyr::summarise(pop = sum(pop_2020))  
 
 Youth <- pop.plot %>%
   filter(Age == "10-14" | Age == "15-19" | Age == "20-24") %>%
   group_by(ADM1_EN) %>%  
-  dplyr::summarise(pop = sum(pop_2019))  
+  dplyr::summarise(pop = sum(pop_2020))  
 
-setwd("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/BFA-shapfefiles")
+setwd("G:/My Drive/2020/3- Humanitarian data/COD-PS/pop_est/input/BFA-shapfefiles")
 geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
 geo[geo@data$DHSREGEN == "Boucle du Mouhoun", "DHSREGEN"] <- "Boucle du Mouhoun"
 geo[geo@data$DHSREGEN == "Hauts-Bassins", "DHSREGEN"] <- "Hauts-Bassins"
@@ -156,7 +156,7 @@ a <- as.data.frame(subset@data$ID2)
 
 plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Data))+
   geom_polygon()+
-  scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(800000, 0), 
+  scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(900000, 0), 
                        breaks = c(0, 200000, 400000, 600000, 800000),
                        labels=c("0", "200,000", "400,000", "600,000", "800000"))+
   labs(title = "Youth (10-24), by Administrative Region 1", 

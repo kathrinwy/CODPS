@@ -28,19 +28,17 @@ setwd(output)
 
 pop      <- read.csv("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/BFA_adm1_pop_2015_2020.csv")
 
-pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2019")))
+pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
 
 # Prepare data for pop-pyramid
-pop.plot$pop_2019 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2019, pop.plot$pop_2019)
+pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
 # Adjust levels (age is stored as factor)
-levels(pop.plot$Age) <- c("0-4", "0-4",  "10-14", "80+",  "80+",  "80+",  "80+",  "80+",  "80+",
-                          "15-19", "20-24", "25-29", "30-34", "35-39",   "40-44", "45-49",
-                          "5-9", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80+", "80+",
-                          "80+",  "80+")
+levels(pop.plot$Age) <- c("1-4",  "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
+                          "40-44", "45-49", "5-9", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80+", "80+")
 
 # Order age groups
-pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 11, 2, 4:10,  12:17, 3)]) 
+pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 10, 2:9,  11:17)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
 regions   <- unique(pop.plot$ADM1_EN)
@@ -52,10 +50,10 @@ for(i in regions){
 temp <- pop.plot %>%
   filter(ADM1_EN == i)
 
-plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2019, fill = Sex)) +   # Fill column
+plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2020, fill = Sex)) +   # Fill column
                   geom_bar(stat = "identity", width = .85) +   # draw the bars
                   coord_flip() + 
-                  labs(title= paste(i, "- 2019"), y = "Population")+
+                  labs(title= paste(i, "- 2020"), y = "Population")+
                   theme(plot.title = element_text(hjust = .5), axis.title.y=element_blank(),
                   axis.ticks = element_blank()) +   
                   scale_y_continuous(breaks = seq(from = -100000, to = 100000, by = 50000), # so that x-axis does not contain negative values
@@ -111,3 +109,4 @@ for(i in regions[11:13]){
 dev.off()
 
 
+getwd()
