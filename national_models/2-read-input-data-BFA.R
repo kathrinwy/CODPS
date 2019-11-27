@@ -77,7 +77,7 @@ for (j in 1:length(asd.adm1[1,1,])){
 } 
 
 female.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
-male.Noumbissi5 <- rep(0,length(asd.adm1[i,1,]))
+male.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
   female.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:99,ageMin = 20, ageMax = 85,digit=5)
@@ -130,7 +130,7 @@ m.pop.all[[i]] <- m.pop
 
 # Flat dataset
 male.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
-names(male.adm1.census5) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+names(male.adm1.census1) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
 
 for(i in 1:length(asd.adm1[1,1,])){
 data <- as.data.frame(m.pop.all[i]) %>%
@@ -143,7 +143,7 @@ male.adm1.census1 <- rbind(male.adm1.census1, data)
 }
 
 female.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
-names(female.adm1.census5) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+names(female.adm1.census1) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
 
 for(i in 1:length(asd.adm1[1,1,])){
   data <- as.data.frame(f.pop.all[i]) %>%
@@ -271,7 +271,7 @@ female.adm1.census5 <-
                     ifelse(DHS_IPUMSI_BF == 9, 53,
                     ifelse(DHS_IPUMSI_BF ==10, 54,
                     ifelse(DHS_IPUMSI_BF ==11, 55,
-                    ifelse(DHS_IPUMSI_BF == 12, 56,
+                    ifelse(DHS_IPUMSI_BF ==12, 56,
                     ifelse(DHS_IPUMSI_BF ==13, 57,NA))))))))))))))
 
 male.adm1.census5 <- 
@@ -287,7 +287,7 @@ male.adm1.census5 <-
          ifelse(DHS_IPUMSI_BF == 9, 53,
          ifelse(DHS_IPUMSI_BF ==10, 54,
          ifelse(DHS_IPUMSI_BF ==11, 55,
-         ifelse(DHS_IPUMSI_BF == 12, 56,
+         ifelse(DHS_IPUMSI_BF ==12, 56,
          ifelse(DHS_IPUMSI_BF ==13, 57,NA))))))))))))))
 
 # Save file ---------------------------------------------------------------
@@ -339,19 +339,9 @@ BFApopM <- BFApopM[,c(1,2,3,13)]
 colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-#write.csv(BFApopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.csv", row.names = TRUE)
-#write.csv(BFApopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.csv", row.names = TRUE)
-
-
-# Attnetion: Hack, order of factor was not retained when saving
-#write.table(BFApopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.txt", sep = "\t", row.names = FALSE)
-#write.table(BFApopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.txt", sep = "\t", row.names = FALSE)
-
-#popF0.file <- BFApopF
-#popM0.file <- BFApopM
-
-BFApopF.test <- read_delim("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.txt", delim="\t")
-BFApopM.test <- read_delim("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.txt", delim="\t")
+# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
+# write.table(BFApopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.txt", sep = "\t", row.names = FALSE)
+# write.table(BFApopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.txt", sep = "\t", row.names = FALSE)
 
 setwd(output)
 

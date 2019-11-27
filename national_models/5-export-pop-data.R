@@ -94,7 +94,7 @@ pop$age = factor(pop$age, levels(pop$age)[c(1,2, 17, 3,10:16, 18:27, 4:9)])
 # Filter age groups that do not exist between 2015 and 2020
 
 pop <- pop %>%
-  filter(age != "0") %>%
+  #filter(age != "0") %>%
   filter(age != "90-94") %>%
   filter(age != "95-99") %>%
   filter(age != "100-104") %>%
@@ -109,10 +109,11 @@ pop <- pop %>%
 
 pop$reg_code <- paste0("BF", pop$reg_code)
 
-names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2015", "pop_2020")
+names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Sex", "Age", "pop_2015", "pop_2020")
 
 # Export ------------------------------------------------------------------
 
+# commented out as usually factors in Excel and CSV format are messed up and require manual manipulation
 # write.csv(pop, file = file.path("BFA_adm1_pop_2015_2020.csv"), row.names = FALSE, quote = FALSE)
-getwd()
+
 setwd(code)

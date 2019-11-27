@@ -34,11 +34,11 @@ pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
 # Adjust levels (age is stored as factor)
-levels(pop.plot$Age) <- c("1-4",  "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
+levels(pop.plot$Age) <- c("0", "1-4",  "10-14", "15-19", "20-24", "25-29", "30-34", "35-39",
                           "40-44", "45-49", "5-9", "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80+", "80+")
 
 # Order age groups
-pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 10, 2:9,  11:17)]) 
+pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 2, 11, 3:10,  12:18)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
 regions   <- unique(pop.plot$ADM1_EN)
