@@ -30,7 +30,7 @@
 
 setwd(output)
 
-my.regtfr.file.ZMB <- "regdata/tfr.ZMB.txt"
+my.regtfr.file.ZMB <- "regdata/tfr_cameroon.txt"
 read.delim(my.regtfr.file.ZMB , check.names = F)
 
 # Projections -------------------------------------------------------------
@@ -52,7 +52,7 @@ regtfr.preds <- tfr.predict.subnat(894,
 
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
-#  Store the directory for Burkina Faso
+#  Store the directory for Zambia
 ZMBtfr.dir <- file.path(reg.tfr.dir, "subnat", "c894")
 
 # Explore projections
@@ -60,10 +60,10 @@ ZMBtfr <- get.tfr.prediction(ZMBtfr.dir)
 
 par(mfrow=c(1,2))
 
-region <- "Cascades"
+region <- "Muchinga"
 tfr.trajectories.plot(ZMBtfr, region)
 
-region <- "Sahel"
+region <- "Western"
 tfr.trajectories.plot(ZMBtfr, region)
 
 setwd(code)
