@@ -65,8 +65,8 @@ f.pop.all <- list()
 m.pop.all   <- list()
 ##Calculate Noumbissi Index for ADM1 level data:
 
-asd.adm1[1,2,3]
-c("age", "sex", "region")
+#asd.adm1[1,2,3]
+#c("age", "sex", "region")
 
 female.Noumbissi0 <- rep(0,length(asd.adm1[1,1,])) # length across all regions
 male.Noumbissi0   <- rep(0,length(asd.adm1[1,1,]))
