@@ -3,8 +3,8 @@
 # Project: COD-PS Construction
 # Script purpose: load subnational population data, DHS/MICS fertilty data
 
-# Date created: 11 September 2019
-# Last updated: 11 September 2019
+# Date created: 29 November 2019
+# Last updated: 29 November 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -47,7 +47,7 @@ table(census.data$AGE)
 # 894003009 Mpika
 # 894003006 Chama
 
-# GEO1_ZM2010
+# GEO1_ZM2010 contains the non-harmonized regions
 # 1 Central
 # 2 Copperbelt
 # 3 Eastern

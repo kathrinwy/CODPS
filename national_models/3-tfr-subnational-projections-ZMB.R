@@ -4,8 +4,8 @@
 # Project: COD-PS Construction
 # Script purpose: subnational TFR projections
 
-# Date created: 11 September 2019
-# Last updated: 11 September 2019
+# Date created: 29 November 2019
+# Last updated: 29 November 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -17,24 +17,21 @@
 # Load data for subnational units
 
 # PCode     region
-# 01	      Boucle de Mouhoun
-# 02	      Cascades
-# 03	      Centre including Ouagadougou
-# 04	      Centre-Est
-# 05	      Centre-Nord
-# 06	      Centre-Ouest
-# 07	      Centre-Sud
-# 08	      Est
-# 09	      Hauts Basins
-# 10	      Nord
-# 11	      Plateau Central
-# 12	      Sahel
-# 13	      Sud-Ouest
+# ZMB10	Central
+# ZMB20	Copperbelt
+# ZMB40	Luapula
+# ZMB50	Lusaka
+# ZMB70	North-Western
+# ZMB80	Southern
+# ZMB90	Western
+# ZMB30	Eastern
+# ZMB11	Muchinga
+# ZMB60	Northern
 
 setwd(output)
 
-my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
-read.delim(my.regtfr.file.BFA , check.names = F)
+my.regtfr.file.ZMB <- "regdata/tfr.ZMB.txt"
+read.delim(my.regtfr.file.ZMB , check.names = F)
 
 # Projections -------------------------------------------------------------
 
@@ -44,29 +41,29 @@ dir.create("regTFRsimulation")
 nat.tfr.dir <- "TFRsimulation"
 reg.tfr.dir <- "regTFRsimulation"
 
-# Generate projections for BFA (854)
+# Generate projections for ZMB (894)
 
 # data("iso3166", package = "bayesTFR") # Find WPP and ISO code
 
-regtfr.preds <- tfr.predict.subnat(854,
-                                   my.tfr.file = my.regtfr.file.BFA,
+regtfr.preds <- tfr.predict.subnat(894,
+                                   my.tfr.file = my.regtfr.file.ZMB,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
 #  Store the directory for Burkina Faso
-BFAtfr.dir <- file.path(reg.tfr.dir, "subnat", "c854")
+ZMBtfr.dir <- file.path(reg.tfr.dir, "subnat", "c894")
 
 # Explore projections
-BFAtfr <- get.tfr.prediction(BFAtfr.dir)
+ZMBtfr <- get.tfr.prediction(ZMBtfr.dir)
 
 par(mfrow=c(1,2))
 
 region <- "Cascades"
-tfr.trajectories.plot(BFAtfr, region)
+tfr.trajectories.plot(ZMBtfr, region)
 
 region <- "Sahel"
-tfr.trajectories.plot(BFAtfr, region)
+tfr.trajectories.plot(ZMBtfr, region)
 
 setwd(code)
