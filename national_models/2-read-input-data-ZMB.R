@@ -346,6 +346,10 @@ write.csv(ZMBe0Mtraj, paste0("./regdata/", "ZMBe0Mtraj.csv"), row.names = F)
 
 # bayesTFR projections of the national TFR (result of tfr.predict )
 
+# Find country code
+data("iso3166", package = "bayesTFR")
+
+# Load TFR file
 my.regtfr.file.ZMB <- "regdata/tfr.ZMB.txt"
 read.delim(my.regtfr.file.ZMB , check.names = F)
 
