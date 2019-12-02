@@ -47,7 +47,7 @@ plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2020, fill = Sex)) +   # Fi
 
 # Export plot.list as png
 
-png(paste0("plots/", iso, "/subnat.pyramids.png"), width = 35, height = 50, units = "cm", res=350)
+png(paste0("plots/", iso, "/subnat.pyramids.png"), width = 40, height = 50, units = "cm", res=350)
 
 do.call(grid.arrange,plot.list)
 
