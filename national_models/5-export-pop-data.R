@@ -4,7 +4,7 @@
 # Script purpose: export
 
 # Date created: 11 September 2019
-# Last updated: 27 November 2019
+# Last updated: 1 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
