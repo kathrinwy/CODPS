@@ -97,8 +97,8 @@ mean(rel.diff.male.05)
 
 for(i in 1:length(asd.adm1[1,1,])){
 ifelse(mean(rel.diff.female.05) > 15, 
-       f.pop <- spencer(asd.adm1[,1,i],0:99),
-       f.pop <- asd.adm1[,1,]
+       f.pop <- spencer(asd.adm1[,2,i],0:99),
+       f.pop <- asd.adm1[,2,]
 )
 # Replace 0-9 and ages above 90 with asd.adm1 by default
 f.pop[1:10]    <- asd.adm1[1:10,2,i]

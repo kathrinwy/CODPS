@@ -17,10 +17,10 @@
 
 # Directories
 
-directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
-code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
-output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
-input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/"
+directory <- "C:/Users/kathrinweny/Documents/pop_est/"
+code      <- "C:/Users/kathrinweny/Documents/pop_est/CODPS/national_models/"
+output    <- "C:/Users/kathrinweny/Documents/pop_est/output/"
+input     <- "C:/Users/kathrinweny/Documents/pop_est/input/"
 
 setwd(code)
 
@@ -32,6 +32,7 @@ source("1-bayespop-projections.R")                          # using converged tf
 # NIGER -------------------------------------------------------------------
 
 country <- "Niger"
+iso     <- "NER"
 
 source("2-read-input-data-NER.R")                           # Read INS data
 source("3-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
@@ -43,7 +44,8 @@ source("6b-visualizations-maps-NER.R")                      # Not coded yet
 # BURKINA FASO ------------------------------------------------------------
 
 country <- "Burkina Faso"
-
+iso     <- "BFA"
+p.code <- "BF"
 source("2-read-input-data-BFA.R")                           # Read IPUMS data, Census 2006
 source("3-tfr-subnational-projections-BFA.R")               # pre-requisite: downloaded tfr file in regdata
 source("4-population-projections-subnational-BFA.R")    
@@ -56,6 +58,7 @@ source("6b-visualizations-maps-BFA.R")
 # Bangladesh --------------------------------------------------------------
 
 country <- "Bangladesh"
+iso     <- "BGD"
 
 source("2-read-input-data-BGD.R")                           # Read IPUMS data, Census 2006
 source("3-tfr-subnational-projections-BGD.R")               # pre-requisite: downloaded tfr file in regdata
@@ -66,4 +69,8 @@ source("6b-visualizations-maps-BGD.R")
 
 
 
+# Zambia ------------------------------------------------------------------
 
+country <- "Zambia"
+iso     <- "ZMB"
+p.code <- "ZMB"

@@ -12,19 +12,20 @@
 setwd(output)
 
 # Sub-regional
-location.file  <- file.path(output, "BFAlocations.txt")
+
+location.file  <- paste0(output, "regdata/", iso, "locations.txt")
 regions        <- (subset(read.delim(location.file), location_type == 4))[,3:4]
 
-# 2015 and 2020 populations for 13 rebions in BFA
+# 2015 and 2020 populations per region
 traj <- get.pop.prediction(reg.pop.dir)
 
 # Male population
-popM_2015  <- as.data.frame(traj$'quantilesMage'[1:13,1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
+popM_2015  <- as.data.frame(traj$'quantilesMage'[1:nrow(traj$countries),1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
 popM_2015  <- rownames_to_column(popM_2015, "reg_code")
 popM_2015  <- popM_2015 %>%
   gather(age, pop_2015, -reg_code)
 
-popM_2020  <- as.data.frame(traj$'quantilesMage'[1:13,1:27,5,2]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2020
+popM_2020  <- as.data.frame(traj$'quantilesMage'[1:nrow(traj$countries),1:27,5,2]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2020
 popM_2020  <- rownames_to_column(popM_2020, "reg_code")
 popM_2020  <- popM_2020 %>%
   gather(age, pop_2020, -reg_code)
@@ -34,12 +35,12 @@ popM <- merge(popM_2015, popM_2020, by = c("reg_code", "age"))
 popM$sex <- "male"
 
 # Female population
-popF_2015  <- as.data.frame(traj$'quantilesFage'[1:13,1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
+popF_2015  <- as.data.frame(traj$'quantilesFage'[1:nrow(traj$countries),1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
 popF_2015  <- rownames_to_column(popF_2015, "reg_code")
 popF_2015  <- popF_2015 %>%
   gather(age, pop_2015, -reg_code)
 
-popF_2020  <- as.data.frame(traj$'quantilesFage'[1:13,1:27,5,2]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2020
+popF_2020  <- as.data.frame(traj$'quantilesFage'[1:nrow(traj$countries),1:27,5,2]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2020
 popF_2020  <- rownames_to_column(popF_2020, "reg_code")
 popF_2020  <- popF_2020 %>%
   gather(age, pop_2020, -reg_code)
@@ -107,13 +108,13 @@ pop <- pop %>%
            
 # Add P-codes
 
-pop$reg_code <- paste0("BF", pop$reg_code)
+pop$reg_code <- paste0(p.code, pop$reg_code)
 
 names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Sex", "Age", "pop_2015", "pop_2020")
 
 # Export ------------------------------------------------------------------
 
 # commented out as usually factors in Excel and CSV format are messed up and require manual manipulation
-# write.csv(pop, file = file.path("BFA_adm1_pop_2015_2020.csv"), row.names = FALSE, quote = FALSE)
+# write.csv(pop, file = file.path(paste0(iso,"_adm1_pop_2015_2020.csv")), row.names = FALSE, quote = FALSE)
 
 setwd(code)

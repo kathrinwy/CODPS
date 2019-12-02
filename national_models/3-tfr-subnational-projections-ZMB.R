@@ -58,12 +58,36 @@ ZMBtfr.dir <- file.path(reg.tfr.dir, "subnat", "c894")
 # Explore projections
 ZMBtfr <- get.tfr.prediction(ZMBtfr.dir)
 
-par(mfrow=c(1,2))
+par(mfrow=c(5,2))
 
 region <- "Muchinga"
 tfr.trajectories.plot(ZMBtfr, region)
 
 region <- "Western"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Central"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Copperbelt"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Luapula"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Lusaka"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "North-Western"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Southern"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Eastern"
+tfr.trajectories.plot(ZMBtfr, region)
+
+region <- "Northern"
 tfr.trajectories.plot(ZMBtfr, region)
 
 setwd(code)

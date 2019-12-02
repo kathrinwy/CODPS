@@ -9,8 +9,6 @@
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
 
-# Last census in Burkina Faso took place in 2006
-
 # Read in data: INS projections -------------------------------------------
 
 setwd(input)
@@ -106,13 +104,16 @@ mean(rel.diff.male.05)
 ##If female age preference for ages ending  0s and 5s differs by moe than 15%,
 ##then smooth single-year ages for females using Spencer's smoothing technique 
 ##(for ages 10-89), else use the raw data directly
+f.pop <- asd.adm1[,2,]
 
 for(i in 1:length(asd.adm1[1,1,])){
+  
   ifelse(mean(rel.diff.female.05) > 15, 
-         f.pop <- spencer(asd.adm1[,1,i],0:99),
-         f.pop <- asd.adm1[,1,]
+         f.pop <- spencer(asd.adm1[,2,i],0:99),
+         f.pop <- asd.adm1[,2,i]
   )
-  # Replace 0-9 and ages above 90 with asd.adm1 by default
+
+ # Replace 0-9 and ages above 90 with asd.adm1 by default
   f.pop[1:10]    <- asd.adm1[1:10,2,i]
  # f.pop[91:100]  <- c(asd.adm1[91:99,2,i], NA)
   
@@ -122,10 +123,12 @@ for(i in 1:length(asd.adm1[1,1,])){
 ##then smooth single-year ages for males using Spencer's smoothing technique 
 ##(for ages 10-89), else use the raw data directly
 
+m.pop <- asd.adm1[,1,]
+
 for(i in 1:length(asd.adm1[1,1,])){
   ifelse(mean(rel.diff.male.05) > 15, 
-         m.pop <- spencer(asd.adm1[,2,i],0:99),
-         m.pop <- asd.adm1[,1,]
+         m.pop <- spencer(asd.adm1[,1,i],0:99),
+         m.pop <- asd.adm1[,1,i]
   )
   
   # Replace 0-9 and ages above 90 with asd.adm1 by default
@@ -146,8 +149,8 @@ names(male.adm1.census1) <- c("AGE2", "PERWT", "GEO1_ZM2010")
 
 for(i in 1:length(asd.adm1[1,1,])){
   data <- as.data.frame(m.pop.all[i]) %>%
-    mutate(GEO1_ZM2010 = i) %>%
-    dplyr::select("Var1", "Freq",  "GEO1_ZM2010")
+    tibble::rownames_to_column("Age")%>%
+    mutate(GEO1_ZM2010 = i) 
 
   names(data) <- c("AGE2", "PERWT", "GEO1_ZM2010")
   
@@ -160,8 +163,8 @@ names(female.adm1.census1) <- c("AGE2", "PERWT", "GEO1_ZM2010")
 
 for(i in 1:length(asd.adm1[1,1,])){
   data <- as.data.frame(f.pop.all[i]) %>%
-    mutate(GEO1_ZM2010 = i) %>%
-    dplyr::select("Var1", "Freq",  "GEO1_ZM2010")
+    tibble::rownames_to_column("Age")%>%
+    mutate(GEO1_ZM2010 = i) 
   
   names(data) <- c("AGE2", "PERWT", "GEO1_ZM2010")
 
@@ -214,7 +217,7 @@ male.adm1.census5 <-
                 ifelse(GEO1_ZM2010 == 5, "Lusaka",
                 ifelse(GEO1_ZM2010 == 6, "Muchinga",
                 ifelse(GEO1_ZM2010 == 7, "Northern",
-                ifelse(GEO1_ZM2010 == 8, "North-Western",
+                ifelse(GEO1_ZM2010 == 8, "North Western",
                 ifelse(GEO1_ZM2010 == 9, "Southern",
                 ifelse(GEO1_ZM2010 ==10, "Western", NA)))))))))))
 
@@ -258,7 +261,7 @@ female.adm1.census5 <-
                 ifelse(GEO1_ZM2010 == 5, "Lusaka",
                 ifelse(GEO1_ZM2010 == 6, "Muchinga",
                 ifelse(GEO1_ZM2010 == 7, "Northern",
-                ifelse(GEO1_ZM2010 == 8, "North-Western",
+                ifelse(GEO1_ZM2010 == 8, "North Western",
                 ifelse(GEO1_ZM2010 == 9, "Southern",
                 ifelse(GEO1_ZM2010 ==10, "Western", NA)))))))))))
 
@@ -266,29 +269,29 @@ female.adm1.census5 <-
 
 female.adm1.census5 <- 
   mutate(female.adm1.census5,
-         reg_code = ifelse(GEO1_ZM2010 == 1, "ZMB10", 
-                           ifelse(GEO1_ZM2010 == 2, "ZMB20",
-                                  ifelse(GEO1_ZM2010 == 3, "ZMB30",
-                                         ifelse(GEO1_ZM2010 == 4, "ZMB40",
-                                                ifelse(GEO1_ZM2010 == 5, "ZMB50",
-                                                       ifelse(GEO1_ZM2010 == 6, "ZMB11",
-                                                              ifelse(GEO1_ZM2010 == 7, "ZMB60",
-                                                                     ifelse(GEO1_ZM2010 == 8, "ZMB70",
-                                                                            ifelse(GEO1_ZM2010 == 9, "ZMB80",
-                                                                                   ifelse(GEO1_ZM2010 ==10, "ZMB90", NA)))))))))))
+         reg_code = ifelse(GEO1_ZM2010 == 1, 10, 
+                           ifelse(GEO1_ZM2010 == 2, 20,
+                                  ifelse(GEO1_ZM2010 == 3, 30,
+                                         ifelse(GEO1_ZM2010 == 4, 40,
+                                                ifelse(GEO1_ZM2010 == 5, 50,
+                                                       ifelse(GEO1_ZM2010 == 6, 11,
+                                                              ifelse(GEO1_ZM2010 == 7, 60,
+                                                                     ifelse(GEO1_ZM2010 == 8, 70,
+                                                                            ifelse(GEO1_ZM2010 == 9, 80,
+                                                                                   ifelse(GEO1_ZM2010 ==10, 90, NA)))))))))))
 
 male.adm1.census5 <- 
   mutate(male.adm1.census5,
-         reg_code = ifelse(GEO1_ZM2010 == 1, "ZMB10", 
-                           ifelse(GEO1_ZM2010 == 2, "ZMB20",
-                                  ifelse(GEO1_ZM2010 == 3, "ZMB30",
-                                         ifelse(GEO1_ZM2010 == 4, "ZMB40",
-                                                ifelse(GEO1_ZM2010 == 5, "ZMB50",
-                                                       ifelse(GEO1_ZM2010 == 6, "ZMB11",
-                                                              ifelse(GEO1_ZM2010 == 7, "ZMB60",
-                                                                     ifelse(GEO1_ZM2010 == 8, "ZMB70",
-                                                                            ifelse(GEO1_ZM2010 == 9, "ZMB80",
-                                                                                   ifelse(GEO1_ZM2010 ==10, "ZMB90", NA)))))))))))
+         reg_code = ifelse(GEO1_ZM2010 == 1, 10, 
+                           ifelse(GEO1_ZM2010 == 2, 20,
+                                  ifelse(GEO1_ZM2010 == 3, 30,
+                                         ifelse(GEO1_ZM2010 == 4, 40,
+                                                ifelse(GEO1_ZM2010 == 5, 50,
+                                                       ifelse(GEO1_ZM2010 == 6, 11,
+                                                              ifelse(GEO1_ZM2010 == 7, 60,
+                                                                     ifelse(GEO1_ZM2010 == 8, 70,
+                                                                            ifelse(GEO1_ZM2010 == 9, 80,
+                                                                                   ifelse(GEO1_ZM2010 ==10, 90, NA)))))))))))
 
 # Save file ---------------------------------------------------------------
 
@@ -327,8 +330,8 @@ colnames(ZMBpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(ZMBpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
 # Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(ZMBpopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/ZMBpopF.txt", sep = "\t", row.names = FALSE)
-# write.table(ZMBpopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/ZMBpopM.txt", sep = "\t", row.names = FALSE)
+# write.table(ZMBpopF, "C:/Users/kathrinweny/Documents/pop_est/output/regdata/ZMBpopF.txt", sep = "\t", row.names = FALSE)
+# write.table(ZMBpopM, "C:/Users/kathrinweny/Documents/pop_est/output/regdata/ZMBpopM.txt", sep = "\t", row.names = FALSE)
 
 setwd(output)
 
@@ -350,7 +353,7 @@ write.csv(ZMBe0Mtraj, paste0("./regdata/", "ZMBe0Mtraj.csv"), row.names = F)
 data("iso3166", package = "bayesTFR")
 
 # Load TFR file
-my.regtfr.file.ZMB <- "regdata/tfr.ZMB.txt"
+my.regtfr.file.ZMB <- "regdata/tfr_cameroon.txt"
 read.delim(my.regtfr.file.ZMB , check.names = F)
 
 setwd(code)

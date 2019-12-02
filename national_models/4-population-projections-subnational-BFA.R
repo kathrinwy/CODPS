@@ -14,7 +14,7 @@ setwd(output)
 
 # Set a location on disk where results will be stored.
 reg.pop.dir <- "regPOPsimulation"
-data.dir <- file.path("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata")
+data.dir <- file.path("C:/Users/kathrinweny/Documents/pop_est/output/regdata")
 
 # Location file defining geographical disaggregation
 
