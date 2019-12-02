@@ -33,7 +33,7 @@
 
 setwd(output)
 
-my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
+my.regtfr.file.BFA <- "regdata/tfr.txt"
 read.delim(my.regtfr.file.BFA , check.names = F)
 
 # Projections -------------------------------------------------------------

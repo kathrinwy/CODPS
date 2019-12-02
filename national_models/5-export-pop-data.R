@@ -55,7 +55,7 @@ pop <- rbind(popM, popF)
 
 pop <- merge(pop, regions, by = "reg_code")
 
-pop <- pop[,c(6, 1, 5, 2, 3, 4 )]
+pop <- pop[,c(6,1, 5, 2, 3, 4 )]
 
 # Recode Age group 
 pop <- 
@@ -115,6 +115,6 @@ names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Sex", "Age", "pop_2015", "pop_2020")
 # Export ------------------------------------------------------------------
 
 # commented out as usually factors in Excel and CSV format are messed up and require manual manipulation
-# write.csv(pop, file = file.path(paste0(iso,"_adm1_pop_2015_2020.csv")), row.names = FALSE, quote = FALSE)
+write.csv(pop, file = file.path(paste0(iso,"_adm1_pop_2015_2020.csv")), row.names = FALSE, quote = FALSE)
 
 setwd(code)

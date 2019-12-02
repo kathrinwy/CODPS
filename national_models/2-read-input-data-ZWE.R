@@ -20,44 +20,32 @@ growth                  <- read_excel(tf, 1L, skip = 16)
 
 growth                  <- growth %>%
                            dplyr::select(c("Region, subregion, country or area *", "2010-2015"))%>%
-                           filter(`Region, subregion, country or area *` == "Zambia")
+                           filter(`Region, subregion, country or area *` == "Zimbabwe")
 
 ## Section: Read in and prepare IPUMS Census microdata
-ZMB.census.2010         <- "ipumsi_00018.dat"
-census.ddi              <- read_ipums_ddi("ipumsi_00018.xml")
+ZMB.census.2010         <- "ipumsi_00017.dat"
+census.ddi              <- read_ipums_ddi("ipumsi_00017.xml")
 census.data             <- read_ipums_micro(census.ddi, verbose = FALSE)
 
 table(census.data$AGE2)
+# Age2 98 is an NA
+census.data$AGE2[which(census.data$AGE2 == 98)] <- NA
+
 table(census.data$AGE)
-table(census.data$GEO1_ZM)
+# Age 999 is an NA
+census.data$AGE[which(census.data$AGE == 999)] <- NA
 
-# Geolevel 1 contains consistent boundaries where Eastern, Muchinga and Northern are merged due to the creation of Muchinga
-# from 5 districts in Northern (Chinsali, Isoka, Mpika, Nakonde, Mafinga) and one in Eastern (Chama) in 2011: https://www.muc.gov.zm/
-# 894001	Central
-# 894002	Copperbelt
-# 894003	Eastern, Muchinga, Northern
-# 894004	Luapula
-# 894005	Lusaka
-# 894008	North Western
-# 894009	Southern
-# 894010	Western
-
-# 894003007 Chinsali
-# 894003008 Isoka, Mafinga, Nakonde
-# 894003009 Mpika
-# 894003006 Chama
-
-# GEO1_ZM contains the non-harmonized regions
-# 1 Central
-# 2 Copperbelt
-# 3 Eastern
-# 4 Luapula
-# 5 Lusaka
-# 6 Muchinga
-# 7 Northern
-# 8 North-Western
-# 9 Southern
-# 10 Western
+table(census.data$DHS_IPUMSI_ZW)
+# 01	Manicaland
+# 02	Mashonaland Central
+# 03	Mashonaland East
+# 04	Mashonaland West
+# 05	Matabeleland North
+# 06	Matabeleland South
+# 07	Midlands
+# 08	Masvingo
+# 09	Harare
+# 10	Bulawayo
 
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 
@@ -68,7 +56,8 @@ asd.adm0 <- 10 * table(census.data$AGE,
 ## Age-Sex distribution, ADM1
 asd.adm1 <- table(census.data$AGE,
                   census.data$SEX,
-                  census.data$GEO1_ZM)*10
+                  census.data$DHS_IPUMSI_ZW)*10
+
 
 ###########################################################################################
 # Smoothing
@@ -80,20 +69,20 @@ m.pop.all   <- list()
 #asd.adm1[1,2,3]
 #c("age", "sex", "region")
 
-female.Noumbissi0 <- rep(0,length(asd.adm1[1,2,])) # length across all regions
+female.Noumbissi0 <- rep(0,length(asd.adm1[1,1,])) # length across all regions
 male.Noumbissi0   <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:80,ageMin = 20, digit=0) #Note highest age is 80
-  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:80,ageMin = 20, digit=0)   #Note highest age is 80
+  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:98,ageMin = 20, ageMax = 80, digit=0) #Note highest age is 98
+  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:98,ageMin = 20, ageMax = 80, digit=0)   #Note highest age is 98
 } 
 
 female.Noumbissi5 <- rep(0,length(asd.adm1[1,2,]))
 male.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:80,ageMin = 20, ageMax = 80,digit=5) #Note highest age is 80
-  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:80,ageMin = 20, ageMax = 80,digit=5)   #Note highest age is 80
+  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:98, ageMin = 20, ageMax = 80,digit=5) #Note highest age is 98
+  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:98, ageMin = 20, ageMax = 80,digit=5)   #Note highest age is 98
 } 
 
 ##Calculate mean relative difference for digit preference between ages 
@@ -108,16 +97,16 @@ mean(rel.diff.male.05)
 ##(for ages 10-89), else use the raw data directly
 f.pop <- asd.adm1[,2,]
 
-for(i in 1:length(asd.adm1[1,2,])){
+for(i in 1:length(asd.adm1[1,1,])){
   
   ifelse(mean(rel.diff.female.05) > 15, 
-         f.pop <- spencer(asd.adm1[,2,i],0:99),
+         f.pop <- spencer(asd.adm1[,2,i],0:98),
          f.pop <- asd.adm1[,2,i]
   )
 
  # Replace 0-9 and ages above 90 with asd.adm1 by default
   f.pop[1:10]    <- asd.adm1[1:10,2,i]
- # f.pop[91:100]  <- c(asd.adm1[91:99,2,i], NA)
+  f.pop[90:98]  <- c(asd.adm1[91:99,2,i])
   
   f.pop.all[[i]] <- f.pop
 }
@@ -135,38 +124,37 @@ for(i in 1:length(asd.adm1[1,1,])){
   
   # Replace 0-9 and ages above 90 with asd.adm1 by default
   m.pop[1:10]    <- asd.adm1[1:10,1,i]
- # m.pop[91:100]  <- c(asd.adm1[91:99,1,i], NA)
+  m.pop[90:98]  <- c(asd.adm1[91:99,1,i])
   
   m.pop.all[[i]] <- m.pop
 }
 
 ###########################################################################################
 
-
 # Flat dataset
 male.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
-names(male.adm1.census1) <- c("AGE2", "PERWT", "GEO1_ZM")
-
+names(male.adm1.census1) <- c("AGE2", "PERWT", "DHS_IPUMSI_ZW")
+i <- 1
 for(i in 1:length(asd.adm1[1,1,])){
   data <- as.data.frame(m.pop.all[i]) %>%
     tibble::rownames_to_column("Age")%>%
-    mutate(GEO1_ZM = i) 
+    mutate(DHS_IPUMSI_ZW = i) 
 
-  names(data) <- c("AGE2", "PERWT", "GEO1_ZM")
+  names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_ZW")
   
   male.adm1.census1 <- rbind(male.adm1.census1, data)
   
 }
 
 female.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
-names(female.adm1.census1) <- c("AGE2", "PERWT", "GEO1_ZM")
+names(female.adm1.census1) <- c("AGE2", "PERWT", "DHS_IPUMSI_ZW")
 
 for(i in 1:length(asd.adm1[1,1,])){
   data <- as.data.frame(f.pop.all[i]) %>%
     tibble::rownames_to_column("Age")%>%
-    mutate(GEO1_ZM = i) 
+    mutate(DHS_IPUMSI_ZW = i) 
   
-  names(data) <- c("AGE2", "PERWT", "GEO1_ZM")
+  names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_ZW")
 
   female.adm1.census1 <- rbind(female.adm1.census1, data)
   
@@ -200,8 +188,8 @@ male.adm1.census1 <-
 # Create 5-year age groups
 
 male.adm1.census5 <- male.adm1.census1 %>%
-  dplyr::select(c("PERWT", "GEO1_ZM", "agegroup")) %>%
-  group_by(agegroup, GEO1_ZM) %>%  
+  dplyr::select(c("PERWT", "DHS_IPUMSI_ZW", "agegroup")) %>%
+  group_by(agegroup, DHS_IPUMSI_ZW) %>%  
   dplyr::summarize(sum_age = sum(PERWT, na.rm= T)) 
 
 male.adm1.census5$agegroup <- factor(male.adm1.census5$agegroup, levels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29",
@@ -210,15 +198,16 @@ male.adm1.census5$agegroup <- factor(male.adm1.census5$agegroup, levels = c("0-4
 
 male.adm1.census5 <-
   mutate(male.adm1.census5,
-         name = ifelse(GEO1_ZM == 1, "Central", 
-                ifelse(GEO1_ZM == 2, "Copperbelt",
-                ifelse(GEO1_ZM == 3, "Eastern, Northern, Muchinga",
-                ifelse(GEO1_ZM == 4, "Luapula",
-                ifelse(GEO1_ZM == 5, "Lusaka",
-                ifelse(GEO1_ZM == 6, "North Western",
-                ifelse(GEO1_ZM == 7, "Southern",
-                ifelse(GEO1_ZM == 8, "Western", NA)))))))))
-
+         name = ifelse(DHS_IPUMSI_ZW == 1, "Manicaland", 
+                ifelse(DHS_IPUMSI_ZW == 2, "Mashonaland Central",
+                ifelse(DHS_IPUMSI_ZW == 3, "Mashonaland East",
+                ifelse(DHS_IPUMSI_ZW == 4, "Mashonaland West",
+                ifelse(DHS_IPUMSI_ZW == 5, "Matabeleland North",
+                ifelse(DHS_IPUMSI_ZW == 6, "Matabeleland South",
+                ifelse(DHS_IPUMSI_ZW == 7, "Midlands",
+                ifelse(DHS_IPUMSI_ZW == 8, "Masvingo",
+                ifelse(DHS_IPUMSI_ZW == 9, "Harare",
+                ifelse(DHS_IPUMSI_ZW ==10, "Bulawayo", NA)))))))))))
 
 female.adm1.census1$AGE2 <- as.numeric(female.adm1.census1$AGE2)
 
@@ -240,11 +229,11 @@ female.adm1.census1 <-
                     ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
                     ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
                     ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
-                    ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
+                    ifelse(AGE2 >80, "80+", NA))))))))))))))))))
 
 # Create 5-year age groups
 female.adm1.census5 <- female.adm1.census1 %>%
-  group_by(agegroup, GEO1_ZM) %>%  
+  group_by(agegroup, DHS_IPUMSI_ZW) %>%  
   dplyr::summarize(sum_age = sum(PERWT, na.rm= T)) 
 
 female.adm1.census5$agegroup <- factor(female.adm1.census5$agegroup, levels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29",
@@ -253,90 +242,91 @@ female.adm1.census5$agegroup <- factor(female.adm1.census5$agegroup, levels = c(
 
 female.adm1.census5 <-
   mutate(female.adm1.census5,
-         name = ifelse(GEO1_ZM == 1, "Central", 
-                       ifelse(GEO1_ZM == 2, "Copperbelt",
-                              ifelse(GEO1_ZM == 3, "Eastern, Northern, Muchinga",
-                                     ifelse(GEO1_ZM == 4, "Luapula",
-                                            ifelse(GEO1_ZM == 5, "Lusaka",
-                                                   ifelse(GEO1_ZM == 6, "North Western",
-                                                          ifelse(GEO1_ZM == 7, "Southern",
-                                                                 ifelse(GEO1_ZM == 8, "Western", NA)))))))))
+         name = ifelse(DHS_IPUMSI_ZW == 1, "Manicaland", 
+                       ifelse(DHS_IPUMSI_ZW == 2, "Mashonaland Central",
+                              ifelse(DHS_IPUMSI_ZW == 3, "Mashonaland East",
+                                     ifelse(DHS_IPUMSI_ZW == 4, "Mashonaland West",
+                                            ifelse(DHS_IPUMSI_ZW == 5, "Matabeleland North",
+                                                   ifelse(DHS_IPUMSI_ZW == 6, "Matabeleland South",
+                                                          ifelse(DHS_IPUMSI_ZW == 7, "Midlands",
+                                                                 ifelse(DHS_IPUMSI_ZW == 8, "Masvingo",
+                                                                        ifelse(DHS_IPUMSI_ZW == 9, "Harare",
+                                                                               ifelse(DHS_IPUMSI_ZW ==10, "Bulawayo", NA)))))))))))
 
 # Add p-codes -------------------------------------------------------------
 
 female.adm1.census5 <- 
   mutate(female.adm1.census5,
-         reg_code = ifelse(GEO1_ZM == 1, 10, 
-                       ifelse(GEO1_ZM == 2, 20,
-                              ifelse(GEO1_ZM == 3, 30,
-                                     ifelse(GEO1_ZM == 4, 40,
-                                            ifelse(GEO1_ZM == 5, 50,
-                                                   ifelse(GEO1_ZM == 6, 60,
-                                                          ifelse(GEO1_ZM == 7, 70,
-                                                                 ifelse(GEO1_ZM == 8, 80, NA)))))))))
+         reg_code = ifelse(DHS_IPUMSI_ZW == 1, 11, 
+                           ifelse(DHS_IPUMSI_ZW == 2, 12,
+                                  ifelse(DHS_IPUMSI_ZW == 3, 13,
+                                         ifelse(DHS_IPUMSI_ZW == 4, 14,
+                                                ifelse(DHS_IPUMSI_ZW == 5, 15,
+                                                       ifelse(DHS_IPUMSI_ZW == 6, 16,
+                                                              ifelse(DHS_IPUMSI_ZW == 7, 17,
+                                                                     ifelse(DHS_IPUMSI_ZW == 8, 18,
+                                                                            ifelse(DHS_IPUMSI_ZW == 9, 19,
+                                                                                   ifelse(DHS_IPUMSI_ZW ==10, 10, NA)))))))))))
 
 male.adm1.census5 <- 
   mutate(male.adm1.census5,
-         reg_code = ifelse(GEO1_ZM == 1, 10, 
-                           ifelse(GEO1_ZM == 2, 20,
-                                  ifelse(GEO1_ZM == 3, 30,
-                                         ifelse(GEO1_ZM == 4, 40,
-                                                ifelse(GEO1_ZM == 5, 50,
-                                                       ifelse(GEO1_ZM == 6, 60,
-                                                              ifelse(GEO1_ZM == 7, 70,
-                                                                     ifelse(GEO1_ZM == 8, 80, NA)))))))))
+         reg_code = ifelse(DHS_IPUMSI_ZW == 1, 11, 
+                           ifelse(DHS_IPUMSI_ZW == 2, 12,
+                                  ifelse(DHS_IPUMSI_ZW == 3, 13,
+                                         ifelse(DHS_IPUMSI_ZW == 4, 14,
+                                                ifelse(DHS_IPUMSI_ZW == 5, 15,
+                                                       ifelse(DHS_IPUMSI_ZW == 6, 16,
+                                                              ifelse(DHS_IPUMSI_ZW == 7, 17,
+                                                                     ifelse(DHS_IPUMSI_ZW == 8, 18,
+                                                                            ifelse(DHS_IPUMSI_ZW == 9, 19,
+                                                                                   ifelse(DHS_IPUMSI_ZW ==10, 10, NA)))))))))))
 
 # Save file ---------------------------------------------------------------
 
-female.pop.2010 <- female.adm1.census5%>%
+female.pop.2012 <- female.adm1.census5%>%
   filter(!is.na(agegroup))
 
-male.pop.2010   <- male.adm1.census5 %>%
+male.pop.2012   <- male.adm1.census5 %>%
   filter(!is.na(agegroup))
 
-ZMBpopF <- female.pop.2010[,c(5,4,1,3)]
-ZMBpopM <-   male.pop.2010[,c(5,4,1,3)]
+ZWEpopF <- female.pop.2012[,c(5,4,1,3)]
+ZWEpopM <-   male.pop.2012[,c(5,4,1,3)]
 
 # Project to 2015 ---------------------------------------------------------
 
 # use growth rate for 2010-2015
-ZMBpopM$'2011' <- ZMBpopM$'sum_age'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopM$'2012' <- ZMBpopM$'2011'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopM$'2013' <- ZMBpopM$'2012'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopM$'2014' <- ZMBpopM$'2013'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopM$'2015' <- ZMBpopM$'2014'*(as.numeric(growth[1,2])/100 +1)
+ZWEpopM$'2013' <- ZWEpopM$'sum_age'*(as.numeric(growth[1,2])/100 +1)
+ZWEpopM$'2014' <- ZWEpopM$'2013'*(as.numeric(growth[1,2])/100 +1)
+ZWEpopM$'2015' <- ZWEpopM$'2014'*(as.numeric(growth[1,2])/100 +1)
 
 # use growth rate for 2010-2015
-ZMBpopF$'2011' <- ZMBpopF$'sum_age'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopF$'2012' <- ZMBpopF$'2011'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopF$'2013' <- ZMBpopF$'2012'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopF$'2014' <- ZMBpopF$'2013'*(as.numeric(growth[1,2])/100 +1)
-ZMBpopF$'2015' <- ZMBpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
+ZWEpopF$'2013' <- ZWEpopF$'sum_age'*(as.numeric(growth[1,2])/100 +1)
+ZWEpopF$'2014' <- ZWEpopF$'2013'*(as.numeric(growth[1,2])/100 +1)
+ZWEpopF$'2015' <- ZWEpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-ZMBpopF <- ZMBpopF[,c(1,2,3,9)]
-ZMBpopM <- ZMBpopM[,c(1,2,3,9)]
-
+ZWEpopF <- ZWEpopF[,c(1,2,3,7)]
+ZWEpopM <- ZWEpopM[,c(1,2,3,7)]
 
 # Export ------------------------------------------------------------------
 
-colnames(ZMBpopF) <- c("reg_code","name","age","2015") # Why 2015?
-colnames(ZMBpopM) <- c("reg_code","name","age","2015") # Why 2015?
+colnames(ZWEpopF) <- c("reg_code","name","age","2015") # Why 2015?
+colnames(ZWEpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
 # Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(ZMBpopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
-# write.table(ZMBpopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
+# write.table(ZWEpopF, paste0(output, "regdata/ZWEpopF.txt"), sep = "\t", row.names = FALSE)
+# write.table(ZWEpopM, paste0(output, "regdata/ZWEpopM.txt"), sep = "\t", row.names = FALSE)
 
 setwd(output)
 
 # Retrieve e0 trajectories ------------------------------------------------
 
-ZMBe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+ZWEe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
   dplyr::select(-Period)
-write.csv(ZMBe0Ftraj, paste0("./regdata/", "ZMBe0Ftraj.csv"), row.names = F)
+write.csv(ZWEe0Ftraj, paste0("./regdata/", "ZWEe0Ftraj.csv"), row.names = F)
 
-ZMBe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+ZWEe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
   dplyr::select(-Period)
-write.csv(ZMBe0Mtraj, paste0("./regdata/", "ZMBe0Mtraj.csv"), row.names = F)
+write.csv(ZWEe0Mtraj, paste0("./regdata/", "ZWEe0Mtraj.csv"), row.names = F)
 
 # TFR input ------------------------------------------------------------------
 
@@ -346,8 +336,8 @@ write.csv(ZMBe0Mtraj, paste0("./regdata/", "ZMBe0Mtraj.csv"), row.names = F)
 data("iso3166", package = "bayesTFR")
 
 # Load TFR file
-my.regtfr.file.ZMB <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.ZMB , check.names = F)
+my.regtfr.file.ZWE <- "regdata/tfr.txt"
+read.delim(my.regtfr.file.ZWE , check.names = F)
 
 setwd(code)
 

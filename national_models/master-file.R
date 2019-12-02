@@ -5,7 +5,7 @@
 # Script purpose: master file
 
 # Date created: 11 September 2019
-# Last updated: 1  December 2019
+# Last updated: 2 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -17,10 +17,10 @@
 
 # Directories
 
-directory <- "C:/Users/kathrinweny/Documents/pop_est/"
-code      <- "C:/Users/kathrinweny/Documents/pop_est/CODPS/national_models/"
-output    <- "C:/Users/kathrinweny/Documents/pop_est/output/"
-input     <- "C:/Users/kathrinweny/Documents/pop_est/input/"
+directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
+code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
+output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
+input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/"
 
 setwd(code)
 
@@ -76,9 +76,23 @@ country <- "Zambia"
 iso     <- "ZMB"
 p.code <- "ZMB"
 
-source("2-read-input-data-ZMB.R")                           # Read IPUMS data, Census 2006
+source("2-read-input-data-ZMB.R")                           # Read IPUMS data, Census 2010
 source("3-tfr-subnational-projections-ZMB.R")               # pre-requisite: downloaded tfr file in regdata
 source("4-population-projections-subnational-ZMB.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-ZMB.R")
+
+# Zimbabwe ----------------------------------------------------------------
+
+country <- "Zimbabwe"
+iso     <- "ZWE"
+p.code <- "ZW"
+
+source("2-read-input-data-ZWE.R")                           # Read IPUMS data, Census 2012
+source("3-tfr-subnational-projections-ZWE.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational-ZWE.R")    
+source("5-export-pop-data.R")                        
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-ZWE.R")
+

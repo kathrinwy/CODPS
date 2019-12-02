@@ -3,16 +3,22 @@
 ## Script purpose: subnational population projections
 ##
 ## Date created: 10 September 2019
-## Last updated: 1 December 2019
+## Last updated: 2 December 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
-
 # Probabilistic population pyramids (2019) ---------------------------------------
 setwd(output)
+dir.create(paste0("plots/",iso))
 
-pop      <- read.csv(paste0("C:/Users/kathrinweny/Documents/pop_est/output/",iso, "_adm1_pop_2015_2020.csv"))
+pop      <- read.csv(paste0(output,iso, "_adm1_pop_2015_2020.csv"))
+
+pop$Age <- as.character(pop$Age)
+
+pop$Age <- ifelse(pop$Age == "'5-9'", "5-9",
+                  ifelse(pop$Age == "'10-14'", "10-14", 
+                         ifelse(pop$Age == "'1-4'", "1-4", pop$Age)))
 
 pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
 
@@ -20,6 +26,7 @@ pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
 # Order age groups
+pop.plot$Age <- as.factor(pop.plot$Age)
 pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 2, 11, 3:10,  12:18)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
@@ -46,9 +53,7 @@ plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2020, fill = Sex)) +   # Fi
 }
 
 # Export plot.list as png
-
 png(paste0("plots/", iso, "/subnat.pyramids.png"), width = 40, height = 50, units = "cm", res=350)
-
 do.call(grid.arrange,plot.list)
 
 dev.off()
@@ -57,7 +62,7 @@ dev.off()
 
 for(i in regions[1:nrow(traj$countries)]){
 
-png(paste0("plots/",iso, "/sex_age_",iso, i, ".png"), width = 35, height = 10, units = "cm", res=350)
+png(paste0("plots/",iso, "/sex_age_",iso, i, ".png"), width = 30, height = 10, units = "cm", res=350)
 
 par(mfrow=c(1,3))  
 pop.trajectories.plot(regpop.pred, country= i, sum.over.ages = TRUE)

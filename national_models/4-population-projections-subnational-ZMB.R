@@ -14,7 +14,7 @@ setwd(output)
 
 # Set a location on disk where results will be stored.
 reg.pop.dir <- "regPOPsimulation"
-data.dir <- file.path("C:/Users/kathrinweny/Documents/pop_est/output/regdata/")
+data.dir <- file.path(paste0(output, "regdata/"))
 
 # Location file defining geographical disaggregation
 
@@ -49,8 +49,6 @@ write.csv(ZMBe0Mtraj,file= paste0(output, "regdata/ZMBe0Mtraj.csv"), row.names =
 
 # Generate subnational trajectories for all regions of one country.
 
-
-
 regpop.pred <- pop.predict.subnat(present.year = 2015, 
                                   wpp.year = 2017, 
                                   output.dir = reg.pop.dir,
@@ -69,9 +67,9 @@ get.countries.table(regpop.pred)
 
 # Explore results.
 par(mfrow = c(1,2))
-pop.trajectories.plot(regpop.pred, "Copperbelt", sum.over.ages = TRUE)
+pop.trajectories.plot(regpop.pred, "Eastern, Northern, Muchinga", sum.over.ages = TRUE)
 
-pop.pyramid(regpop.pred, "Southern", year = 2015)
+pop.pyramid(regpop.pred, "Eastern, Northern, Muchinga", year = 2015)
 
 setwd(code)
 

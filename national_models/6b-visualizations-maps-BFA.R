@@ -12,25 +12,28 @@ options(scipen = 999)  # disable scientific notation in R
 
 #if a primary sapling unit has only a single observation, R will crash
 # option adjust calculates conservative standard errors
-# reference: http://faculty.washington.edu/tlumley/survey/example-lonely.html
-options(survey.lonely.psu = "adjust")
 
 # Prepare data for pop-pyramid
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
+pop.plot$Age <- as.character(pop.plot$Age)
 WRA <- pop.plot %>%
   filter(Age == "15-19" | Age == "20-24" | Age == "25-29	" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
   filter(Sex == "female") %>%
   group_by(ADM1_EN) %>%  
   dplyr::summarise(pop = sum(pop_2020))  
 
-Youth <- pop.plot %>%
+
+Youth <- pop.plot%>%
   filter(Age == "10-14" | Age == "15-19" | Age == "20-24") %>%
   group_by(ADM1_EN) %>%  
-  dplyr::summarise(pop = sum(pop_2020))  
+  dplyr::summarise(pop = sum(pop_2020))   
 
-setwd("G:/My Drive/2020/3- Humanitarian data/COD-PS/pop_est/input/BFA-shapfefiles")
+path <- paste0(input, iso, "-shapefiles")
+setwd("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/BFA-shapfefiles")
+
 geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
+geo@data$DHSREGEN <- as.character(geo@data$DHSREGEN)
 geo[geo@data$DHSREGEN == "Boucle du Mouhoun", "DHSREGEN"] <- "Boucle du Mouhoun"
 geo[geo@data$DHSREGEN == "Hauts-Bassins", "DHSREGEN"] <- "Hauts-Bassins"
 
@@ -76,15 +79,21 @@ a <- as.data.frame(subset@data$ID2)
 # Maps
 
 plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Data))+
-        geom_polygon()+
-        scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(600000, 0), 
-                             breaks = c(0, 200000, 400000, 600000),
-                             labels=c("0", "200,000", "400,000", "600,000"))+
-        labs(title = "Women of Reproductive Age (15-49), by Administrative Region 1", 
-             fill  = "Number of women \n of reproductive age (15-49)")+
-        theme_void()+
-        theme(legend.position = c(0.15, 0.8))+
-        coord_equal()
+  geom_polygon()+
+  scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(max(mapping$Data), 0), 
+                       breaks = c(0, max(mapping$Data)*0.25, 
+                                  max(mapping$Data)*0.5, 
+                                  max(mapping$Data)*0.75, 
+                                  max(mapping$Data)),
+                       labels=c(0, round(max(mapping$Data)*0.00025,0)*1000, 
+                                round(max(mapping$Data)*0.0005,0)*1000, 
+                                round(max(mapping$Data)*0.00075,0)*1000, 
+                                round(max(mapping$Data/1000,0))*1000))+
+  labs(title = "Women of Reproductive Age (15-49), by Administrative Region 1", 
+       fill  = "Number of women \n of reproductive age (15-49)")+
+  theme_void()+
+  theme(legend.position = c(0.15, 0.8))+
+  coord_equal()
 
 grob.BFA01 <- grobTree(textGrob("Boucle du \n Mouhoun", x=0.23,  y=0.57, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic"))) # OK
@@ -156,9 +165,15 @@ a <- as.data.frame(subset@data$ID2)
 
 plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Data))+
   geom_polygon()+
-  scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(900000, 0), 
-                       breaks = c(0, 200000, 400000, 600000, 800000),
-                       labels=c("0", "200,000", "400,000", "600,000", "800000"))+
+  scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(max(mapping$Data), 0), 
+                       breaks = c(0, max(mapping$Data)*0.25, 
+                                  max(mapping$Data)*0.5, 
+                                  max(mapping$Data)*0.75, 
+                                  max(mapping$Data)),
+                       labels=c(0, round(max(mapping$Data)*0.00025,0)*1000, 
+                                round(max(mapping$Data)*0.0005,0)*1000, 
+                                round(max(mapping$Data)*0.00075,0)*1000, 
+                                round(max(mapping$Data/1000,0))*1000))+
   labs(title = "Youth (10-24), by Administrative Region 1", 
        fill  = "Youth (10-24)")+
   theme_void()+

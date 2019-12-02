@@ -68,19 +68,19 @@ m.pop.all   <- list()
 #asd.adm1[1,2,3]
 #c("age", "sex", "region")
 
-female.Noumbissi0 <- rep(0,length(asd.adm1[1,1,])) # length across all regions
+female.Noumbissi0 <- rep(0,length(asd.adm1[1,2,])) # length across all regions
 male.Noumbissi0   <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:99,ageMin = 20, ageMax = 85,digit=0)
-  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:99,ageMin = 20, ageMax = 85,digit=0)
+  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:99,ageMin = 20, ageMax = 85,digit=0)
+  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:99,ageMin = 20, ageMax = 85,digit=0)
 } 
 
-female.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
+female.Noumbissi5 <- rep(0,length(asd.adm1[1,2,]))
 male.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:99,ageMin = 20, ageMax = 85,digit=5)
+  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:99,ageMin = 20, ageMax = 85,digit=5)
   male.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:99,ageMin = 20, ageMax = 85,digit=5)
 } 
 
@@ -95,10 +95,12 @@ mean(rel.diff.male.05)
 ##then smooth single-year ages for females using Spencer's smoothing technique 
 ##(for ages 10-89), else use the raw data directly
 
-for(i in 1:length(asd.adm1[1,1,])){
+f.pop <- asd.adm1[,2,]
+
+for(i in 1:length(asd.adm1[1,2,])){
 ifelse(mean(rel.diff.female.05) > 15, 
        f.pop <- spencer(asd.adm1[,2,i],0:99),
-       f.pop <- asd.adm1[,2,]
+       f.pop <- asd.adm1[,2,i]
 )
 # Replace 0-9 and ages above 90 with asd.adm1 by default
 f.pop[1:10]    <- asd.adm1[1:10,2,i]
@@ -110,10 +112,13 @@ f.pop.all[[i]] <- f.pop
 ##then smooth single-year ages for males using Spencer's smoothing technique 
 ##(for ages 10-89), else use the raw data directly
 
+
+m.pop <- asd.adm1[,1,]
+
 for(i in 1:length(asd.adm1[1,1,])){
 ifelse(mean(rel.diff.male.05) > 15, 
-       m.pop <- spencer(asd.adm1[,2,i],0:99),
-       m.pop <- asd.adm1[,1,]
+       m.pop <- spencer(asd.adm1[,1,i],0:99),
+       m.pop <- asd.adm1[,1,i]
 )
 
 # Replace 0-9 and ages above 90 with asd.adm1 by default
@@ -133,12 +138,13 @@ male.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
 names(male.adm1.census1) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
 
 for(i in 1:length(asd.adm1[1,1,])){
-data <- as.data.frame(m.pop.all[i]) %>%
-  mutate(DHS_IPUMSI_BF = i)
-data  <- tibble::rownames_to_column(data , "VALUE")
-names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
-
-male.adm1.census1 <- rbind(male.adm1.census1, data)
+  data <- as.data.frame(m.pop.all[i]) %>%
+    tibble::rownames_to_column("Age")%>%
+    mutate(DHS_IPUMSI_BF = i) 
+  
+  names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
+  
+  male.adm1.census1 <- rbind(male.adm1.census1, data)
 
 }
 
@@ -147,17 +153,14 @@ names(female.adm1.census1) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
 
 for(i in 1:length(asd.adm1[1,1,])){
   data <- as.data.frame(f.pop.all[i]) %>%
-    mutate(DHS_IPUMSI_BF = i)
-  data  <- tibble::rownames_to_column(data , "VALUE")
+    tibble::rownames_to_column("Age")%>%
+    mutate(DHS_IPUMSI_BF = i) 
+  
   names(data) <- c("AGE2", "PERWT", "DHS_IPUMSI_BF")
   
   female.adm1.census1 <- rbind(female.adm1.census1, data)
   
 }
-
-
-		
-
 
 ## convert region.no to region-name 
 
@@ -181,7 +184,7 @@ male.adm1.census1 <-
                            ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
                            ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
                            ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
-                           ifelse(AGE2 >80, "80+", NA))))))))))))))))))
+                           ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
 
 # Create 5-year age groups
 
@@ -229,7 +232,7 @@ female.adm1.census1 <-
           ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
           ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
           ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
-          ifelse(AGE2 >80, "80+", NA))))))))))))))))))
+          ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
 
 # Create 5-year age groups
 female.adm1.census5 <- female.adm1.census1 %>%
@@ -292,15 +295,14 @@ male.adm1.census5 <-
 
 # Save file ---------------------------------------------------------------
 
-female.pop.2005 <- female.adm1.census5%>%
+female.pop.2006 <- female.adm1.census5%>%
   filter(!is.na(agegroup))
   
-         
-male.pop.2005   <- male.adm1.census5 %>%
+male.pop.2006   <- male.adm1.census5 %>%
   filter(!is.na(agegroup))
 
-BFApopF <- female.pop.2005[,c(5,4,1,3)]
-BFApopM <-   male.pop.2005[,c(5,4,1,3)]
+BFApopF <- female.pop.2006[,c(5,4,1,3)]
+BFApopM <-   male.pop.2006[,c(5,4,1,3)]
 
 # Project to 2015 ---------------------------------------------------------
 
@@ -333,15 +335,14 @@ BFApopF$'2015' <- BFApopF$'2014'*(as.numeric(growth[1,3])/100 +1)
 BFApopF <- BFApopF[,c(1,2,3,13)]
 BFApopM <- BFApopM[,c(1,2,3,13)]
 
-
 # Export ------------------------------------------------------------------
 
 colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
 
 # Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(BFApopF, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopF.txt", sep = "\t", row.names = FALSE)
-# write.table(BFApopM, "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/regdata/BFApopM.txt", sep = "\t", row.names = FALSE)
+# write.table(BFApopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
+# write.table(BFApopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
 
 setwd(output)
 
@@ -359,7 +360,7 @@ write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 
 # bayesTFR projections of the national TFR (result of tfr.predict )
 
-my.regtfr.file.BFA <- "regdata/tfr.BFA.txt"
+my.regtfr.file.BFA <- "regdata/tfr.txt"
 read.delim(my.regtfr.file.BFA , check.names = F)
 
 setwd(code)

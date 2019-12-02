@@ -63,7 +63,6 @@ library(wpp2017)
 library(wpp2019)
 library(gridExtra)
 
-
 # for mapping -------------------------------------------------------------
 
 library(rgdal)                           # Read in shapfiles

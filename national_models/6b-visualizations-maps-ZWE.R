@@ -2,8 +2,8 @@
 ## Project: COD-PS Assessment and Construction, Niger
 ## Script purpose: maps
 ##
-## Date created: 1 December 2020
-## Last updated: 1 December 2020
+## Date created: 2 December 2019
+## Last updated: 2 December 2019
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
@@ -20,26 +20,26 @@ pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.pl
 
 pop.plot$Age <- as.character(pop.plot$Age)
 WRA <- pop.plot %>%
-  filter(Age == "15-19" | Age == "20-24" | Age == "25-29	" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
+  filter(Age == "15-19" | Age == "20-24" | Age == "25-29" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
   filter(Sex == "female") %>%
   group_by(ADM1_EN) %>%  
   dplyr::summarise(pop = sum(pop_2020))  
 
+Youth <- pop.plot 
 
-Youth <- pop.plot%>%
+Youth <- Youth%>%
   filter(Age == "10-14" | Age == "15-19" | Age == "20-24") %>%
   group_by(ADM1_EN) %>%  
-  dplyr::summarise(pop = sum(pop_2020)) 
-
+  dplyr::summarise(pop = sum(pop_2020))  
 
 setwd(paste0(input, iso, "-shapefiles"))
 
-geo <- readOGR(".", "geo1_zm1990_2010") # load shapefile for  DHS data
-geo@data$ADMIN_NAME <- as.character(geo@data$ADMIN_NAME)
-geo@data[geo@data$ADMIN_NAME == "Eastern, Muchinga, Northern", "ADMIN_NAME"] <- "Eastern, Northern, Muchinga"
+geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
+geo@data$DHSREGEN <- as.character(geo@data$DHSREGEN )
+geo@data[geo@data$DHSREGEN == "Harare Chitungwiza", "DHSREGEN"] <- "Harare"
 
 subset <- geo
-subset@data$ID2 <- paste(subset@data$ADMIN_NAME)
+subset@data$ID2 <- paste(subset@data$DHSREGEN)
 
 #Correct country names
 subset_data <- tidy(subset)%>% #Command takes medium amount of time
@@ -55,7 +55,6 @@ geo_data_1 <- subset@data%>%
 geo_data_1$id <- as.numeric(geo_data_1$id)-1
 
 geo_data_1$id <- as.character(geo_data_1$id)
-
 
 # Women of reproductive age (15-49) ---------------------------------------
 
@@ -96,21 +95,25 @@ plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Da
         theme(legend.position = c(0.15, 0.8))+
         coord_equal()
 
-grob.ZMB01 <- grobTree(textGrob("North Western", x=0.23,  y=0.57, hjust=0,
+grob.ZMB01 <- grobTree(textGrob("Matabeleland \n North", x=0.2,  y=0.55, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic"))) # OK
-grob.ZMB02 <- grobTree(textGrob("Western", x=0.12,  y=0.22, hjust=0,
+grob.ZMB02 <- grobTree(textGrob("Bulawayo", x=0.43,  y=0.33, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB03 <- grobTree(textGrob("Copperbelt", x=0.45,  y=0.5, hjust=0,
+grob.ZMB03 <- grobTree(textGrob("Harare", x=0.7,  y=0.65, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB04 <- grobTree(textGrob("Eastern, Northern, \n Muchinga", x=0.75,  y=0.65, hjust=0,
+grob.ZMB04 <- grobTree(textGrob("Mashonaland \n East", x=0.7,  y=0.55, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB06 <- grobTree(textGrob("Lusaka", x=0.55,  y=0.29, hjust=0,
+grob.ZMB05 <- grobTree(textGrob("Mashonaland \n Central", x=0.7,  y=0.8, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB07 <- grobTree(textGrob("Center", x=0.53,  y=0.38, hjust=0,
+grob.ZMB06 <- grobTree(textGrob("Masavingo", x=0.7,  y=0.3, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB09 <- grobTree(textGrob("Southern", x=0.35,  y=0.15, hjust=0,
+grob.ZMB07 <- grobTree(textGrob("Midlands", x=0.53,  y=0.5, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB10 <- grobTree(textGrob("Luapula", x=0.58,  y=0.65, hjust=0,
+grob.ZMB08 <- grobTree(textGrob("Manicaland", x=0.8,  y=0.46, hjust=0,
+                              gp=gpar(col="black", fontsize=9, fontface="italic")))
+grob.ZMB09 <- grobTree(textGrob("Matabeleland \n South", x=0.4,  y=0.2, hjust=0,
+                              gp=gpar(col="black", fontsize=9, fontface="italic")))
+grob.ZMB10 <- grobTree(textGrob("Mashonaland \n West", x=0.5,  y=0.8, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
 
 
@@ -119,8 +122,10 @@ plot.label <- plot +
   annotation_custom(grob.ZMB02) +
   annotation_custom(grob.ZMB03) +
   annotation_custom(grob.ZMB04) +
+  annotation_custom(grob.ZMB05) +
   annotation_custom(grob.ZMB06) +
   annotation_custom(grob.ZMB07) +
+  annotation_custom(grob.ZMB08) +
   annotation_custom(grob.ZMB09) +
   annotation_custom(grob.ZMB10) 
 
@@ -171,10 +176,12 @@ plot.label <- plot +
   annotation_custom(grob.ZMB02) +
   annotation_custom(grob.ZMB03) +
   annotation_custom(grob.ZMB04) +
+  annotation_custom(grob.ZMB05) +
   annotation_custom(grob.ZMB06) +
   annotation_custom(grob.ZMB07) +
+  annotation_custom(grob.ZMB08) +
   annotation_custom(grob.ZMB09) +
-  annotation_custom(grob.ZMB10)   
+  annotation_custom(grob.ZMB10)  
 
 ggsave(file = paste(paste0(output, "plots/", iso, "/Youth_total.png")), print(plot.label), dpi = 900)
 

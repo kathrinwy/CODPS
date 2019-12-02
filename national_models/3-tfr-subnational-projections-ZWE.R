@@ -4,8 +4,8 @@
 # Project: COD-PS Construction
 # Script purpose: subnational TFR projections
 
-# Date created: 29 November 2019
-# Last updated: 29 November 2019
+# Date created: 2 December 2019
+# Last updated: 2 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -16,10 +16,22 @@
 
 # Load data for subnational units
 
+# PCode     region
+# 01	Manicaland
+# 02	Mashonaland Central
+# 03	Mashonaland East
+# 04	Mashonaland West
+# 05	Matabeleland North
+# 06	Matabeleland South
+# 07	Midlands
+# 08	Masvingo
+# 09	Harare
+# 10	Bulawayo
+
 setwd(output)
 
-my.regtfr.file.ZMB <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.ZMB , check.names = F)
+my.regtfr.file.ZWE <- "regdata/tfr.txt"
+read.delim(my.regtfr.file.ZWE , check.names = F)
 
 # Projections -------------------------------------------------------------
 
@@ -29,29 +41,29 @@ dir.create("regTFRsimulation")
 nat.tfr.dir <- "TFRsimulation"
 reg.tfr.dir <- "regTFRsimulation"
 
-# Generate projections for ZMB (894)
+# Generate projections for ZWE (716)
 
 # data("iso3166", package = "bayesTFR") # Find WPP and ISO code
 
-regtfr.preds <- tfr.predict.subnat(894,
-                                   my.tfr.file = my.regtfr.file.ZMB,
+regtfr.preds <- tfr.predict.subnat(716,
+                                   my.tfr.file = my.regtfr.file.ZWE,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
-#  Store the directory for Zambia
-ZMBtfr.dir <- file.path(reg.tfr.dir, "subnat", "c894")
+#  Store the directory for Zimbabwe
+ZWEtfr.dir <- file.path(reg.tfr.dir, "subnat", "c716")
 
 # Explore projections
-ZMBtfr <- get.tfr.prediction(ZMBtfr.dir)
+ZWEtfr <- get.tfr.prediction(ZWEtfr.dir)
 
 par(mfrow=c(1,2))
 
-region <- "Eastern, Northern, Muchinga"
-tfr.trajectories.plot(ZMBtfr, region)
+region <- "Harare"
+tfr.trajectories.plot(ZWEtfr, region)
 
-region <- "Central"
-tfr.trajectories.plot(ZMBtfr, region)
+region <- "Masvingo"
+tfr.trajectories.plot(ZWEtfr, region)
 
 setwd(code)
