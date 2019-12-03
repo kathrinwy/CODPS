@@ -50,13 +50,13 @@ unique(census.data$DHS_IPUMSI_BF)
 
 
 ## Age-Sex distribution, ADM0
-asd.adm0 <- 10 * table(census.data$AGE,
+asd.adm0 <- census.data$PERWT[1] * table(census.data$AGE,
                        census.data$SEX)
 
 ## Age-Sex distribution, ADM1
 asd.adm1 <- table(census.data$AGE,
                   census.data$SEX,
-                  census.data$DHS_IPUMSI_BF)*10
+                  census.data$DHS_IPUMSI_BF)*census.data$PERWT[1]
 
 ###########################################################################################
 # Smoothing

@@ -62,13 +62,13 @@ table(census.data$GEO1_ZM)
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 
 ## Age-Sex distribution, ADM0
-asd.adm0 <- 10 * table(census.data$AGE,
+asd.adm0 <- census.data$PERWT[1] * table(census.data$AGE,
                        census.data$SEX)
 
 ## Age-Sex distribution, ADM1
 asd.adm1 <- table(census.data$AGE,
                   census.data$SEX,
-                  census.data$GEO1_ZM)*10
+                  census.data$GEO1_ZM)*census.data$PERWT[1]
 
 ###########################################################################################
 # Smoothing

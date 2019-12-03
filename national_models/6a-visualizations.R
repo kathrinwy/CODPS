@@ -42,7 +42,7 @@ temp <- pop.plot %>%
 plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2020, fill = Sex)) +   # Fill column
                   geom_bar(stat = "identity", width = .85) +   # draw the bars
                   coord_flip() + 
-                  labs(title= paste(i, "- 2020"), y = "Population in thousands")+
+                  labs(title= paste(i, "- 2020"), y = "Population")+
                   theme(plot.title = element_text(hjust = .5), axis.title.y=element_blank(),
                   axis.ticks = element_blank()) +   
                   scale_y_continuous(breaks = seq(from = -max(temp$pop_2020), to = max(temp$pop_2020), by = max(temp$pop_2020)/2),

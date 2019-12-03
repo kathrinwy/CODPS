@@ -54,12 +54,11 @@ source("5-export-pop-data.R")
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BFA.R")
 
-
-
 # Bangladesh --------------------------------------------------------------
 
 country <- "Bangladesh"
 iso     <- "BGD"
+p.code  <- "BD"
 
 source("2-read-input-data-BGD.R")                           # Read IPUMS data, Census 2006
 source("3-tfr-subnational-projections-BGD.R")               # pre-requisite: downloaded tfr file in regdata
@@ -67,7 +66,6 @@ source("4-population-projections-subnational-BGD.R")
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BGD.R")
-
 
 
 # Zambia ------------------------------------------------------------------

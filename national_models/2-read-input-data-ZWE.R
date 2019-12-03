@@ -50,18 +50,17 @@ table(census.data$DHS_IPUMSI_ZW)
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 
 ## Age-Sex distribution, ADM0
-asd.adm0 <- 10 * table(census.data$AGE,
+asd.adm0 <- census.data$PERWT[1] * table(census.data$AGE,
                        census.data$SEX)
 
 ## Age-Sex distribution, ADM1
 asd.adm1 <- table(census.data$AGE,
                   census.data$SEX,
-                  census.data$DHS_IPUMSI_ZW)*10
+                  census.data$DHS_IPUMSI_ZW)*census.data$PERWT[1]
 
 
 ###########################################################################################
 # Smoothing
-
 f.pop.all <- list()
 m.pop.all   <- list()
 ##Calculate Noumbissi Index for ADM1 level data:
