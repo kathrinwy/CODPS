@@ -64,8 +64,8 @@ get.countries.table(regpop.pred)
 
 # Explore results.
 par(mfrow = c(1,2))
-pop.trajectories.plot(regpop.pred, "Masvingo", sum.over.ages = TRUE)
-pop.pyramid(regpop.pred, "Masvingo", year = 2015)
+pop.trajectories.plot(regpop.pred, "Harare", sum.over.ages = TRUE)
+pop.pyramid(regpop.pred, "Harare", year = 2015)
 
 setwd(code)
 

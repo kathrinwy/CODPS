@@ -18,7 +18,7 @@ pop$Age <- as.character(pop$Age)
 
 pop$Age <- ifelse(pop$Age == "'5-9'", "5-9",
                   ifelse(pop$Age == "'10-14'", "10-14", 
-                         ifelse(pop$Age == "'1-4'", "1-4", pop$Age)))
+                         ifelse(pop$Age == "'0-4'", "0-4", pop$Age)))
 
 pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
 
@@ -27,7 +27,7 @@ pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.pl
 
 # Order age groups
 pop.plot$Age <- as.factor(pop.plot$Age)
-pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 2, 11, 3:10,  12:18)]) 
+pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 10, 2:9,  11:18)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
 regions   <- unique(pop.plot$ADM1_EN)
