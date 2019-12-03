@@ -31,15 +31,15 @@ source("1-bayespop-projections.R")                          # using converged tf
 
 # NIGER -------------------------------------------------------------------
 
-country <- "Niger"
-iso     <- "NER"
+#country <- "Niger"
+#iso     <- "NER"
 
-source("2-read-input-data-NER.R")                           # Read INS data
-source("3-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
-source("4-population-projections-subnational-NER.R")    
-source("5-export-pop-data.R")                        
-source("6a-visualizations.R") 
-source("6b-visualizations-maps-NER.R")                      # Not coded yet
+#source("2-read-input-data-NER.R")                           # Read INS data
+#source("3-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
+#source("4-population-projections-subnational-NER.R")    
+#source("5-export-pop-data.R")                        
+#source("6a-visualizations.R") 
+#source("6b-visualizations-maps-NER.R")                      # Not coded yet
 
 # BURKINA FASO ------------------------------------------------------------
 
@@ -67,6 +67,18 @@ source("5-export-pop-data.R")
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BGD.R")
 
+# Mali --------------------------------------------------------------
+
+country <- "Mali"
+iso     <- "MLI"
+p.code  <- "ML"
+
+source("2-read-input-data-MLI.R")                           # Read IPUMS data, Census 2006
+source("3-tfr-subnational-projections-MLI.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational-MLI.R")    
+source("5-export-pop-data.R")                        
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-MLI.R")
 
 # Zambia ------------------------------------------------------------------
 
