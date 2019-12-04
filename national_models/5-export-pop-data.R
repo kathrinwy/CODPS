@@ -60,7 +60,8 @@ pop <- pop[,c(6,1, 5, 2, 3, 4 )]
 # Recode Age group 
 pop <- 
   mutate(pop,
-         age = ifelse(age == 0, "0", 
+         age = 
+         ifelse(age == 0, "0", 
          ifelse(age == 5, "'0-4'",
          ifelse(age == 10, "'5-9'",
          ifelse(age == 15, "'10-14'",
@@ -69,41 +70,33 @@ pop <-
          ifelse(age == 30, "25-29",
          ifelse(age == 35, "30-34",
          ifelse(age == 40, "35-39",
-         ifelse(age ==45, "40-44",
+         ifelse(age == 45, "40-44",
          ifelse(age == 50, "45-49",
-        ifelse(age == 55, "50-54",
+         ifelse(age == 55, "50-54",
          ifelse(age == 60, "55-59",
-          ifelse(age == 65, "60-64", 
-          ifelse(age == 70, "65-69",  
-        ifelse(age == 75, "70-74", 
-          ifelse(age == 80, "75-79", 
-            ifelse(age == 85, "80-84", 
+         ifelse(age == 65, "60-64", 
+         ifelse(age == 70, "65-69",  
+         ifelse(age == 75, "70-74", 
+         ifelse(age == 80, "75-79", 
+         ifelse(age == 85, "80-84", 
          ifelse(age == 90, "85-89", 
          ifelse(age == 95, "90-94", 
          ifelse(age == 100, "95-99", 
-          ifelse(age == 105, "100-104",
-           ifelse(age == 110, "105-109", 
-           ifelse(age == 115, "110-114", 
-             ifelse(age == 120, "115-119", 
-               ifelse(age == 125, "120-124", 
-               ifelse(age == 130, "125-129", NA))))))))))))))))))))))))))))
+         ifelse(age == 105, "100-104",
+         ifelse(age == 110, "105-109", 
+         ifelse(age == 115, "110-114", 
+         ifelse(age == 120, "115-119", 
+         ifelse(age == 125, "120-124", 
+         ifelse(age == 130, "125-129", NA))))))))))))))))))))))))))))
 
 # Filter age groups that do not exist between 2015 and 2020
 
 pop <- pop %>%
-  filter(age != "0") %>%
-  filter(age != "90-94") %>%
-  filter(age != "95-99") %>%
-  filter(age != "100-104") %>%
-  filter(age != "105-109") %>%
-  filter(age != "110-114") %>%
-  filter(age != "115-119") %>%
-  filter(age != "120-124") %>%
-  filter(age != "125-129")
+  filter(age != "0") # subsumed in 0-4 age group
 
 # Order age groups
 pop$age <- as.factor(pop$age)
-pop$age = factor(pop$age, levels(pop$age)[c(1,3,2,4:18)]) 
+pop$age = factor(pop$age, levels(pop$age)[c(1,3,2,4:26)]) 
 
 # Add P-codes
 

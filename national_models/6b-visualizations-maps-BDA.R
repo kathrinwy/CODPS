@@ -162,11 +162,7 @@ plot.label <- plot +
   annotation_custom(grob.ZMB01) +
   annotation_custom(grob.ZMB02) +
   annotation_custom(grob.ZMB03) +
-  annotation_custom(grob.ZMB04) +
-  annotation_custom(grob.ZMB05) +
   annotation_custom(grob.ZMB06) +
-  annotation_custom(grob.ZMB07) +
-  annotation_custom(grob.ZMB08) +
   annotation_custom(grob.ZMB09) +
   annotation_custom(grob.ZMB10)  
 

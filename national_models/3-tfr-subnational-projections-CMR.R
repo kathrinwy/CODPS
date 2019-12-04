@@ -17,8 +17,8 @@
 # Load data for subnational units
 setwd(output)
 
-my.regtfr.file.MLI <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.MLI , check.names = F)
+my.regtfr.file <- "regdata/tfr.txt"
+read.delim(my.regtfr.file , check.names = F)
 
 # Projections -------------------------------------------------------------
 
@@ -31,12 +31,12 @@ reg.tfr.dir <- "regTFRsimulation"
 # data("iso3166", package = "bayesTFR") 
 
 regtfr.preds <- tfr.predict.subnat(country.code,
-                                   my.tfr.file = my.regtfr.file.MLI,
+                                   my.tfr.file = my.regtfr.file,
                                    sim.dir = nat.tfr.dir,
                                    output.dir = reg.tfr.dir)
 
 regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 
 #  Store the directory
-MLItfr.dir <- file.path(reg.tfr.dir, "subnat", "c466")
+tfr.dir <- file.path(reg.tfr.dir, "subnat", paste0("c", country.code))
 

@@ -67,13 +67,26 @@ source("5-export-pop-data.R")
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BGD.R")
 
+# Cameroon --------------------------------------------------------------
+
+country <- "Cameroon"
+iso     <- "CMR"
+p.code  <- "CMR"
+
+source("2-read-input-data-CMR.R")                           # Read IPUMS data, Census 2005
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational.R")    
+source("5-export-pop-data.R")                        
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-CMR.R")
+
 # Mali --------------------------------------------------------------
 
 country <- "Mali"
 iso     <- "MLI"
 p.code  <- "ML"
 
-source("2-read-input-data-MLI.R")                           # Read IPUMS data, Census 2006
+source("2-read-input-data-MLI.R")                           # Read IPUMS data, Census 2009
 source("3-tfr-subnational-projections-MLI.R")               # pre-requisite: downloaded tfr file in regdata
 source("4-population-projections-subnational-MLI.R")    
 source("5-export-pop-data.R")                        
