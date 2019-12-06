@@ -5,7 +5,7 @@
 # Script purpose: master file
 
 # Date created: 11 September 2019
-# Last updated: 2 December 2019
+# Last updated: 5 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -35,8 +35,8 @@ source("1-bayespop-projections.R")                          # using converged tf
 #iso     <- "NER"
 
 #source("2-read-input-data-NER.R")                           # Read INS data
-#source("3-tfr-subnational-projections-NER.R")               # pre-requisite: downloaded tfr file in regdata
-#source("4-population-projections-subnational-NER.R")    
+#source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+#source("4-population-projections-subnational.R")    
 #source("5-export-pop-data.R")                        
 #source("6a-visualizations.R") 
 #source("6b-visualizations-maps-NER.R")                      # Not coded yet
@@ -48,8 +48,8 @@ iso     <- "BFA"
 p.code <- "BF"
 
 source("2-read-input-data-BFA.R")                           # Read IPUMS data, Census 2006
-source("3-tfr-subnational-projections-BFA.R")               # pre-requisite: downloaded tfr file in regdata
-source("4-population-projections-subnational-BFA.R")    
+source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BFA.R")
@@ -61,8 +61,8 @@ iso     <- "BGD"
 p.code  <- "BD"
 
 source("2-read-input-data-BGD.R")                           # Read IPUMS data, Census 2006
-source("3-tfr-subnational-projections-BGD.R")               # pre-requisite: downloaded tfr file in regdata
-source("4-population-projections-subnational-BGD.R")    
+source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BGD.R")
@@ -87,8 +87,8 @@ iso     <- "MLI"
 p.code  <- "ML"
 
 source("2-read-input-data-MLI.R")                           # Read IPUMS data, Census 2009
-source("3-tfr-subnational-projections-MLI.R")               # pre-requisite: downloaded tfr file in regdata
-source("4-population-projections-subnational-MLI.R")    
+source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-MLI.R")
@@ -100,8 +100,8 @@ iso     <- "ZMB"
 p.code <- "ZMB"
 
 source("2-read-input-data-ZMB.R")                           # Read IPUMS data, Census 2010
-source("3-tfr-subnational-projections-ZMB.R")               # pre-requisite: downloaded tfr file in regdata
-source("4-population-projections-subnational-ZMB.R")    
+source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-ZMB.R")
@@ -113,8 +113,8 @@ iso     <- "ZWE"
 p.code <- "ZW"
 
 source("2-read-input-data-ZWE.R")                           # Read IPUMS data, Census 2012
-source("3-tfr-subnational-projections-ZWE.R")               # pre-requisite: downloaded tfr file in regdata
-source("4-population-projections-subnational-ZWE.R")    
+source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-ZWE.R")

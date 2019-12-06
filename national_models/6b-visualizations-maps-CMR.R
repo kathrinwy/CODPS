@@ -33,12 +33,13 @@ Youth <- Youth%>%
 
 setwd(paste0(input, iso, "-shapefiles"))
 
-geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
-geo@data$DHSREGEN <- as.character(geo@data$DHSREGEN )
-geo@data[geo@data$DHSREGEN == "Tombouctou", "DHSREGEN"] <- "Toumbouctou"
+geo <- readOGR(".", "geo1_cm2005") # load shapefile for  DHS data
+geo@data$ADMIN_NAME <- as.character(geo@data$ADMIN_NAME )
+geo@data[geo@data$ADMIN_NAME == "Extrème Nord", "ADMIN_NAME"] <- "Extreme-Nord"
+geo@data[geo@data$ADMIN_NAME == "Adamoua", "ADMIN_NAME"] <- "Adamaoua"
 
 subset <- geo
-subset@data$ID2 <- paste(subset@data$DHSREGEN)
+subset@data$ID2 <- paste(subset@data$ADMIN_NAME)
 
 #Correct country names
 subset_data <- tidy(subset)%>% #Command takes medium amount of time
@@ -94,23 +95,25 @@ plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Da
   theme(legend.position = c(0.15, 0.8))+
   coord_equal()
 
-grob.MLI01 <- grobTree(textGrob("Bamako", x=0.22,  y=0.18, hjust=0,
+grob.MLI01 <- grobTree(textGrob("South", x=0.34,  y=0.15, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic"))) # OK
-grob.MLI02 <- grobTree(textGrob("Mopti", x=0.47,  y=0.33, hjust=0,
+grob.MLI02 <- grobTree(textGrob("Central", x=0.4,  y=0.3, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI03 <- grobTree(textGrob("Kidal", x=0.73,  y=0.65, hjust=0,
+grob.MLI03 <- grobTree(textGrob("North", x=0.65,  y=0.6, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI04 <- grobTree(textGrob("Segou", x=0.35,  y=0.25, hjust=0,
+grob.MLI04 <- grobTree(textGrob("Littoral", x=0.19,  y=0.25, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI05 <- grobTree(textGrob("Koulikoro", x=0.29,  y=0.32, hjust=0,
+grob.MLI05 <- grobTree(textGrob("Northwest", x=0.23,  y=0.43, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI07 <- grobTree(textGrob("Sikasso", x=0.27,  y=0.1, hjust=0,
+grob.MLI07 <- grobTree(textGrob("East", x=0.65,  y=0.22, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI08 <- grobTree(textGrob("Gao", x=0.8,  y=0.46, hjust=0,
+grob.MLI08 <- grobTree(textGrob("Adamaoua", x=0.53,  y=0.46, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI09 <- grobTree(textGrob("Kayes", x=0.1,  y=0.25, hjust=0,
+grob.MLI09 <- grobTree(textGrob("Southwest", x=0.05,  y=0.35, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.MLI10 <- grobTree(textGrob("Toumbouctou", x=0.4,  y=0.8, hjust=0,
+grob.MLI10 <- grobTree(textGrob("Far North", x=0.65,  y=0.75, hjust=0,
+                                gp=gpar(col="black", fontsize=9, fontface="italic")))
+grob.MLI06 <- grobTree(textGrob("West", x=0.25,  y=0.35, hjust=0,
                                 gp=gpar(col="black", fontsize=9, fontface="italic")))
 
 
@@ -120,6 +123,7 @@ plot.label <- plot +
   annotation_custom(grob.MLI03) +
   annotation_custom(grob.MLI04) +
   annotation_custom(grob.MLI05) +
+  annotation_custom(grob.MLI06) +
   annotation_custom(grob.MLI07) +
   annotation_custom(grob.MLI08) +
   annotation_custom(grob.MLI09) +

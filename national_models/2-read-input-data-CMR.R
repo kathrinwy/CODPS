@@ -23,8 +23,8 @@ growth                  <- growth %>%
                            filter(`Region, subregion, country or area *` == country)
 
 ## Section: Read in and prepare IPUMS Census microdata
-census                  <- "ipumsi_00022.dat"
-census.ddi              <- read_ipums_ddi("ipumsi_00022.xml")
+census                  <- "ipumsi_00023.dat"
+census.ddi              <- read_ipums_ddi("ipumsi_00023.xml")
 census.data             <- read_ipums_micro(census.ddi, verbose = FALSE)
 
 table(census.data$AGE2)
@@ -43,8 +43,10 @@ table(census.data$GEO1_CM2005)
 # 05	Littoral
 # 06	Nord
 # 07	Nord Ouest
+# 07	Ouest
 # 08	Sud
 # 09	Sud Ouest
+
 
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 
@@ -332,9 +334,8 @@ colnames(CMRpopM) <- c("reg_code","name","age","2015") # Why 2015?
 # write.table(CMRpopF, paste0(output, "regdata/CMRpopF.txt"), sep = "\t", row.names = FALSE)
 # write.table(CMRpopM, paste0(output, "regdata/CMRpopM.txt"), sep = "\t", row.names = FALSE)
 
-setwd(output)
-
 # Retrieve e0 trajectories ------------------------------------------------
+setwd(output)
 
 e0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
   dplyr::select(-Period)
@@ -344,18 +345,6 @@ e0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, 
   dplyr::select(-Period)
 write.csv(e0Mtraj, paste0("./regdata/", "e0Mtraj.csv"), row.names = F)
 
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Find country code
-country.code <- iso3166[iso3166$name == country, ][,4]
-
-# Load TFR file
-my.regtfr.file <- "regdata/tfr.txt"
-read.delim(my.regtfr.file , check.names = F)
-
-setwd(code)
 
 
 

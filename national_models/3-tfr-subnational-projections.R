@@ -18,7 +18,8 @@
 setwd(output)
 
 my.regtfr.file <- "regdata/tfr.txt"
-read.delim(my.regtfr.file , check.names = F)
+read.delim(my.regtfr.file , check.names = F) %>%
+  filter(country == country)
 
 # Projections -------------------------------------------------------------
 
