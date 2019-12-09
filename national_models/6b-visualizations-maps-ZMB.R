@@ -20,16 +20,17 @@ pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.pl
 
 pop.plot$Age <- as.character(pop.plot$Age)
 WRA <- pop.plot %>%
-  filter(Age == "15-19" | Age == "20-24" | Age == "25-29	" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
+  filter(Age == "15-19" | Age == "20-24" | Age == "25-29" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
   filter(Sex == "female") %>%
   group_by(ADM1_EN) %>%  
   dplyr::summarise(pop = sum(pop_2020))  
 
+Youth <- pop.plot 
 
-Youth <- pop.plot%>%
+Youth <- Youth%>%
   filter(Age == "10-14" | Age == "15-19" | Age == "20-24") %>%
   group_by(ADM1_EN) %>%  
-  dplyr::summarise(pop = sum(pop_2020)) 
+  dplyr::summarise(pop = sum(pop_2020))  
 
 
 setwd(paste0(input, iso, "-shapefiles"))

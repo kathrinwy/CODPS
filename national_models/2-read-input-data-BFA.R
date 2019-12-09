@@ -360,6 +360,9 @@ write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 
 # bayesTFR projections of the national TFR (result of tfr.predict )
 
+# Find country code
+country.code <- iso3166[iso3166$name == country, ][,4]
+
 my.regtfr.file.BFA <- "regdata/tfr.txt"
 read.delim(my.regtfr.file.BFA , check.names = F)
 
