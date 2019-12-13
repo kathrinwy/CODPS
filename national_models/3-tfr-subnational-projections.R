@@ -41,3 +41,9 @@ regtfr.preds <- get.regtfr.prediction(reg.tfr.dir)
 #  Store the directory
 tfr.dir <- file.path(reg.tfr.dir, "subnat", paste0("c", country.code))
 
+# Visual inspection
+#NATtfr <- regtfr.preds[[as.character(country.code)]]
+#get.countries.table(NATtfr)
+#region <- "Diffa"
+#tfr.trajectories.plot(NATtfr, region)
+setwd(code)

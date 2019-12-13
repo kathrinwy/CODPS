@@ -3,10 +3,10 @@
 ## Script purpose: script to load census, DHS, MICS input data files
 ##
 ## Date created: 14 August 2019
-## Last updated: 16 August 2019
+## Last updated: 10 December 2019
 ##
 ## Author: Kathrin Weny
-## Maintainers: Kathrin Weny, Romesh Silva
+## Maintainers: Kathrin Weny
 
 # Last census in Niger was in 2012, the same year a DHS took place. 
 # No micro data are available for the 2012 census, however, INS has published single year 
@@ -15,163 +15,316 @@
 
 # Read in data: INS projections -------------------------------------------
 
-setwd(NER.input)
+setwd(input)
 
 # Adm0 population growth from WPP -----------------------------------------
-
-url1       <- "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/1_Population/WPP2019_POP_F02_POPULATION_GROWTH_RATE.xlsx"
+url1                    <- "https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/EXCEL_FILES/1_Population/WPP2019_POP_F02_POPULATION_GROWTH_RATE.xlsx"
 GET(url1, write_disk(tf <- tempfile(fileext = ".xlsx")))
-growth     <- read_excel(tf, 1L, skip = 16)
+growth                  <- read_excel(tf, 1L, skip = 16)
 
-growth.NER <- growth %>%
-  select(c("Region, subregion, country or area *", "2010-2015"))%>%
-  filter(`Region, subregion, country or area *` == "Niger")
-
-# Adm0
-
-adm0.pop     <- read_excel("ins-projections-adm0.xlsx")
-adm0.pop     <- gather(adm0.pop, key = "sex", value = "2012", -"age1")
-
-# Convert into 5-year age11 groups
-adm0.pop <- adm0.pop %>%
-  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
-                    ifelse(5  <= age1 & age1 < 10, "5-9",
-                    ifelse(10 <= age1 & age1 < 15, "10-14",
-                    ifelse(15 <= age1 & age1 < 20, "15-19",
-                    ifelse(20 <= age1 & age1 < 25, "20-24",
-                    ifelse(25 <= age1 & age1 < 30, "25-29",
-                    ifelse(30 <= age1 & age1 < 35, "30-34",
-                    ifelse(35 <= age1 & age1 < 40, "35-39",
-                    ifelse(40 <= age1 & age1 < 45, "40-44",
-                    ifelse(45 <= age1 & age1 < 50, "45-49",
-                    ifelse(50 <= age1 & age1 < 55, "50-54",
-                    ifelse(55 <= age1 & age1 < 60, "55-59",
-                    ifelse(60 <= age1 & age1 < 65, "60-64",
-                    ifelse(65 <= age1 & age1 < 70, "65-69",
-                    ifelse(70 <= age1 & age1 < 78, "70-74",
-                    ifelse(75 <= age1 & age1 < 80, "75-79",
-                    ifelse(80 <= age1            , "80+", NA))))))))))))))))))
-
-#adm0.pop$'2013' <- adm0.pop$'2012'*(as.numeric(growth.NER[1,2])/100 +1)
-#adm0.pop$'2014' <- adm0.pop$'2013'*(as.numeric(growth.NER[1,2])/100 +1)
-#adm0.pop$'2015' <- adm0.pop$'2014'*(as.numeric(growth.NER[1,2])/100 +1)
-
-NERpopF.adm0  <- filter(adm0.pop, sex == "female")
-NERpopM.adm0  <- filter(adm0.pop, sex == "male")
+growth                  <- growth %>%
+  dplyr::select(c("Region, subregion, country or area *", "2010-2015"))%>%
+  filter(`Region, subregion, country or area *` == country)
 
 # Adm1
-
 adm1.pop      <- read_excel("ins-projections-adm1.xlsx")
 adm1.pop      <- gather(adm1.pop, key = "age1", value = "2012", -c("name", "reg_code", "sex"))
 adm1.pop$age1 <- as.numeric(adm1.pop$age1)
 
-# Convert into 5-year age11 groups
-adm1.pop <- adm1.pop %>%
-  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
-                    ifelse(5  <= age1 & age1 < 10, "5-9",
-                    ifelse(10 <= age1 & age1 < 15, "10-14",
-                    ifelse(15 <= age1 & age1 < 20, "15-19",
-                    ifelse(20 <= age1 & age1 < 25, "20-24",
-                    ifelse(25 <= age1 & age1 < 30, "25-29",
-                    ifelse(30 <= age1 & age1 < 35, "30-34",
-                    ifelse(35 <= age1 & age1 < 40, "35-39",
-                    ifelse(40 <= age1 & age1 < 45, "40-44",
-                    ifelse(45 <= age1 & age1 < 50, "45-49",
-                    ifelse(50 <= age1 & age1 < 55, "50-54",
-                    ifelse(55 <= age1 & age1 < 60, "55-59",
-                    ifelse(60 <= age1 & age1 < 65, "60-64",
-                    ifelse(65 <= age1 & age1 < 70, "65-69",
-                    ifelse(70 <= age1 & age1 < 75, "70-74",
-                    ifelse(75 <= age1 & age1 < 80, "75-79",
-                    ifelse(80 <= age1            , "80+", NA))))))))))))))))))
+asd.adm1 <- data.frame(adm1.pop[rep(seq_len(dim(adm1.pop)[1]), adm1.pop$`2012`), 1:4, drop = FALSE], row.names=NULL)
 
-NERpopF.adm1  <- filter(adm1.pop, sex == "female")
-NERpopM.adm1  <- filter(adm1.pop, sex == "male")
+test <- asd.adm1 %>%
+  filter(name == "Diffa")%>%
+  filter(sex == "male") %>%
+  filter(age1 == 0)
 
-# Adm2
+table(census.data$AGE)
+table(asd.adm1$age1)
 
-adm2.pop      <- read_excel("ins-projections-adm2.xlsx")
-adm2.pop      <- gather(adm2.pop, key = "age1", value = "2012", -c("name", "reg_code", "name2", "reg_code2", "sex"))
-adm2.pop$age1 <- as.numeric(adm2.pop$age1)
+table(census.data$SEX)
+table(asd.adm1$sex)
 
-# Convert into 5-year age1 groups
-adm2.pop <- adm2.pop %>%
-  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
-                    ifelse(5  <= age1 & age1 < 10, "5-9",
-                    ifelse(10 <= age1 & age1 < 15, "10-14",
-                    ifelse(15 <= age1 & age1 < 20, "15-19",
-                    ifelse(20 <= age1 & age1 < 25, "20-24",
-                    ifelse(25 <= age1 & age1 < 30, "25-29",
-                    ifelse(30 <= age1 & age1 < 35, "30-34",
-                    ifelse(35 <= age1 & age1 < 40, "35-39",
-                    ifelse(40 <= age1 & age1 < 45, "40-44",
-                    ifelse(45 <= age1 & age1 < 50, "45-49",
-                    ifelse(50 <= age1 & age1 < 55, "50-54",
-                    ifelse(55 <= age1 & age1 < 60, "55-59",
-                    ifelse(60 <= age1 & age1 < 65, "60-64",
-                    ifelse(65 <= age1 & age1 < 70, "65-69",
-                    ifelse(70 <= age1 & age1 < 75, "70-74",
-                    ifelse(75 <= age1 & age1 < 80, "75-79",
-                    ifelse(80 <= age1           , "80+", NA))))))))))))))))))
+table(census.data$DHS_IPUMSI_ZW)
+table(asd.adm1$name)
 
-NERpopF.adm2  <- filter(adm2.pop, sex == "female")
-NERpopM.adm2  <- filter(adm2.pop, sex == "male")
+## Age-Sex distribution, ADM1
+asd.adm1 <- table(asd.adm1$age1,
+                     asd.adm1$sex,
+                     asd.adm1$name)
 
-# Adm3
 
-adm3.pop      <- read_excel("ins-projections-adm3.xlsx")
-adm3.pop      <- gather(adm3.pop, key = "age1", value = "2012", -c("name", "reg_code", "name2", "reg_code2", "name3", "reg_code3", "sex"))
-adm3.pop$age1 <- as.numeric(adm3.pop$age1)
 
-adm3.pop <- adm3.pop %>%
-  mutate(age = ifelse(0  <= age1 & age1 < 5, "0-4",
-                    ifelse(5  <= age1 & age1 < 10, "5-9",
-                    ifelse(10 <= age1 & age1 < 15, "10-14",
-                    ifelse(15 <= age1 & age1 < 20, "15-19",
-                    ifelse(20 <= age1 & age1 < 25, "20-24",
-                    ifelse(25 <= age1 & age1 < 30, "25-29",
-                    ifelse(30 <= age1 & age1 < 35, "30-34",
-                    ifelse(35 <= age1 & age1 < 40, "35-39",
-                    ifelse(40 <= age1 & age1 < 45, "40-44",
-                    ifelse(45 <= age1 & age1 < 50, "45-49",
-                    ifelse(50 <= age1 & age1 < 55, "50-54",
-                    ifelse(55 <= age1 & age1 < 60, "55-59",
-                    ifelse(60 <= age1 & age1 < 65, "60-64",
-                    ifelse(65 <= age1 & age1 < 70, "65-69",
-                    ifelse(70 <= age1 & age1 < 75, "70-74",
-                    ifelse(75 <= age1 & age1 < 80, "75-79",
-                    ifelse(80 <= age1           , "80+", NA))))))))))))))))))
+###########################################################################################
+# Smoothing
+f.pop.all <- list()
+m.pop.all   <- list()
+##Calculate Noumbissi Index for ADM1 level data:
 
-NERpopF.adm3 <- filter(adm3.pop, sex == "female")
-NERpopM.adm3 <- filter(adm3.pop, sex == "male")
+#asd.adm1[1,2,3]
+#c("age", "sex", "region")
+
+female.Noumbissi0 <- rep(0,length(asd.adm1[1,1,])) # length across all regions
+male.Noumbissi0   <- rep(0,length(asd.adm1[1,1,]))
+
+
+for (j in 1:length(asd.adm1[1,1,])){
+  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:80,ageMin = 20, ageMax = 80, digit=0) 
+  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:80,ageMin = 20, ageMax = 80, digit=0)   
+}  
+
+female.Noumbissi5 <- rep(0,length(asd.adm1[1,2,]))
+male.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
+
+for (j in 1:length(asd.adm1[1,1,])){
+  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:80, ageMin = 20, ageMax = 80,digit=5) 
+  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:80, ageMin = 20, ageMax = 80,digit=5)  
+} 
+
+##Calculate mean relative difference for digit preference between ages 
+## ending in -0 and -5  
+rel.diff.female.05 <- 100*(female.Noumbissi0 - female.Noumbissi5)/(0.5*(female.Noumbissi0 + female.Noumbissi5))
+rel.diff.male.05 <- 100*(male.Noumbissi0 - male.Noumbissi5)/(0.5*(male.Noumbissi0 + male.Noumbissi5))
+mean(rel.diff.female.05)
+mean(rel.diff.male.05)
+
+##If female age preference for ages ending  0s and 5s differs by moe than 15%,
+##then smooth single-year ages for females using Spencer's smoothing technique 
+##(for ages 10-89), else use the raw data directly
+f.pop <- asd.adm1[,2,]
+
+for(i in 1:length(asd.adm1[1,2,])){
+  
+  ifelse(mean(rel.diff.female.05) > 15, 
+         f.pop <- spencer(asd.adm1[,2,i],0:99),
+         f.pop <- asd.adm1[,2,i]
+  )
+  
+  # Replace 0-9 and ages above 90 with asd.adm1 by default
+  f.pop[1:10]    <- asd.adm1[1:10,2,i]
+ # f.pop[90:98]  <- c(asd.adm1[91:99,2,i])
+  
+  f.pop.all[[i]] <- f.pop
+}
+##If male age preference for ages ending  0s and 5s differs by moe than 15%,
+##then smooth single-year ages for males using Spencer's smoothing technique 
+##(for ages 10-89), else use the raw data directly
+
+m.pop <- asd.adm1[,1,]
+
+for(i in 1:length(asd.adm1[1,1,])){
+  ifelse(mean(rel.diff.male.05) > 15, 
+         m.pop <- spencer(asd.adm1[,1,i],0:99),
+         m.pop <- asd.adm1[,1,i]
+  )
+  
+  # Replace 0-9 and ages above 90 with asd.adm1 by default
+  m.pop[1:10]    <- asd.adm1[1:10,1,i]
+ # m.pop[90:98]  <- c(asd.adm1[91:99,1,i])
+  
+  m.pop.all[[i]] <- m.pop
+}
+
+###########################################################################################
+
+
+# Flat dataset
+male.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
+names(male.adm1.census1) <- c("AGE2", "PERWT", "name")
+
+for(i in 1:length(asd.adm1[1,1,])){
+  data <- as.data.frame(m.pop.all[i]) %>%
+    tibble::rownames_to_column("Age")%>%
+    mutate(name = i) 
+  
+  names(data) <- c("AGE2", "PERWT", "name")
+  
+  male.adm1.census1 <- rbind(male.adm1.census1, data)
+  
+}
+
+female.adm1.census1 <- data.frame(matrix(, nrow=0, ncol=3))
+names(female.adm1.census1) <- c("AGE2", "PERWT", "name")
+
+for(i in 1:length(asd.adm1[1,1,])){
+  data <- as.data.frame(f.pop.all[i]) %>%
+    tibble::rownames_to_column("Age")%>%
+    mutate(name = i) 
+  
+  names(data) <- c("AGE2", "PERWT", "name")
+  
+  female.adm1.census1 <- rbind(female.adm1.census1, data)
+}
+
+## convert region.no to region-name 
+
+male.adm1.census1$AGE2 <- as.numeric(male.adm1.census1$AGE2)
+
+male.adm1.census1 <-
+  mutate(male.adm1.census1, 
+         agegroup = ifelse(0 <= AGE2 & AGE2 <= 4, "0-4",
+                           ifelse(5 <= AGE2 & AGE2 <= 9, "5-9",
+                                  ifelse(10 <= AGE2 & AGE2 <= 14, "10-14",
+                                         ifelse(15 <= AGE2&  AGE2 <= 19, "15-19",
+                                                ifelse(20 <= AGE2 & AGE2 <= 24, "20-24",
+                                                       ifelse(25 <= AGE2 & AGE2 <= 29, "25-29",
+                                                              ifelse(30 <= AGE2 & AGE2 <= 34, "30-34",
+                                                                     ifelse(35 <= AGE2 & AGE2 <= 39, "35-39",
+                                                                            ifelse(40 <= AGE2 & AGE2 <= 44, "40-44",
+                                                                                   ifelse(45 <= AGE2 & AGE2 <= 49, "45-49",
+                                                                                          ifelse(50 <= AGE2 & AGE2 <= 54, "50-54",
+                                                                                                 ifelse(55 <= AGE2 & AGE2 <= 59, "55-59",
+                                                                                                        ifelse(60 <= AGE2 & AGE2 <= 64, "60-64",
+                                                                                                               ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
+                                                                                                                      ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
+                                                                                                                             ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
+                                                                                                                                    ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
+
+# Create 5-year age groups
+
+male.adm1.census5 <- male.adm1.census1 %>%
+  dplyr::select(c("PERWT", "name", "agegroup")) %>%
+  group_by(agegroup, name) %>%  
+  dplyr::summarize(sum_age = sum(PERWT, na.rm= T)) 
+
+male.adm1.census5$agegroup <- factor(male.adm1.census5$agegroup, levels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29",
+                                                                            "30-34", "35-39", "40-44", "45-49", "50-54", "55-59",
+                                                                            "60-64", "65-69", "70-74", "75-79", "80+"))
+
+male.adm1.census5 <-
+  mutate(male.adm1.census5,
+         name = ifelse(name == 1, "Agadez", 
+                       ifelse(name == 2, "Diffa",
+                              ifelse(name == 3, "Dosso",
+                                     ifelse(name == 4, "Maradi",
+                                            ifelse(name == 5, "Niamey",
+                                                   ifelse(name == 6, "Tahoua",
+                                                          ifelse(name == 7, "Tillaberi",
+                                                                 ifelse(name == 8, "Zinder", NA)))))))))
+
+female.adm1.census1$AGE2 <- as.numeric(female.adm1.census1$AGE2)
+
+female.adm1.census1 <-
+  mutate(female.adm1.census1, 
+         agegroup = ifelse(0 <= AGE2 & AGE2 <= 4, "0-4",
+                           ifelse(5 <= AGE2 & AGE2 <= 9, "5-9",
+                                  ifelse(10 <= AGE2 & AGE2 <= 14, "10-14",
+                                         ifelse(15 <= AGE2&  AGE2 <= 19, "15-19",
+                                                ifelse(20 <= AGE2 & AGE2 <= 24, "20-24",
+                                                       ifelse(25 <= AGE2 & AGE2 <= 29, "25-29",
+                                                              ifelse(30 <= AGE2 & AGE2 <= 34, "30-34",
+                                                                     ifelse(35 <= AGE2 & AGE2 <= 39, "35-39",
+                                                                            ifelse(40 <= AGE2 & AGE2 <= 44, "40-44",
+                                                                                   ifelse(45 <= AGE2 & AGE2 <= 49, "45-49",
+                                                                                          ifelse(50 <= AGE2 & AGE2 <= 54, "50-54",
+                                                                                                 ifelse(55 <= AGE2 & AGE2 <= 59, "55-59",
+                                                                                                        ifelse(60 <= AGE2 & AGE2 <= 64, "60-64",
+                                                                                                               ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
+                                                                                                                      ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
+                                                                                                                             ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
+                                                                                                                                    ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
+
+# Create 5-year age groups
+female.adm1.census5 <- female.adm1.census1 %>%
+  group_by(agegroup, name) %>%  
+  dplyr::summarize(sum_age = sum(PERWT, na.rm= T)) 
+
+female.adm1.census5$agegroup <- factor(female.adm1.census5$agegroup, levels = c("0-4", "5-9", "10-14", "15-19", "20-24", "25-29",
+                                                                                "30-34", "35-39", "40-44", "45-49", "50-54", "55-59",
+                                                                                "60-64", "65-69", "70-74", "75-79", "80+"))
+
+female.adm1.census5 <-
+  mutate(female.adm1.census5,
+         name = ifelse(name == 1, "Agadez", 
+                       ifelse(name == 2, "Diffa",
+                              ifelse(name == 3, "Dosso",
+                                     ifelse(name == 4, "Maradi",
+                                            ifelse(name == 5, "Niamey",
+                                                   ifelse(name == 6, "Tahoua",
+                                                          ifelse(name == 7, "Tillaberi",
+                                                                 ifelse(name == 8, "Zinder", NA)))))))))
+
+# Add p-codes -------------------------------------------------------------
+
+female.adm1.census5 <- 
+  mutate(female.adm1.census5,
+         reg_code = ifelse(name == "Agadez", 001, 
+                           ifelse(name == "Diffa", 002,
+                                  ifelse(name == "Dosso", 003,
+                                         ifelse(name == "Maradi", 004,
+                                                ifelse(name == "Niamey", 008,
+                                                       ifelse(name == "Tahoua", 005,
+                                                              ifelse(name == "Tillaberi", 006,
+                                                                     ifelse(name == "Zinder", 007, NA)))))))))
+
+male.adm1.census5 <- 
+  mutate(male.adm1.census5,
+         reg_code = ifelse(name == "Agadez", 001, 
+                           ifelse(name == "Diffa", 002,
+                                  ifelse(name == "Dosso", 003,
+                                         ifelse(name == "Maradi", 004,
+                                                ifelse(name == "Niamey", 008,
+                                                       ifelse(name == "Tahoua", 005,
+                                                              ifelse(name == "Tillaberi", 006,
+                                                                     ifelse(name == "Zinder", 007, NA)))))))))
+
 
 # Verificaton of boundary changes beween fertility assumptions and --------
 # As the Niger DHS and Census both took place in 2012, boundaries do note change in between them
 
-# Export population data --------------------------------------------------
+# Save file ---------------------------------------------------------------
 
-write.csv(NERpopF.adm0, paste0(NER.output, "NERpopF.adm0.csv"), row.names = F)
-write.csv(NERpopM.adm0, paste0(NER.output, "NERpopM.adm0.csv"), row.names = F)
+female.pop.2012 <- female.adm1.census5%>%
+  filter(!is.na(agegroup))
 
-write.csv(NERpopF.adm1, paste0(NER.output, "NERpopF.adm1.csv"), row.names = F)
-write.csv(NERpopM.adm1, paste0(NER.output, "NERpopM.adm1.csv"), row.names = F)
+male.pop.2012   <- male.adm1.census5 %>%
+  filter(!is.na(agegroup))
 
-write.csv(NERpopF.adm2, paste0(NER.output, "NERpopF.adm2.csv"), row.names = F)
-write.csv(NERpopM.adm2, paste0(NER.output, "NERpopM.adm2.csv"), row.names = F)
+NERpopF <- female.pop.2012[,c(4,2,1,3)]
+NERpopM <-   male.pop.2012[,c(4,2,1,3)]
 
-write.csv(NERpopF.adm3, paste0(NER.output, "NERpopF.adm3.csv"), row.names = F)
-write.csv(NERpopM.adm3, paste0(NER.output, "NERpopM.adm3.csv"), row.names = F)
+# Project to 2015 ---------------------------------------------------------
 
-popF0.adm0.file <- NERpopF.adm0
-popM0.adm0.file <- NERpopM.adm0
+# use growth rate for 2010-2015
+NERpopF$'2013' <- NERpopF$'sum_age'*(as.numeric(growth[1,2])/100 +1)
+NERpopF$'2014' <- NERpopF$'2013'*(as.numeric(growth[1,2])/100 +1)
+NERpopF$'2015' <- NERpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-popF0.adm1.file <- NERpopF.adm1
-popM0.adm1.file <- NERpopM.adm1
+# use growth rate for 2010-2015
+NERpopM$'2013' <- NERpopM$'sum_age'*(as.numeric(growth[1,2])/100 +1)
+NERpopM$'2014' <- NERpopM$'2013'*(as.numeric(growth[1,2])/100 +1)
+NERpopM$'2015' <- NERpopM$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-popF0.adm2.file <- NERpopF.adm2
-popM0.adm2.file <- NERpopM.adm2
+NERpopF <- NERpopF[,c(1,2,3,ncol(NERpopF))]
+NERpopM <- NERpopM[,c(1,2,3,ncol(NERpopM))]
 
-popF0.adm3.file <- NERpopF.adm3
-popM0.adm3.file <- NERpopM.adm3
+# Export ------------------------------------------------------------------
 
-setwd(NER.code)
+colnames(NERpopF) <- c("reg_code","name","age","2015") 
+colnames(NERpopM) <- c("reg_code","name","age","2015") 
+
+# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
+# write.table(NERpopF, paste0(output, "regdata/NERpopF.txt"), sep = "\t", row.names = FALSE)
+# write.table(NERpopM, paste0(output, "regdata/NERpopM.txt"), sep = "\t", row.names = FALSE)
+
+setwd(output)
+
+# Retrieve e0 trajectories ------------------------------------------------
+
+NERe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+  dplyr::select(-Period)
+write.csv(NERe0Ftraj, paste0("./regdata/", "NERe0Ftraj.csv"), row.names = F)
+
+NERe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+  dplyr::select(-Period)
+write.csv(NERe0Mtraj, paste0("./regdata/", "NERe0Mtraj.csv"), row.names = F)
+
+# TFR input ------------------------------------------------------------------
+
+# bayesTFR projections of the national TFR (result of tfr.predict )
+
+# Load TFR file
+my.regtfr.file.NER <- "regdata/tfr.txt"
+read.delim(my.regtfr.file.NER , check.names = F)
+
+setwd(code)
+

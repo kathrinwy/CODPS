@@ -229,7 +229,7 @@ female.adm1.census1 <-
                     ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
                     ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
                     ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
-                    ifelse(AGE2 >80, "80+", NA))))))))))))))))))
+                    ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
 
 # Create 5-year age groups
 female.adm1.census5 <- female.adm1.census1 %>%

@@ -5,7 +5,7 @@
 # Script purpose: master file
 
 # Date created: 11 September 2019
-# Last updated: 5 December 2019
+# Last updated: 10 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -21,7 +21,6 @@ directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
 code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
 output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
 input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/"
-
 setwd(code)
 
 source("0-set-up.R")   
@@ -29,26 +28,16 @@ source("0-set-up.R")
 # National models ---------------------------------------------------------
 source("1-bayespop-projections.R")                          # using converged tfr/e0 projections and retriev pop projections
 
-# NIGER -------------------------------------------------------------------
-
-#country <- "Niger"
-#iso     <- "NER"
-
-#source("2-read-input-data-NER.R")                           # Read INS data
-#source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
-#source("4-population-projections-subnational.R")    
-#source("5-export-pop-data.R")                        
-#source("6a-visualizations.R") 
-#source("6b-visualizations-maps-NER.R")                      # Not coded yet
-
-# BURKINA FASO ------------------------------------------------------------
+# Burkina Faso ------------------------------------------------------------
 
 country <- "Burkina Faso"
 iso     <- "BFA"
 p.code <- "BF"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2006
 
 source("2-read-input-data-BFA.R")                           # Read IPUMS data, Census 2006
-source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
@@ -59,9 +48,11 @@ source("6b-visualizations-maps-BFA.R")
 country <- "Bangladesh"
 iso     <- "BGD"
 p.code  <- "BD"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2011
 
 source("2-read-input-data-BGD.R")                           # Read IPUMS data, Census 2006
-source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
@@ -72,9 +63,11 @@ source("6b-visualizations-maps-BGD.R")
 country <- "Cameroon"
 iso     <- "CMR"
 p.code  <- "CMR"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2005
 
 source("2-read-input-data-CMR.R")                           # Read IPUMS data, Census 2005
-source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr file in regdata
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
@@ -85,35 +78,55 @@ source("6b-visualizations-maps-CMR.R")
 country <- "Mali"
 iso     <- "MLI"
 p.code  <- "ML"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2009
 
 source("2-read-input-data-MLI.R")                           # Read IPUMS data, Census 2009
-source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-MLI.R")
+
+# Niger -------------------------------------------------------------------
+
+country <- "Niger"
+iso     <- "NER"
+p.code  <- "NER"
+country.code <- iso3166[iso3166$name == country, ][,4]
+
+source("2-read-input-data-NER.R")                           # Read INS data
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
+source("4-population-projections-subnational.R")    
+source("5-export-pop-data.R")                        
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-NER.R")                      
 
 # Zambia ------------------------------------------------------------------
 
 country <- "Zambia"
 iso     <- "ZMB"
 p.code <- "ZMB"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2010
 
 source("2-read-input-data-ZMB.R")                           # Read IPUMS data, Census 2010
-source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
-source("6b-visualizations-maps-ZMB.R")
+source("6b-visualizations-maps-NER.R")
 
 # Zimbabwe ----------------------------------------------------------------
 
 country <- "Zimbabwe"
 iso     <- "ZWE"
 p.code <- "ZW"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2012
 
 source("2-read-input-data-ZWE.R")                           # Read IPUMS data, Census 2012
-source("3-tfr-subnational-projections.R")               # pre-requisite: downloaded tfr file in regdata
+source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 

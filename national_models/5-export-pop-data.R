@@ -20,7 +20,9 @@ regions        <- (subset(read.delim(location.file), location_type == 4))[,3:4]
 traj <- get.pop.prediction(reg.pop.dir)
 
 # Male population
-popM_2015  <- as.data.frame(traj$'quantilesMage'[1:nrow(traj$countries),1:27,5,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
+
+traj$quantilesMage
+popM_2015  <- as.data.frame(traj$'quantilesMage'[1:nrow(traj$countries),1:27,2,1]) # select 1:13 regions, 1:27 age groups, 0.5 quantile and 2015
 popM_2015  <- rownames_to_column(popM_2015, "reg_code")
 popM_2015  <- popM_2015 %>%
   gather(age, pop_2015, -reg_code)
@@ -61,8 +63,8 @@ pop <- pop[,c(6,1, 5, 2, 3, 4 )]
 pop <- 
   mutate(pop,
          age = 
-         ifelse(age == 0, "0", 
-         ifelse(age == 5, "'0-4'",
+         ifelse(age == 0, "'0-4'", 
+         ifelse(age == 5, "1-4",
          ifelse(age == 10, "'5-9'",
          ifelse(age == 15, "'10-14'",
          ifelse(age == 20, "15-19",
@@ -90,13 +92,26 @@ pop <-
          ifelse(age == 130, "125-129", NA))))))))))))))))))))))))))))
 
 # Filter age groups that do not exist between 2015 and 2020
-
 pop <- pop %>%
-  filter(age != "0") # subsumed in 0-4 age group
+  filter(age != "1-4") # subsumed in 0-4 age group
+
+
+
+
+pop$age <- ifelse(pop$age == "80-84", "80+",
+                  ifelse(pop$age == "85-89", "80+", 
+                         ifelse(pop$age == "90-94", "80+", 
+                                ifelse(pop$age == "95-99", "80+",
+                                       ifelse(pop$age == "100-104", "80+",
+                                              ifelse(pop$age == "105-109", "80+",
+                                                     ifelse(pop$age == "110-114", "80+",
+                                                            ifelse(pop$age == "115-119", "80+",
+                                                                   ifelse(pop$age == "120-124","80+",
+                                                                          ifelse(pop$age == "125-129", "80+", pop$age))))))))))
 
 # Order age groups
 pop$age <- as.factor(pop$age)
-pop$age = factor(pop$age, levels(pop$age)[c(1,3,2,4:26)]) 
+pop$age = factor(pop$age, levels(pop$age)[c(1,3,2,4:17)]) 
 
 # Add P-codes
 
@@ -108,5 +123,5 @@ names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Sex", "Age", "pop_2015", "pop_2020")
 
 # commented out as usually factors in Excel and CSV format are messed up and require manual manipulation
 write.csv(pop, file = file.path(paste0(iso,"_adm1_pop_2015_2020.csv")), row.names = FALSE, quote = FALSE)
-
+# Note in the case of Zamiba, regions divided by a ',' will be put into different columns --- currently manual adjustment needed
 setwd(code)

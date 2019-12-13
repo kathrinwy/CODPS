@@ -67,20 +67,20 @@ m.pop.all   <- list()
 #asd.adm1[1,2,3]
 #c("age", "sex", "region")
 
-female.Noumbissi0 <- rep(0,length(asd.adm1[1,1,])) # length across all regions
+female.Noumbissi0 <- rep(0,length(asd.adm1[1,2,])) # length across all regions
 male.Noumbissi0   <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:98,ageMin = 20, ageMax = 80, digit=0) #Note highest age is 98
-  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:98,ageMin = 20, ageMax = 80, digit=0)   #Note highest age is 98
+  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:98,ageMin = 20, ageMax = 80, digit=0) #Note highest age is 98
+  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:98,ageMin = 20, ageMax = 80, digit=0)   #Note highest age is 98
 } 
 
 female.Noumbissi5 <- rep(0,length(asd.adm1[1,2,]))
 male.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
 
 for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:98, ageMin = 20, ageMax = 80,digit=5) #Note highest age is 98
-  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:98, ageMin = 20, ageMax = 80,digit=5)   #Note highest age is 98
+  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:98, ageMin = 20, ageMax = 80,digit=5) #Note highest age is 98
+  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,1,j],0:98, ageMin = 20, ageMax = 80,digit=5)   #Note highest age is 98
 } 
 
 ##Calculate mean relative difference for digit preference between ages 
@@ -95,7 +95,7 @@ mean(rel.diff.male.05)
 ##(for ages 10-89), else use the raw data directly
 f.pop <- asd.adm1[,2,]
 
-for(i in 1:length(asd.adm1[1,1,])){
+for(i in 1:length(asd.adm1[1,2,])){
   
   ifelse(mean(rel.diff.female.05) > 15, 
          f.pop <- spencer(asd.adm1[,2,i],0:98),
@@ -226,7 +226,7 @@ female.adm1.census1 <-
                     ifelse(65 <= AGE2 & AGE2 <= 69, "65-69",
                     ifelse(70 <= AGE2 & AGE2 <= 74, "70-74",
                     ifelse(75 <= AGE2 & AGE2 <= 79, "75-79",
-                    ifelse(AGE2 >80, "80+", NA))))))))))))))))))
+                    ifelse(AGE2 >=80, "80+", NA))))))))))))))))))
 
 # Create 5-year age groups
 female.adm1.census5 <- female.adm1.census1 %>%
