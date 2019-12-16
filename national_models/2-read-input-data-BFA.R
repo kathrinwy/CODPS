@@ -4,7 +4,7 @@
 # Script purpose: load subnational population data, DHS/MICS fertilty data
 
 # Date created: 11 September 2019
-# Last updated: 29 November 2019
+# Last updated: 16 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -199,21 +199,21 @@ male.adm1.census5$agegroup <- factor(male.adm1.census5$agegroup, levels = c("0-4
 male.adm1.census5 <-
   mutate(male.adm1.census5,
          name = ifelse(DHS_IPUMSI_BF == 1, "Boucle de Mouhoun", 
-                ifelse(DHS_IPUMSI_BF == 2, "Cascades",
-                ifelse(DHS_IPUMSI_BF == 3, "Centre including Ouagadougou",
-                ifelse(DHS_IPUMSI_BF == 4, "Centre-Est",
-                ifelse(DHS_IPUMSI_BF == 5, "Centre-Nord",
-                ifelse(DHS_IPUMSI_BF == 6, "Centre-Ouest",
-                ifelse(DHS_IPUMSI_BF == 7, "Centre-Sud",
-                ifelse(DHS_IPUMSI_BF == 8, "Est",
-                ifelse(DHS_IPUMSI_BF == 9, "Hauts Basins",
-                ifelse(DHS_IPUMSI_BF ==10, "Nord",
-                ifelse(DHS_IPUMSI_BF ==11, "Plateau Central",
-                ifelse(DHS_IPUMSI_BF ==12, "Sahel",
-                ifelse(DHS_IPUMSI_BF ==13, "Sud-Ouest", NA))))))))))))))
+                       ifelse(DHS_IPUMSI_BF == 2, "Cascades",
+                              ifelse(DHS_IPUMSI_BF == 3, "Centre including Ouagadougou",
+                                     ifelse(DHS_IPUMSI_BF == 4, "Centre-Est",
+                                            ifelse(DHS_IPUMSI_BF == 5, "Centre-Nord",
+                                                   ifelse(DHS_IPUMSI_BF == 6, "Centre-Ouest",
+                                                          ifelse(DHS_IPUMSI_BF == 7, "Centre-Sud",
+                                                                 ifelse(DHS_IPUMSI_BF == 8, "Est",
+                                                                        ifelse(DHS_IPUMSI_BF == 9, "Hauts-Bassins",
+                                                                               ifelse(DHS_IPUMSI_BF ==10, "Nord",
+                                                                                      ifelse(DHS_IPUMSI_BF ==11, "Plateau Central",
+                                                                                             ifelse(DHS_IPUMSI_BF ==12, "Sahel",
+                                                                                                    ifelse(DHS_IPUMSI_BF ==13, "Sud-Ouest", NA))))))))))))))
 
 female.adm1.census1$AGE2 <- as.numeric(female.adm1.census1$AGE2)
-     
+
 female.adm1.census1 <-
   mutate(female.adm1.census1, 
           agegroup = ifelse(0 <= AGE2 & AGE2 <= 4, "0-4",
@@ -253,7 +253,7 @@ female.adm1.census5 <-
          ifelse(DHS_IPUMSI_BF == 6, "Centre-Ouest",
          ifelse(DHS_IPUMSI_BF == 7, "Centre-Sud",
          ifelse(DHS_IPUMSI_BF == 8, "Est",
-         ifelse(DHS_IPUMSI_BF == 9, "Hauts Basins",
+         ifelse(DHS_IPUMSI_BF == 9, "Hauts-Bassins",
          ifelse(DHS_IPUMSI_BF ==10, "Nord",
          ifelse(DHS_IPUMSI_BF ==11, "Plateau Central",
          ifelse(DHS_IPUMSI_BF ==12, "Sahel",
@@ -304,6 +304,17 @@ male.pop.2006   <- male.adm1.census5 %>%
 BFApopF <- female.pop.2006[,c(5,4,1,3)]
 BFApopM <-   male.pop.2006[,c(5,4,1,3)]
 
+# Undercount adjustment ---------------------------------------------------
+
+undercount <- read.csv.sql("undercount.csv", 
+                           sql = "select * from file where country == 'BFA'")
+
+BFApopF    <- merge(BFApopF, undercount[, c("name", "undercount")], by = "name")
+BFApopF$sum_age <- BFApopF$sum_age*(1+BFApopF$undercount)
+
+BFApopM    <- merge(BFApopM, undercount[, c("name", "undercount")], by = "name")
+BFApopM$sum_age <- BFApopM$sum_age*(1+BFApopM$undercount)
+
 # Project to 2015 ---------------------------------------------------------
 
 # use growth rate for 2005-2010
@@ -332,40 +343,31 @@ BFApopF$'2013' <- BFApopF$'2012'*(as.numeric(growth[1,3])/100 +1)
 BFApopF$'2014' <- BFApopF$'2013'*(as.numeric(growth[1,3])/100 +1)
 BFApopF$'2015' <- BFApopF$'2014'*(as.numeric(growth[1,3])/100 +1)
 
-BFApopF <- BFApopF[,c(1,2,3,13)]
-BFApopM <- BFApopM[,c(1,2,3,13)]
+BFApopF <- BFApopF[,c(2,1,3,14)]
+BFApopM <- BFApopM[,c(2,1,3,14)]
 
 # Export ------------------------------------------------------------------
 
 colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(BFApopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
-# write.table(BFApopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
+#pop$age = factor(pop$age, levels(BFApopF$age)[c(1,3,2,4:17)]) 
 
-setwd(output)
+BFApopF <- BFApopF[order(BFApopF$reg_code, BFApopF$age),]
+BFApopM <- BFApopM[order(BFApopM$reg_code, BFApopM$age),]
+# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
+write.table(BFApopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
+write.table(BFApopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
 
 # Retrieve e0 trajectories ------------------------------------------------
+#setwd(output)
 
-BFAe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(BFAe0Ftraj, paste0("./regdata/", "BFAe0Ftraj.csv"), row.names = F)
+#BFAe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+ # dplyr::select(-Period)
+#write.csv(BFAe0Ftraj, paste0("./regdata/", "BFAe0Ftraj.csv"), row.names = F)
 
-BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
-
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Find country code
-country.code <- iso3166[iso3166$name == country, ][,4]
-
-my.regtfr.file.BFA <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.BFA , check.names = F)
-
-setwd(code)
+#BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
+ # dplyr::select(-Period)
+#write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
 
 

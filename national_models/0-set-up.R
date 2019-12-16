@@ -81,4 +81,5 @@ library(grid)  # to label maps
 library(png)
 library(raster)
 
+library(sqldf)
 setwd(code)

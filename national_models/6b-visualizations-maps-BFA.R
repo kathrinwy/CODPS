@@ -34,8 +34,10 @@ setwd("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/BFA-shapfefile
 
 geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
 geo@data$DHSREGEN <- as.character(geo@data$DHSREGEN)
+unique(geo@data$DHSREGEN)
 geo[geo@data$DHSREGEN == "Boucle du Mouhoun", "DHSREGEN"] <- "Boucle du Mouhoun"
 geo[geo@data$DHSREGEN == "Hauts-Bassins", "DHSREGEN"] <- "Hauts-Bassins"
+geo[geo@data$DHSREGEN == "Centre", "DHSREGEN"] <- "Centre including Ouagadougou"
 
 subset <- geo
 subset@data$ID2 <- paste(subset@data$DHSREGEN)
@@ -99,7 +101,7 @@ grob.BFA01 <- grobTree(textGrob("Boucle du \n Mouhoun", x=0.23,  y=0.57, hjust=0
                               gp=gpar(col="black", fontsize=9, fontface="italic"))) # OK
 grob.BFA02 <- grobTree(textGrob("Cascades", x=0.12,  y=0.22, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.BFA03 <- grobTree(textGrob("Centre", x=0.48,  y=0.52, hjust=0,
+grob.BFA03 <- grobTree(textGrob("Centre \n incl. \n Ouaga.", x=0.45,  y=0.52, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
 grob.BFA04 <- grobTree(textGrob("Centre-Est", x=0.6,  y=0.43, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))

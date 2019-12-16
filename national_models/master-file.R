@@ -30,11 +30,12 @@ source("1-bayespop-projections.R")                          # using converged tf
 
 # Burkina Faso ------------------------------------------------------------
 
-country <- "Burkina Faso"
+country <- "Burkina.Faso"
 iso     <- "BFA"
 p.code <- "BF"
 country.code <- iso3166[iso3166$name == country, ][,4]
 year <- 2006
+my.regtfr.file.BFA <- "regdata/tfr.txt"
 
 source("2-read-input-data-BFA.R")                           # Read IPUMS data, Census 2006
 source("3-tfr-subnational-projections.R")                   # pre-requisite: downloaded tfr and locations file in regdata
