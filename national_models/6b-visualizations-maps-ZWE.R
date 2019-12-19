@@ -15,19 +15,31 @@ options(scipen = 999)  # disable scientific notation in R
 # reference: http://faculty.washington.edu/tlumley/survey/example-lonely.html
 
 # Compare to external dataset ---------------------------------------------
+setwd(output)
 
-external <- read.csv(paste0(output,"zimbabwe_2020_esaro.csv")) %>%
-  gather("region", "pop_2020", 3:12)
+#external <- read.csv(paste0(output,"zimbabwe_2020_esaro.csv")) %>%
+ # gather("region", "pop_2020", 3:12)
 
-external <- external[,c(3, 1, 2, 4)]
+#external <- external[,c(3, 1, 2, 4)]
 
-names(external) <- c("ADM1_EN", "Age", "Sex", "pop_2020")
+#names(external) <- c("ADM1_EN", "Age", "Sex", "pop_2020")
 
-external$pop_2020 <- as.numeric(external$pop_2020)
+#external$pop_2020 <- as.numeric(external$pop_2020)
 
-write.csv(external, file = file.path(paste0(iso,"_adm1_pop_2020_external.csv")), row.names = FALSE, quote = FALSE)
+#write.csv(external, file = file.path(paste0(iso,"_adm1_pop_2020_external.csv")), row.names = FALSE, quote = FALSE)
+
+# Manually adapt space issue
 
 # Prepare data for pop-pyramid
+
+external <- read.csv(paste0(output,"ZWE_adm1_pop_2020_external.csv"))
+
+external$Age <- as.character(external$Age)
+
+external$Age <- ifelse(external$Age == "'5-9'", "5-9",
+                  ifelse(external$Age == "'10-14'", "10-14", 
+                         ifelse(external$Age == "'0-4'", "0-4", external$Age)))
+
 external$pop_2020 <- ifelse(external$Sex == "male", -1*external$pop_2020, external$pop_2020)
 
 # Order age groups
@@ -84,18 +96,17 @@ png(paste0("plots/", iso, "/subnat.pyramids.esaro.png"), width = 40, height = le
 do.call(grid.arrange,c(plot.list, ncol = 2))
 dev.off()
 
-
 # Prepare data for pop-pyramid
-pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
+external$pop_2020 <- ifelse(external$Sex == "male", -1*external$pop_2020, external$pop_2020)
 
-pop.plot$Age <- as.character(pop.plot$Age)
-WRA <- pop.plot %>%
+external$Age <- as.character(external$Age)
+WRA <- external %>%
   filter(Age == "15-19" | Age == "20-24" | Age == "25-29" |Age == "30-34" | Age == "35-39" | Age == "40-44" | Age == "45-49") %>%
   filter(Sex == "female") %>%
   group_by(ADM1_EN) %>%  
   dplyr::summarise(pop = sum(pop_2020))  
 
-Youth <- pop.plot 
+Youth <- external 
 
 Youth <- Youth%>%
   filter(Age == "10-14" | Age == "15-19" | Age == "20-24") %>%
