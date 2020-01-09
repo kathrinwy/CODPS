@@ -93,7 +93,7 @@ pop <-
 
 # Filter age groups that do not exist between 2015 and 2020
 pop <- pop %>%
-  filter(age != "1-4") # subsumed in 0-4 age group
+  filter(age != "'0-4'") # subsumed in 0-4 age group
 
 
 

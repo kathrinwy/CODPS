@@ -355,19 +355,8 @@ colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
 
 BFApopF <- BFApopF[order(BFApopF$reg_code, BFApopF$age),]
 BFApopM <- BFApopM[order(BFApopM$reg_code, BFApopM$age),]
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
+
 write.table(BFApopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
 write.table(BFApopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
 
-# Retrieve e0 trajectories ------------------------------------------------
-#setwd(output)
-
-#BFAe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
- # dplyr::select(-Period)
-#write.csv(BFAe0Ftraj, paste0("./regdata/", "BFAe0Ftraj.csv"), row.names = F)
-
-#BFAe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
- # dplyr::select(-Period)
-#write.csv(BFAe0Mtraj, paste0("./regdata/", "BFAe0Mtraj.csv"), row.names = F)
-
-
+setwd(code)

@@ -16,12 +16,11 @@ setwd(output)
 reg.pop.dir <- "regPOPsimulation"
 data.dir    <- file.path(paste0(output, "regdata/"))
 
-tfr.sim.dir <- paste0(iso, "tfr.dir")
+tfr.sim.dir <- file.path(reg.tfr.dir, "subnat", paste0("c",country.code))
 
 # Location file defining geographical disaggregation
 location.file <- file.path(data.dir, paste0(iso, "locations.txt"))
 locations     <- read.delim(location.file)
-locations
 
 # Locate files with historical age- and sex-specific population. Only population at the present time is required.
 
@@ -43,15 +42,17 @@ write.csv(e0Mtraj,file= paste0(output, "regdata/", "e0Mtraj.csv"), row.names = F
 
 # If migration shares are specified, it is used to distribute the national migration taken out of
 # the wpp2017 package. Note that such approach does not deal with the between-region migration.
-setwd(output)
+
 # Generate subnational trajectories for all regions of one country.
 regpop.pred <- pop.predict.subnat(present.year = 2015, 
                                   wpp.year = 2017, 
                                   output.dir = reg.pop.dir,
                                   locations  = locations,
-                                  inputs     = list(popM        = file.path("regdata", paste0(iso, "popM.txt")),
-                                                    popF        = file.path("regdata", paste0(iso, "popF.txt")),
-                                                    tfr.sim.dir = tfr.dir),
+                                  inputs     = list(popM        = popM0.file,
+                                                    popF        = popF0.file,
+                                                    tfr.sim.dir = tfr.sim.dir),
+                                                   # e0F.file = "regdata/e0Ftraj.csv",
+                                                   # e0M.file = "regdata/e0Mtraj.csv"),
                                   verbose = TRUE,
                                   nr.traj = 200,
                                   replace.output=TRUE)

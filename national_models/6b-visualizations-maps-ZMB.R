@@ -10,11 +10,6 @@
 
 options(scipen = 999)  # disable scientific notation in R
 
-#if a primary sapling unit has only a single observation, R will crash
-# option adjust calculates conservative standard errors
-# reference: http://faculty.washington.edu/tlumley/survey/example-lonely.html
-options(survey.lonely.psu = "adjust")
-
 # Prepare data for pop-pyramid
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
@@ -34,10 +29,10 @@ Youth <- Youth%>%
 
 
 setwd(paste0(input, iso, "-shapefiles"))
-
+getwd()
 geo <- readOGR(".", "geo1_zm1990_2010") # load shapefile for  DHS data
 geo@data$ADMIN_NAME <- as.character(geo@data$ADMIN_NAME)
-geo@data[geo@data$ADMIN_NAME == "Eastern, Muchinga, Northern", "ADMIN_NAME"] <- "Eastern, Northern, Muchinga"
+geo@data[geo@data$ADMIN_NAME == "Eastern, Muchinga, Northern", "ADMIN_NAME"] <- "EasternNorthernMuchinga"
 
 subset <- geo
 subset@data$ID2 <- paste(subset@data$ADMIN_NAME)

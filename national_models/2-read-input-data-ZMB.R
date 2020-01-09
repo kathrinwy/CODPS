@@ -4,12 +4,12 @@
 # Script purpose: load subnational population data, DHS/MICS fertilty data
 
 # Date created: 29 November 2019
-# Last updated: 29 November 2019
+# Last updated: 31 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
 
-# Read in data: INS projections -------------------------------------------
+# Read in data: IPUMS data -------------------------------------------
 
 setwd(input)
 
@@ -212,7 +212,7 @@ male.adm1.census5 <-
   mutate(male.adm1.census5,
          name = ifelse(GEO1_ZM == 1, "Central", 
                 ifelse(GEO1_ZM == 2, "Copperbelt",
-                ifelse(GEO1_ZM == 3, "Eastern, Northern, Muchinga",
+                ifelse(GEO1_ZM == 3, "EasternNorthernMuchinga",
                 ifelse(GEO1_ZM == 4, "Luapula",
                 ifelse(GEO1_ZM == 5, "Lusaka",
                 ifelse(GEO1_ZM == 6, "North Western",
@@ -255,7 +255,7 @@ female.adm1.census5 <-
   mutate(female.adm1.census5,
          name = ifelse(GEO1_ZM == 1, "Central", 
                        ifelse(GEO1_ZM == 2, "Copperbelt",
-                              ifelse(GEO1_ZM == 3, "Eastern, Northern, Muchinga",
+                              ifelse(GEO1_ZM == 3, "EasternNorthernMuchinga",
                                      ifelse(GEO1_ZM == 4, "Luapula",
                                             ifelse(GEO1_ZM == 5, "Lusaka",
                                                    ifelse(GEO1_ZM == 6, "North Western",
@@ -297,6 +297,17 @@ male.pop.2010   <- male.adm1.census5 %>%
 ZMBpopF <- female.pop.2010[,c(5,4,1,3)]
 ZMBpopM <-   male.pop.2010[,c(5,4,1,3)]
 
+# Undercount adjustment ---------------------------------------------------
+#unlink('C:/Users/kathrinweny/AppData/Local/Temp/Rtmp0MMeVo/file1d5036742a3b', recursive=TRUE)
+undercount <- read.csv.sql("undercount.csv", 
+                           sql = "select * from file where country == 'ZMB'")
+
+ZMBpopF    <- merge(ZMBpopF, undercount[, c("name", "undercount")], by = "name")
+ZMBpopF$sum_age <- ZMBpopF$sum_age*(1+ZMBpopF$undercount)
+
+ZMBpopM    <- merge(ZMBpopM, undercount[, c("name", "undercount")], by = "name")
+ZMBpopM$sum_age <- ZMBpopM$sum_age*(1+ZMBpopM$undercount)
+
 # Project to 2015 ---------------------------------------------------------
 
 # use growth rate for 2010-2015
@@ -313,8 +324,8 @@ ZMBpopF$'2013' <- ZMBpopF$'2012'*(as.numeric(growth[1,2])/100 +1)
 ZMBpopF$'2014' <- ZMBpopF$'2013'*(as.numeric(growth[1,2])/100 +1)
 ZMBpopF$'2015' <- ZMBpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-ZMBpopF <- ZMBpopF[,c(1,2,3,9)]
-ZMBpopM <- ZMBpopM[,c(1,2,3,9)]
+ZMBpopF <- ZMBpopF[,c(2,1,3,9)]
+ZMBpopM <- ZMBpopM[,c(2,1,3,9)]
 
 
 # Export ------------------------------------------------------------------
@@ -322,34 +333,14 @@ ZMBpopM <- ZMBpopM[,c(1,2,3,9)]
 colnames(ZMBpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(ZMBpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
+ZMBpopF <- ZMBpopF[order(ZMBpopF$reg_code, ZMBpopF$age),]
+ZMBpopM <- ZMBpopM[order(ZMBpopM$reg_code, ZMBpopM$age),]
+
 # Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(ZMBpopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
-# write.table(ZMBpopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
+write.table(ZMBpopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
+write.table(ZMBpopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
 
-setwd(output)
 
-# Retrieve e0 trajectories ------------------------------------------------
-
-ZMBe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(ZMBe0Ftraj, paste0("./regdata/", "ZMBe0Ftraj.csv"), row.names = F)
-
-ZMBe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(ZMBe0Mtraj, paste0("./regdata/", "ZMBe0Mtraj.csv"), row.names = F)
-
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Find country code
-country.code <- iso3166[iso3166$name == country, ][,4]
-
-# Load TFR file
-my.regtfr.file.ZMB <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.ZMB , check.names = F)
-
-setwd(code)
 
 
 

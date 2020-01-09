@@ -271,6 +271,17 @@ male.pop.2011   <- male.adm1.census5 %>%
 BGDpopF <- female.pop.2011[,c(5,4,1,3)]
 BGDpopM <-   male.pop.2011[,c(5,4,1,3)]
 
+# Undercount adjustment ---------------------------------------------------
+
+undercount <- read.csv.sql("undercount.csv", 
+                           sql = "select * from file where country == 'BGD'")
+
+BGDpopF    <- merge(BGDpopF, undercount[, c("name", "undercount")], by = "name")
+BGDpopF$sum_age <- BGDpopF$sum_age*(1+BGDpopF$undercount)
+
+BGDpopM    <- merge(BGDpopM, undercount[, c("name", "undercount")], by = "name")
+BGDpopM$sum_age <- BGDpopM$sum_age*(1+BGDpopM$undercount)
+
 # Project to 2015 ---------------------------------------------------------
 
 # use growth rate for 2010-2015
@@ -293,32 +304,13 @@ BGDpopM <- BGDpopM[,c(1,2,3,7)]
 colnames(BGDpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(BGDpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(BGDpopF, paste0(output, "regdata/BGDpopF.txt"), sep = "\t", row.names = FALSE)
-# write.table(BGDpopM, paste0(output, "regdata/BGDpopM.txt"), sep = "\t", row.names = FALSE)
+BGDpopF <- BGDpopF[order(BGDpopF$reg_code, BGDpopF$age),]
+BGDpopM <- BGDpopM[order(BGDpopM$reg_code, BGDpopM$age),]
 
-setwd(output)
+write.table(BGDpopF, paste0(output, "regdata/BGDpopF.txt"), sep = "\t", row.names = FALSE)
+write.table(BGDpopM, paste0(output, "regdata/BGDpopM.txt"), sep = "\t", row.names = FALSE)
 
-# Retrieve e0 trajectories ------------------------------------------------
 
-BGDe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(BGDe0Ftraj, paste0("./regdata/", "BGDe0Ftraj.csv"), row.names = F)
-
-BGDe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(BGDe0Mtraj, paste0("./regdata/", "BGDe0Mtraj.csv"), row.names = F)
-
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Find country code
-country.code <- iso3166[iso3166$name == country, ][,4]
-
-# Load TFR file
-my.regtfr.file.BGD <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.BGD , check.names = F)
 
 setwd(code)
 

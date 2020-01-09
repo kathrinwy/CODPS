@@ -5,7 +5,7 @@
 # Script purpose: master file
 
 # Date created: 11 September 2019
-# Last updated: 10 December 2019
+# Last updated: 31 December 2019
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -17,10 +17,16 @@
 
 # Directories
 
+directory <- "C:/Users/kathrinweny/Documents/pop_est/"
+code      <- "C:/Users/kathrinweny/Documents/pop_est/CODPS/national_models/"
+output    <- "C:/Users/kathrinweny/Documents/pop_est/output/"
+input     <- "C:/Users/kathrinweny/Documents/pop_est/input/"
+
 directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
 code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
 output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
 input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/"
+
 setwd(code)
 
 source("0-set-up.R")   
@@ -33,7 +39,7 @@ source("1-bayespop-projections.R")                          # using converged tf
 country <- "Burkina.Faso"
 iso     <- "BFA"
 p.code <- "BF"
-country.code <- iso3166[iso3166$name == country, ][,4]
+country.code <- iso3166[iso3166$name == "Burkina Faso", ][,4]
 year <- 2006
 my.regtfr.file.BFA <- "regdata/tfr.txt"
 
