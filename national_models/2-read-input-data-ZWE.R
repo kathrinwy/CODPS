@@ -311,32 +311,11 @@ ZWEpopM <- ZWEpopM[,c(1,2,3,7)]
 colnames(ZWEpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(ZWEpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(ZWEpopF, paste0(output, "regdata/ZWEpopF.txt"), sep = "\t", row.names = FALSE)
-# write.table(ZWEpopM, paste0(output, "regdata/ZWEpopM.txt"), sep = "\t", row.names = FALSE)
+ZWEpopF <- ZWEpopF[order(ZWEpopF$reg_code, ZWEpopF$age),]
+ZWEpopM <- ZWEpopM[order(ZWEpopM$reg_code, ZWEpopM$age),]
 
-setwd(output)
-
-# Retrieve e0 trajectories ------------------------------------------------
-
-ZWEe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(ZWEe0Ftraj, paste0("./regdata/", "ZWEe0Ftraj.csv"), row.names = F)
-
-ZWEe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(ZWEe0Mtraj, paste0("./regdata/", "ZWEe0Mtraj.csv"), row.names = F)
-
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Find country code
-country.code <- iso3166[iso3166$name == country, ][,4]
-
-# Load TFR file
-my.regtfr.file.ZWE <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.ZWE , check.names = F)
+write.table(ZWEpopF, paste0(output, "regdata/ZWEpopF.txt"), sep = "\t", row.names = FALSE)
+write.table(ZWEpopM, paste0(output, "regdata/ZWEpopM.txt"), sep = "\t", row.names = FALSE)
 
 setwd(code)
 

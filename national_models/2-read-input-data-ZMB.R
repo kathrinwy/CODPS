@@ -327,7 +327,6 @@ ZMBpopF$'2015' <- ZMBpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 ZMBpopF <- ZMBpopF[,c(2,1,3,9)]
 ZMBpopM <- ZMBpopM[,c(2,1,3,9)]
 
-
 # Export ------------------------------------------------------------------
 
 colnames(ZMBpopF) <- c("reg_code","name","age","2015") # Why 2015?
@@ -336,7 +335,6 @@ colnames(ZMBpopM) <- c("reg_code","name","age","2015") # Why 2015?
 ZMBpopF <- ZMBpopF[order(ZMBpopF$reg_code, ZMBpopF$age),]
 ZMBpopM <- ZMBpopM[order(ZMBpopM$reg_code, ZMBpopM$age),]
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
 write.table(ZMBpopF, paste0(output, "regdata/", iso, "popF.txt"), sep = "\t", row.names = FALSE)
 write.table(ZMBpopM, paste0(output, "regdata/", iso, "popM.txt"), sep = "\t", row.names = FALSE)
 

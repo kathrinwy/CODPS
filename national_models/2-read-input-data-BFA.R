@@ -4,7 +4,7 @@
 # Script purpose: load subnational population data, DHS/MICS fertilty data
 
 # Date created: 11 September 2019
-# Last updated: 16 December 2019
+# Last updated: 9 January 2020
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -293,7 +293,7 @@ male.adm1.census5 <-
          ifelse(DHS_IPUMSI_BF ==12, 56,
          ifelse(DHS_IPUMSI_BF ==13, 57,NA))))))))))))))
 
-# Save file ---------------------------------------------------------------
+# Extract data -------------------------------------------------------------
 
 female.pop.2006 <- female.adm1.census5%>%
   filter(!is.na(agegroup))
@@ -350,8 +350,6 @@ BFApopM <- BFApopM[,c(2,1,3,14)]
 
 colnames(BFApopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(BFApopM) <- c("reg_code","name","age","2015") # Why 2015?
-
-#pop$age = factor(pop$age, levels(BFApopF$age)[c(1,3,2,4:17)]) 
 
 BFApopF <- BFApopF[order(BFApopF$reg_code, BFApopF$age),]
 BFApopM <- BFApopM[order(BFApopM$reg_code, BFApopM$age),]

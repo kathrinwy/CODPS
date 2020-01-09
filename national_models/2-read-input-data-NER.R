@@ -3,7 +3,7 @@
 ## Script purpose: script to load census, DHS, MICS input data files
 ##
 ## Date created: 14 August 2019
-## Last updated: 10 December 2019
+## Last updated: 9 January 2020
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny
@@ -271,7 +271,7 @@ male.adm1.census5 <-
 # Verificaton of boundary changes beween fertility assumptions and --------
 # As the Niger DHS and Census both took place in 2012, boundaries do note change in between them
 
-# Save file ---------------------------------------------------------------
+# Extract data -------------------------------------------------------------
 
 female.pop.2012 <- female.adm1.census5%>%
   filter(!is.na(agegroup))
@@ -281,6 +281,17 @@ male.pop.2012   <- male.adm1.census5 %>%
 
 NERpopF <- female.pop.2012[,c(4,2,1,3)]
 NERpopM <-   male.pop.2012[,c(4,2,1,3)]
+
+# Undercount adjustment ---------------------------------------------------
+
+undercount <- read.csv.sql("undercount.csv", 
+                           sql = "select * from file where country == 'NER'")
+
+NERpopF    <- merge(NERpopF, undercount[, c("name", "undercount")], by = "name")
+NERpopF$sum_age <- NERpopF$sum_age*(1+NERpopF$undercount)
+
+NERpopM    <- merge(NERpopM, undercount[, c("name", "undercount")], by = "name")
+NERpopM$sum_age <- NERpopM$sum_age*(1+NERpopM$undercount)
 
 # Project to 2015 ---------------------------------------------------------
 
@@ -302,29 +313,11 @@ NERpopM <- NERpopM[,c(1,2,3,ncol(NERpopM))]
 colnames(NERpopF) <- c("reg_code","name","age","2015") 
 colnames(NERpopM) <- c("reg_code","name","age","2015") 
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(NERpopF, paste0(output, "regdata/NERpopF.txt"), sep = "\t", row.names = FALSE)
-# write.table(NERpopM, paste0(output, "regdata/NERpopM.txt"), sep = "\t", row.names = FALSE)
+NERpopF <- NERpopF[order(NERpopF$reg_code, NERpopF$age),]
+NERpopM <- NERpopM[order(NERpopM$reg_code, NERpopM$age),]
 
-setwd(output)
-
-# Retrieve e0 trajectories ------------------------------------------------
-
-NERe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(NERe0Ftraj, paste0("./regdata/", "NERe0Ftraj.csv"), row.names = F)
-
-NERe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(NERe0Mtraj, paste0("./regdata/", "NERe0Mtraj.csv"), row.names = F)
-
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Load TFR file
-my.regtfr.file.NER <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.NER , check.names = F)
+write.table(NERpopF, paste0(output, "regdata/NERpopF.txt"), sep = "\t", row.names = FALSE)
+write.table(NERpopM, paste0(output, "regdata/NERpopM.txt"), sep = "\t", row.names = FALSE)
 
 setwd(code)
 

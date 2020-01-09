@@ -4,7 +4,7 @@
 # Script purpose: load subnational population data, DHS/MICS fertilty data
 
 # Date created: 3 December 2019
-# Last updated: 3 December 2019
+# Last updated: 9 January 2020
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -276,7 +276,7 @@ male.adm1.census5 <-
                                                                             ifelse(GEO1_ML2009 == 9, 19,
                                                                                    ifelse(GEO1_ML2009 ==10, 10, NA)))))))))))
 
-# Save file ---------------------------------------------------------------
+# Extract data -------------------------------------------------------------
 
 female.pop.2012 <- female.adm1.census5%>%
   filter(!is.na(agegroup))
@@ -286,6 +286,17 @@ male.pop.2012   <- male.adm1.census5 %>%
 
 MLIpopF <- female.pop.2012[,c(5,4,1,3)]
 MLIpopM <-   male.pop.2012[,c(5,4,1,3)]
+
+# Undercount adjustment ---------------------------------------------------
+
+undercount <- read.csv.sql("undercount.csv", 
+                           sql = "select * from file where country == 'MLI'")
+
+MLIpopF    <- merge(MLIpopF, undercount[, c("name", "undercount")], by = "name")
+MLIpopF$sum_age <- MLIpopF$sum_age*(1+MLIpopF$undercount)
+
+MLIpopM    <- merge(MLIpopM, undercount[, c("name", "undercount")], by = "name")
+MLIpopM$sum_age <- MLIpopM$sum_age*(1+MLIpopM$undercount)
 
 # Project to 2015 ---------------------------------------------------------
 
@@ -302,37 +313,17 @@ MLIpopF$'2015' <- MLIpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 MLIpopF <- MLIpopF[,c(1,2,3,7)]
 MLIpopM <- MLIpopM[,c(1,2,3,7)]
 
+
 # Export ------------------------------------------------------------------
 
 colnames(MLIpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(MLIpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(MLIpopF, paste0(output, "regdata/MLIpopF.txt"), sep = "\t", row.names = FALSE)
-# write.table(MLIpopM, paste0(output, "regdata/MLIpopM.txt"), sep = "\t", row.names = FALSE)
+MLIpopF <- MLIpopF[order(MLIpopF$reg_code, MLIpopF$age),]
+MLIpopM <- MLIpopM[order(MLIpopM$reg_code, MLIpopM$age),]
 
-setwd(output)
-
-# Retrieve e0 trajectories ------------------------------------------------
-
-MLIe0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(MLIe0Ftraj, paste0("./regdata/", "MLIe0Ftraj.csv"), row.names = F)
-
-MLIe0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(MLIe0Mtraj, paste0("./regdata/", "MLIe0Mtraj.csv"), row.names = F)
-
-# TFR input ------------------------------------------------------------------
-
-# bayesTFR projections of the national TFR (result of tfr.predict )
-
-# Find country code
-country.code <- iso3166[iso3166$name == country, ][,4]
-
-# Load TFR file
-my.regtfr.file.MLI <- "regdata/tfr.txt"
-read.delim(my.regtfr.file.MLI , check.names = F)
+write.table(MLIpopF, paste0(output, "regdata/MLIpopF.txt"), sep = "\t", row.names = FALSE)
+write.table(MLIpopM, paste0(output, "regdata/MLIpopM.txt"), sep = "\t", row.names = FALSE)
 
 setwd(code)
 

@@ -4,7 +4,7 @@
 # Script purpose: load subnational population data, DHS/MICS fertilty data
 
 # Date created: 4 December 2019
-# Last updated: 4 December 2019
+# Last updated: 9 January 2020
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -281,7 +281,7 @@ male.adm1.census5 <-
                                                                             ifelse(GEO1_CM2005 == 9, 109, 
                                                                                    ifelse(GEO1_CM2005 == 10, 110, NA)))))))))))
 
-# Save file ---------------------------------------------------------------
+# Extract data -------------------------------------------------------------
 
 female.pop.2005 <- female.adm1.census5%>%
   filter(!is.na(agegroup))
@@ -291,6 +291,17 @@ male.pop.2005   <- male.adm1.census5 %>%
 
 CMRpopF <- female.pop.2005[,c(5,4,1,3)]
 CMRpopM <-   male.pop.2005[,c(5,4,1,3)]
+
+# Undercount adjustment ---------------------------------------------------
+
+undercount <- read.csv.sql("undercount.csv", 
+                           sql = "select * from file where country == 'CMR'")
+
+CMRpopF    <- merge(CMRpopF, undercount[, c("name", "undercount")], by = "name")
+CMRpopF$sum_age <- CMRpopF$sum_age*(1+CMRpopF$undercount)
+
+CMRpopM    <- merge(CMRpopM, undercount[, c("name", "undercount")], by = "name")
+CMRpopM$sum_age <- CMRpopM$sum_age*(1+CMRpopM$undercount)
 
 # Project to 2015 ---------------------------------------------------------
 
@@ -330,20 +341,13 @@ CMRpopM <- CMRpopM[,c(1,2,3,14)]
 colnames(CMRpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(CMRpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-# Attnetion: Hack, order of factor was not retained when saving --- manually altered order of age groups, thus this code is usually commented out
-# write.table(CMRpopF, paste0(output, "regdata/CMRpopF.txt"), sep = "\t", row.names = FALSE)
-# write.table(CMRpopM, paste0(output, "regdata/CMRpopM.txt"), sep = "\t", row.names = FALSE)
+ZWEpopF <- ZWEpopF[order(ZWEpopF$reg_code, ZWEpopF$age),]
+ZWEpopM <- ZWEpopM[order(ZWEpopM$reg_code, ZWEpopM$age),]
 
-# Retrieve e0 trajectories ------------------------------------------------
-setwd(output)
+write.table(CMRpopF, paste0(output, "regdata/CMRpopF.txt"), sep = "\t", row.names = FALSE)
+write.table(CMRpopM, paste0(output, "regdata/CMRpopM.txt"), sep = "\t", row.names = FALSE)
 
-e0Ftraj <- read.csv(file = "./mye0trajs/F/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(e0Ftraj, paste0("./regdata/", "e0Ftraj.csv"), row.names = F)
-
-e0Mtraj <- read.csv(file = "./mye0trajs/M/ascii_trajectories.csv", header=TRUE, sep=",") %>%
-  dplyr::select(-Period)
-write.csv(e0Mtraj, paste0("./regdata/", "e0Mtraj.csv"), row.names = F)
+setwd(code)
 
 
 

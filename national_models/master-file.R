@@ -17,15 +17,15 @@
 
 # Directories
 
-directory <- "C:/Users/kathrinweny/Documents/pop_est/"
-code      <- "C:/Users/kathrinweny/Documents/pop_est/CODPS/national_models/"
-output    <- "C:/Users/kathrinweny/Documents/pop_est/output/"
-input     <- "C:/Users/kathrinweny/Documents/pop_est/input/"
+#directory <- "C:/Users/kathrinweny/Documents/pop_est/"
+#code      <- "C:/Users/kathrinweny/Documents/pop_est/CODPS/national_models/"
+#output    <- "C:/Users/kathrinweny/Documents/pop_est/output/"
+#input     <- "C:/Users/kathrinweny/Documents/pop_est/input/"
 
-directory <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/"
-code      <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/CODPS/national_models/"
-output    <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/output/"
-input     <- "G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/"
+directory <- "G:/My Drive/2020/2-Humanitarian/1-COD-PS/pop_est/"
+code      <- "G:/My Drive/2020/2-Humanitarian/1-COD-PS/pop_est/CODPS/national_models/"
+output    <- "G:/My Drive/2020/2-Humanitarian/1-COD-PS/pop_est/output/"
+input     <- "G:/My Drive/2020/2-Humanitarian/1-COD-PS/pop_est/input/"
 
 setwd(code)
 
