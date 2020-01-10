@@ -37,7 +37,7 @@ geo <- readOGR(".", "geo1_cm2005") # load shapefile for  DHS data
 geo@data$ADMIN_NAME <- as.character(geo@data$ADMIN_NAME )
 geo@data[geo@data$ADMIN_NAME == "Extrème Nord", "ADMIN_NAME"] <- "Extreme-Nord"
 geo@data[geo@data$ADMIN_NAME == "Adamoua", "ADMIN_NAME"] <- "Adamaoua"
-
+unique(geo@data$ADMIN_NAME)
 subset <- geo
 subset@data$ID2 <- paste(subset@data$ADMIN_NAME)
 
@@ -184,3 +184,4 @@ plot.label <- plot +
 
 ggsave(file = paste(paste0(output, "plots/", iso, "/Youth_total.png")), print(plot.label), dpi = 900)
 
+setwd(code)

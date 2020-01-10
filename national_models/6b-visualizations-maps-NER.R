@@ -3,17 +3,12 @@
 ## Script purpose: maps
 ##
 ## Date created: 2 December 2019
-## Last updated: 2 December 2019
+## Last updated: 9 January 2020
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
 options(scipen = 999)  # disable scientific notation in R
-
-#if a primary sapling unit has only a single observation, R will crash
-# option adjust calculates conservative standard errors
-# reference: http://faculty.washington.edu/tlumley/survey/example-lonely.html
-options(survey.lonely.psu = "adjust")
 
 # Prepare data for pop-pyramid
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
@@ -95,39 +90,33 @@ plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Da
         theme(legend.position = c(0.15, 0.8))+
         coord_equal()
 
-grob.ZMB01 <- grobTree(textGrob("Matabeleland \n North", x=0.2,  y=0.55, hjust=0,
+grob.NER01 <- grobTree(textGrob("Tillaberi", x=0.08,  y=0.27, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic"))) # OK
-grob.ZMB02 <- grobTree(textGrob("Bulawayo", x=0.43,  y=0.33, hjust=0,
+grob.NER02 <- grobTree(textGrob("Niamey", x=0.1,  y=0.21, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB03 <- grobTree(textGrob("Harare", x=0.7,  y=0.65, hjust=0,
+grob.NER03 <- grobTree(textGrob("Dosso", x=0.21,  y=0.15, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB04 <- grobTree(textGrob("Mashonaland \n East", x=0.7,  y=0.55, hjust=0,
+grob.NER04 <- grobTree(textGrob("Agadez", x=0.7,  y=0.8, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB05 <- grobTree(textGrob("Mashonaland \n Central", x=0.7,  y=0.8, hjust=0,
+grob.NER05 <- grobTree(textGrob("Tahoua", x=0.3,  y=0.3, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB06 <- grobTree(textGrob("Masavingo", x=0.7,  y=0.3, hjust=0,
+grob.NER06 <- grobTree(textGrob("Diffa", x=0.76,  y=0.46, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB07 <- grobTree(textGrob("Midlands", x=0.53,  y=0.5, hjust=0,
+grob.NER07 <- grobTree(textGrob("Maradi", x=0.43,  y=0.23, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB08 <- grobTree(textGrob("Manicaland", x=0.8,  y=0.46, hjust=0,
-                              gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB09 <- grobTree(textGrob("Matabeleland \n South", x=0.4,  y=0.2, hjust=0,
-                              gp=gpar(col="black", fontsize=9, fontface="italic")))
-grob.ZMB10 <- grobTree(textGrob("Mashonaland \n West", x=0.5,  y=0.8, hjust=0,
+grob.NER08 <- grobTree(textGrob("Zinder", x=0.56,  y=0.28, hjust=0,
                               gp=gpar(col="black", fontsize=9, fontface="italic")))
 
 
 plot.label <- plot +
-  annotation_custom(grob.ZMB01) +
-  annotation_custom(grob.ZMB02) +
-  annotation_custom(grob.ZMB03) +
-  annotation_custom(grob.ZMB04) +
-  annotation_custom(grob.ZMB05) +
-  annotation_custom(grob.ZMB06) +
-  annotation_custom(grob.ZMB07) +
-  annotation_custom(grob.ZMB08) +
-  annotation_custom(grob.ZMB09) +
-  annotation_custom(grob.ZMB10) 
+  annotation_custom(grob.NER01) +
+  annotation_custom(grob.NER02) +
+  annotation_custom(grob.NER03) +
+  annotation_custom(grob.NER04) +
+  annotation_custom(grob.NER05) +
+  annotation_custom(grob.NER06) +
+  annotation_custom(grob.NER07) +
+  annotation_custom(grob.NER08)  
 
 ggsave(file = paste(paste0(output, "plots/", iso, "/WRA_total.png")), print(plot.label), dpi = 900)
 
@@ -172,18 +161,15 @@ plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Da
   coord_equal()
 
 plot.label <- plot +
-  annotation_custom(grob.ZMB01) +
-  annotation_custom(grob.ZMB02) +
-  annotation_custom(grob.ZMB03) +
-  annotation_custom(grob.ZMB04) +
-  annotation_custom(grob.ZMB05) +
-  annotation_custom(grob.ZMB06) +
-  annotation_custom(grob.ZMB07) +
-  annotation_custom(grob.ZMB08) +
-  annotation_custom(grob.ZMB09) +
-  annotation_custom(grob.ZMB10)  
+  annotation_custom(grob.NER01) +
+  annotation_custom(grob.NER02) +
+  annotation_custom(grob.NER03) +
+  annotation_custom(grob.NER04) +
+  annotation_custom(grob.NER05) +
+  annotation_custom(grob.NER06) +
+  annotation_custom(grob.NER07) +
+  annotation_custom(grob.NER08)   
 
 ggsave(file = paste(paste0(output, "plots/", iso, "/Youth_total.png")), print(plot.label), dpi = 900)
 
-
-
+setwd(code)

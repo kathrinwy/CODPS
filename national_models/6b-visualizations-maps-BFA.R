@@ -10,9 +10,6 @@
 
 options(scipen = 999)  # disable scientific notation in R
 
-#if a primary sapling unit has only a single observation, R will crash
-# option adjust calculates conservative standard errors
-
 # Prepare data for pop-pyramid
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
@@ -29,8 +26,7 @@ Youth <- pop.plot%>%
   group_by(ADM1_EN) %>%  
   dplyr::summarise(pop = sum(pop_2020))   
 
-path <- paste0(input, iso, "-shapefiles")
-setwd("G:/My Drive/2019/3- Humanitarian data/COD-PS/pop_est/input/BFA-shapfefiles")
+setwd(paste0(input, iso, "-shapefiles"))
 
 geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
 geo@data$DHSREGEN <- as.character(geo@data$DHSREGEN)
@@ -200,5 +196,5 @@ plot.label <- plot +
 setwd(output)
 ggsave(file = paste("plots/BFA/Youth_total.png"), print(plot.label), dpi = 900)
 
-
+setwd(code)
 

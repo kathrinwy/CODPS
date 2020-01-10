@@ -296,8 +296,8 @@ BGDpopF$'2013' <- BGDpopF$'2012'*(as.numeric(growth[1,2])/100 +1)
 BGDpopF$'2014' <- BGDpopF$'2013'*(as.numeric(growth[1,2])/100 +1)
 BGDpopF$'2015' <- BGDpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-BGDpopF <- BGDpopF[,c(1,2,3,7)]
-BGDpopM <- BGDpopM[,c(1,2,3,7)]
+BGDpopF <- BGDpopF[,c(2,1,3,7)]
+BGDpopM <- BGDpopM[,c(2,1,3,7)]
 
 # Export ------------------------------------------------------------------
 
@@ -309,8 +309,6 @@ BGDpopM <- BGDpopM[order(BGDpopM$reg_code, BGDpopM$age),]
 
 write.table(BGDpopF, paste0(output, "regdata/BGDpopF.txt"), sep = "\t", row.names = FALSE)
 write.table(BGDpopM, paste0(output, "regdata/BGDpopM.txt"), sep = "\t", row.names = FALSE)
-
-
 
 setwd(code)
 

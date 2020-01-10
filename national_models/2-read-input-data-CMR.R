@@ -47,7 +47,6 @@ table(census.data$GEO1_CM2005)
 # 08	Sud
 # 09	Sud Ouest
 
-
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 
 ## Age-Sex distribution, ADM0
@@ -157,9 +156,7 @@ for(i in 1:length(asd.adm1[1,1,])){
   names(data) <- c("AGE2", "PERWT", "GEO1_CM2005")
 
   female.adm1.census1 <- rbind(female.adm1.census1, data)
-  
-}
-
+  }
 
 ## convert region.no to region-name 
 
@@ -201,7 +198,7 @@ male.adm1.census5 <-
          name = ifelse(GEO1_CM2005 == 1, "Adamoua", 
                 ifelse(GEO1_CM2005 == 2, "Centre",
                 ifelse(GEO1_CM2005 == 3, "Est",
-                ifelse(GEO1_CM2005 == 4, "Extreme Nord",
+                ifelse(GEO1_CM2005 == 4, "Extreme-Nord",
                 ifelse(GEO1_CM2005 == 5, "Littoral",
                 ifelse(GEO1_CM2005 == 6, "Nord",
                 ifelse(GEO1_CM2005 == 7, "Nord Ouest",
@@ -245,7 +242,7 @@ female.adm1.census5 <-
          name = ifelse(GEO1_CM2005 == 1, "Adamoua", 
                        ifelse(GEO1_CM2005 == 2, "Centre",
                               ifelse(GEO1_CM2005 == 3, "Est",
-                                     ifelse(GEO1_CM2005 == 4, "Extreme Nord",
+                                     ifelse(GEO1_CM2005 == 4, "Extreme-Nord",
                                             ifelse(GEO1_CM2005 == 5, "Littoral",
                                                    ifelse(GEO1_CM2005 == 6, "Nord",
                                                           ifelse(GEO1_CM2005 == 7, "Nord Ouest",
@@ -333,16 +330,16 @@ CMRpopM$'2013' <- CMRpopM$'2012'*(as.numeric(growth[1,3])/100 +1)
 CMRpopM$'2014' <- CMRpopM$'2013'*(as.numeric(growth[1,3])/100 +1)
 CMRpopM$'2015' <- CMRpopM$'2014'*(as.numeric(growth[1,3])/100 +1)
 
-CMRpopF <- CMRpopF[,c(1,2,3,14)]
-CMRpopM <- CMRpopM[,c(1,2,3,14)]
+CMRpopF <- CMRpopF[,c(2,1,3,15)]
+CMRpopM <- CMRpopM[,c(2,1,3,15)]
 
 # Export ------------------------------------------------------------------
 
 colnames(CMRpopF) <- c("reg_code","name","age","2015") # Why 2015?
 colnames(CMRpopM) <- c("reg_code","name","age","2015") # Why 2015?
 
-ZWEpopF <- ZWEpopF[order(ZWEpopF$reg_code, ZWEpopF$age),]
-ZWEpopM <- ZWEpopM[order(ZWEpopM$reg_code, ZWEpopM$age),]
+CMRpopF <- CMRpopF[order(CMRpopF$reg_code, CMRpopF$age),]
+CMRpopM <- CMRpopM[order(CMRpopM$reg_code, CMRpopM$age),]
 
 write.table(CMRpopF, paste0(output, "regdata/CMRpopF.txt"), sep = "\t", row.names = FALSE)
 write.table(CMRpopM, paste0(output, "regdata/CMRpopM.txt"), sep = "\t", row.names = FALSE)

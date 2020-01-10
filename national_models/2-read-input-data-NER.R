@@ -33,19 +33,6 @@ adm1.pop$age1 <- as.numeric(adm1.pop$age1)
 
 asd.adm1 <- data.frame(adm1.pop[rep(seq_len(dim(adm1.pop)[1]), adm1.pop$`2012`), 1:4, drop = FALSE], row.names=NULL)
 
-test <- asd.adm1 %>%
-  filter(name == "Diffa")%>%
-  filter(sex == "male") %>%
-  filter(age1 == 0)
-
-table(census.data$AGE)
-table(asd.adm1$age1)
-
-table(census.data$SEX)
-table(asd.adm1$sex)
-
-table(census.data$DHS_IPUMSI_ZW)
-table(asd.adm1$name)
 
 ## Age-Sex distribution, ADM1
 asd.adm1 <- table(asd.adm1$age1,
@@ -305,8 +292,8 @@ NERpopM$'2013' <- NERpopM$'sum_age'*(as.numeric(growth[1,2])/100 +1)
 NERpopM$'2014' <- NERpopM$'2013'*(as.numeric(growth[1,2])/100 +1)
 NERpopM$'2015' <- NERpopM$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-NERpopF <- NERpopF[,c(1,2,3,ncol(NERpopF))]
-NERpopM <- NERpopM[,c(1,2,3,ncol(NERpopM))]
+NERpopF <- NERpopF[,c(2,1,3,ncol(NERpopF))]
+NERpopM <- NERpopM[,c(2,1,3,ncol(NERpopM))]
 
 # Export ------------------------------------------------------------------
 

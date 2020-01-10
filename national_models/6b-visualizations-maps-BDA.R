@@ -3,16 +3,12 @@
 ## Script purpose: maps
 ##
 ## Date created: 11 September 2019
-## Last updated: 16 September 2019
+## Last updated: 9 January 2020
 ##
 ## Author: Kathrin Weny
 ## Maintainers: Kathrin Weny, Romesh Silva
 
 options(scipen = 999)  # disable scientific notation in R
-
-#if a primary sapling unit has only a single observation, R will crash
-# option adjust calculates conservative standard errors
-# reference: http://faculty.washington.edu/tlumley/survey/example-lonely.html
 
 # Prepare data for pop-pyramid
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
@@ -167,3 +163,5 @@ plot.label <- plot +
   annotation_custom(grob.ZMB10)  
 
 ggsave(file = paste(paste0(output, "plots/", iso, "/Youth_total.png")), print(plot.label), dpi = 900)
+
+setwd(code)

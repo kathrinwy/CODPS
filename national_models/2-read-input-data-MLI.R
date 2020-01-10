@@ -310,8 +310,8 @@ MLIpopF$'2013' <- MLIpopF$'sum_age'*(as.numeric(growth[1,2])/100 +1)
 MLIpopF$'2014' <- MLIpopF$'2013'*(as.numeric(growth[1,2])/100 +1)
 MLIpopF$'2015' <- MLIpopF$'2014'*(as.numeric(growth[1,2])/100 +1)
 
-MLIpopF <- MLIpopF[,c(1,2,3,7)]
-MLIpopM <- MLIpopM[,c(1,2,3,7)]
+MLIpopF <- MLIpopF[,c(2,1,3,7)]
+MLIpopM <- MLIpopM[,c(2,1,3,7)]
 
 
 # Export ------------------------------------------------------------------
