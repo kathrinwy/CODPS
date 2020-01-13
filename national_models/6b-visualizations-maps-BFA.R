@@ -196,5 +196,72 @@ plot.label <- plot +
 setwd(output)
 ggsave(file = paste("plots/BFA/Youth_total.png"), print(plot.label), dpi = 900)
 
-setwd(code)
 
+
+
+# Comparison with Institut Geographique National de la Statistique --------
+
+setwd(output)
+
+pop      <- read.csv("bfa_population_statistic_2019_ign.csv")
+
+pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
+
+pop.plot
+
+# Prepare data for pop-pyramid
+pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
+
+pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1,10, 2:9,  11:13)]) 
+
+# Prepare loop (results are to be stored in the plot.list)
+regions   <- c(as.character(unique(pop.plot$ADM1_EN)))
+plot.list <- list()
+
+# Loop over age pyramids
+for(i in regions){
+  
+  temp <- pop.plot %>%
+    filter(ADM1_EN == i)
+  
+  if((match(i, regions) %% 2) == 0) {
+    
+    plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2020, fill = Sex)) +   # Fill column
+      geom_bar(stat = "identity", width = .85) +   # draw the bars
+      coord_flip() + 
+      labs(title= paste(i, "- 2020"), y = "Population")+
+      theme(plot.title = element_text(hjust = .5, size =22), axis.title.y=element_blank(),
+            axis.ticks = element_blank(), axis.text.y=element_blank(),
+            axis.text.x = element_text(size = 16), axis.title.x = element_text(size = 16), 
+            legend.text = element_text(size=16), legend.title = element_text(size=16), legend.position = c(0.88,0.8)) +   
+      scale_y_continuous(breaks = seq(from = -max(temp$pop_2020), to = max(temp$pop_2020), by = max(temp$pop_2020)/2),
+                         labels=c(round(max(temp$pop_2020)/1000,0)*1000,  round(max(temp$pop_2020)/2000,0)*1000, 
+                                  0, 
+                                  round(max(temp$pop_2020)/2000,0)*1000, round(max(temp$pop_2020)/1000,0)*1000)) +
+      scale_fill_manual(values=c("#899DA4", "#C93312")) 
+  }
+  
+  else {
+    
+    plot.list[[i]] <- ggplot(temp , aes(x = Age, y = pop_2020, fill = Sex)) +   # Fill column
+      geom_bar(stat = "identity", width = .85) +   # draw the bars
+      coord_flip() + 
+      labs(title= paste(i, "- 2020"), y = "Population")+
+      theme(plot.title = element_text(hjust = .5, size =22), axis.title.y=element_blank(),
+            axis.ticks = element_blank(), axis.text.y = element_text(size = 16),
+            legend.text = element_text(size=16), legend.title = element_text(size=16), legend.position = c(0.88,0.8),
+            axis.text.x = element_text(size = 16), axis.title.x = element_text(size = 16)) +   
+      scale_y_continuous(breaks = seq(from = -max(temp$pop_2020), to = max(temp$pop_2020), by = max(temp$pop_2020)/2),
+                         labels=c(round(max(temp$pop_2020)/1000,0)*1000,  round(max(temp$pop_2020)/2000,0)*1000, 
+                                  0, 
+                                  round(max(temp$pop_2020)/2000,0)*1000, round(max(temp$pop_2020)/1000,0)*1000)) +
+      scale_fill_manual(values=c("#899DA4", "#C93312")) 
+  }
+}
+
+# Export plot.list as png
+png(paste0("plots/", iso, "/subnat.pyramids.INS.png"), width = 40, height = length(regions)*7, units = "cm", res=350)
+do.call(grid.arrange,c(plot.list, ncol = 2))
+dev.off()
+
+setwd(code)

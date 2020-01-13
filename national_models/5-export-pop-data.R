@@ -63,8 +63,8 @@ pop <- pop[,c(6,1, 5, 2, 3, 4 )]
 pop <- 
   mutate(pop,
          age = 
-         ifelse(age == 0, "'0-4'", 
-         ifelse(age == 5, "1-4",
+         ifelse(age == 0, "'0-1'", 
+         ifelse(age == 5, "0-4",
          ifelse(age == 10, "'5-9'",
          ifelse(age == 15, "'10-14'",
          ifelse(age == 20, "15-19",
