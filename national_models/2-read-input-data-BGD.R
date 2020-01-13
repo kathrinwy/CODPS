@@ -195,7 +195,7 @@ male.adm1.census5 <-
                        ifelse(GEOLEV1 == 2, "Chittagong",
                               ifelse(GEOLEV1 == 3, "Dhaka",
                                      ifelse(GEOLEV1 == 4, "Khulna",
-                                            ifelse(GEOLEV1 == 5, "Rajshahi/Rangpur",
+                                            ifelse(GEOLEV1 == 5, "Rajshahi Rangpur",
                                                    ifelse(GEOLEV1 == 6, "Sylhet",
                                                           ifelse(GEOLEV1 == 7, "Sylhet", NA))))))))
 
@@ -236,7 +236,7 @@ female.adm1.census5 <-
                        ifelse(GEOLEV1 == 2, "Chittagong",
                               ifelse(GEOLEV1 == 3, "Dhaka",
                                      ifelse(GEOLEV1 == 4, "Khulna",
-                                            ifelse(GEOLEV1 == 5, "Rajshahi/Rangpur",
+                                            ifelse(GEOLEV1 == 5, "Rajshahi Rangpur",
                                                    ifelse(GEOLEV1 == 6, "Sylhet",
                                                           ifelse(GEOLEV1 == 7, "Sylhet", NA))))))))
 

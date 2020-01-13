@@ -207,11 +207,10 @@ pop      <- read.csv("bfa_population_statistic_2019_ign.csv")
 
 pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
 
-pop.plot
-
 # Prepare data for pop-pyramid
 pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.plot$pop_2020)
 
+pop.plot$Age <- as.factor(pop.plot$Age)
 pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1,10, 2:9,  11:13)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
@@ -260,8 +259,67 @@ for(i in regions){
 }
 
 # Export plot.list as png
-png(paste0("plots/", iso, "/subnat.pyramids.INS.png"), width = 40, height = length(regions)*7, units = "cm", res=350)
+png(paste0("plots/", iso, "/subnat.pyramids.INS.png"), width = 60, height = length(regions)*7, units = "cm", res=350)
 do.call(grid.arrange,c(plot.list, ncol = 2))
 dev.off()
+
+# Map
+
+data <- read.csv("ins_bayespop_BFA.csv")
+
+data_match <- data %>%
+  tbl_df()%>%
+  dplyr::select(c("ADM1_EN", "dif.per"))
+
+colnames(data_match) <- c("ID2", "Data") 
+
+data_match <- left_join(data_match, geo_data_1,by=c("ID2"="ID2"))
+
+data_match <- data_match %>%
+  group_by(id)
+
+#Second link (new) df2(data_match) and df4
+
+mapping <- left_join(subset_data,data_match)
+b <- as.data.frame(unique(mapping$ID2))
+a <- as.data.frame(subset@data$ID2)
+
+# Maps
+
+plot <- ggplot(data=mapping, mapping = aes(x=long, y=lat, group=group, fill = Data))+
+  geom_polygon()+
+  scale_fill_distiller(palette = "YlOrRd", trans = "reverse", limits = c(max(mapping$Data), 0), 
+                     #  breaks = c(0, max(mapping$Data)*0.25, 
+                      #            max(mapping$Data)*0.5, 
+                       #           max(mapping$Data)*0.75, 
+                        #          max(mapping$Data)),
+                      # labels=c(0, round(max(mapping$Data)*0.00025,0)*1000, 
+                       #         round(max(mapping$Data)*0.0005,0)*1000, 
+                        #        round(max(mapping$Data)*0.00075,0)*1000, 
+                         #       round(max(mapping$Data/1000,0))*1000)
+                      )+
+  labs(title = "Percentage difference in INS/Bayespop estimates", 
+       fill  = "Difference in %")+
+  theme_void()+
+  theme(legend.position = c(0.12, 0.8))+
+  coord_equal()
+
+plot.label <- plot +
+  annotation_custom(grob.BFA01) +
+  annotation_custom(grob.BFA02) +
+  annotation_custom(grob.BFA03) +
+  annotation_custom(grob.BFA04) +
+  annotation_custom(grob.BFA05) +
+  annotation_custom(grob.BFA06) +
+  annotation_custom(grob.BFA07) +
+  annotation_custom(grob.BFA08) +
+  annotation_custom(grob.BFA09) +
+  annotation_custom(grob.BFA10) +
+  annotation_custom(grob.BFA11) +
+  annotation_custom(grob.BFA12) +
+  annotation_custom(grob.BFA13) 
+
+setwd(output)
+ggsave(file = paste("plots/BFA/Difference_INS_Bayespop.png"), print(plot.label), dpi = 900)
 
 setwd(code)

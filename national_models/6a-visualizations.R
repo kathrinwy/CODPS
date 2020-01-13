@@ -18,7 +18,8 @@ pop$Age <- as.character(pop$Age)
 
 pop$Age <- ifelse(pop$Age == "'5-9'", "5-9",
                   ifelse(pop$Age == "'10-14'", "10-14", 
-                         ifelse(pop$Age == "'0-4'", "0-4", pop$Age)))
+                         ifelse(pop$Age == "'1-4'", "1-4",
+                                ifelse(pop$Age == "'0-1'", "0-1", pop$Age))))
 
 pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
 
@@ -27,7 +28,7 @@ pop.plot$pop_2020 <- ifelse(pop.plot$Sex == "male", -1*pop.plot$pop_2020, pop.pl
 
 # Order age groups
 pop.plot$Age <- as.factor(pop.plot$Age)
-pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1, 10, 2:9,  11:17)]) 
+pop.plot$Age = factor(pop.plot$Age, levels(pop.plot$Age)[c(1,10,2:9,11:17)]) 
 
 # Prepare loop (results are to be stored in the plot.list)
 regions   <- c(as.character(unique(pop.plot$ADM1_EN)))
@@ -73,7 +74,7 @@ else {
     scale_fill_manual(values=c("#899DA4", "#C93312")) 
 }
 }
-
+getwd()
 # Export plot.list as png
 png(paste0("plots/", iso, "/subnat.pyramids.png"), width = 40, height = length(regions)*7, units = "cm", res=350)
 do.call(grid.arrange,c(plot.list, ncol = 2))
@@ -81,17 +82,17 @@ dev.off()
 
 # Poptrajectories plot ----------------------------------------------------
 
-for(i in regions[1:nrow(traj$countries)]){
+#for(i in regions[1:nrow(traj$countries)]){
 
-png(paste0("plots/",iso, "/sex_age_",iso, i, ".png"), width = 30, height = 10, units = "cm", res=350)
+#png(paste0("plots/",iso, "/sex_age_",iso, i, ".png"), width = 30, height = 10, units = "cm", res=350)
 
-par(mfrow=c(1,3))  
-pop.trajectories.plot(regpop.pred, country= i, sum.over.ages = TRUE)
-pop.trajectories.plot(regpop.pred, country= i, age = 4:10, sex = c("female"), sum.over.ages = TRUE) # WRA 15-49
-pop.trajectories.plot(regpop.pred, country= i, age = 3:5,  sum.over.ages = TRUE) # Youth 10-24
-dev.off()
+#par(mfrow=c(1,3))  
+#pop.trajectories.plot(regpop.pred, country= i, sum.over.ages = TRUE)
+#pop.trajectories.plot(regpop.pred, country= i, age = 4:10, sex = c("female"), sum.over.ages = TRUE) # WRA 15-49
+#pop.trajectories.plot(regpop.pred, country= i, age = 3:5,  sum.over.ages = TRUE) # Youth 10-24
+#dev.off()
 
-}
+#}
 
 
 setwd(code)

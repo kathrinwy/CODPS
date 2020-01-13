@@ -5,7 +5,7 @@
 # Script purpose: master file
 
 # Date created: 11 September 2019
-# Last updated: 10 January 2010
+# Last updated: 13 January 2010
 
 # Author: Kathrin Weny
 # Maintainers: Kathrin Weny, Romesh Silva
@@ -124,7 +124,7 @@ source("3-tfr-subnational-projections.R")
 source("4-population-projections-subnational.R")    
 source("5-export-pop-data.R")                        
 source("6a-visualizations.R") 
-source("6b-visualizations-maps-NER.R")
+source("6b-visualizations-maps-ZMB.R")
 
 # Zimbabwe ----------------------------------------------------------------
 

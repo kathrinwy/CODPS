@@ -63,6 +63,6 @@ get.countries.table(regpop.pred)
 
 setwd(code)
 # Visual inspection
-#region <- "Boucle du Mouhoun"
+#region <- "Central"
 #pop.trajectories.plot(regpop.pred, region, sum.over.ages = TRUE)
-#pop.pyramid(regpop.pred, region, year = 2015)
+#pop.pyramid(regpop.pred, "Central", year = 2020)

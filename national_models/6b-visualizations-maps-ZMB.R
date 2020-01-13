@@ -32,7 +32,7 @@ setwd(paste0(input, iso, "-shapefiles"))
 getwd()
 geo <- readOGR(".", "geo1_zm1990_2010") # load shapefile for  DHS data
 geo@data$ADMIN_NAME <- as.character(geo@data$ADMIN_NAME)
-geo@data[geo@data$ADMIN_NAME == "Eastern, Muchinga, Northern", "ADMIN_NAME"] <- "EasternNorthernMuchinga"
+geo@data[geo@data$ADMIN_NAME == "Eastern, Muchinga, Northern", "ADMIN_NAME"] <- "Eastern, Northern, Muchinga"
 
 subset <- geo
 subset@data$ID2 <- paste(subset@data$ADMIN_NAME)

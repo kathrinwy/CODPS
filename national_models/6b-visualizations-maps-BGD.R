@@ -31,7 +31,7 @@ setwd(paste0(input, iso, "-shapefiles"))
 
 geo <- readOGR(".", "sdr_subnational_boundaries") # load shapefile for  DHS data
 geo@data$DHSREGEN <- as.character(geo@data$DHSREGEN )
-geo@data[geo@data$DHSREGEN == "Rajshahi", "DHSREGEN"] <- "Rajshahi/Rangpur"
+geo@data[geo@data$DHSREGEN == "Rajshahi", "DHSREGEN"] <- "Rajshahi Rangpur"
 
 subset <- geo
 subset@data$ID2 <- paste(subset@data$DHSREGEN)

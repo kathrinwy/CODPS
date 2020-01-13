@@ -308,7 +308,7 @@ BFApopM <-   male.pop.2006[,c(5,4,1,3)]
 
 undercount <- read.csv.sql("undercount.csv", 
                            sql = "select * from file where country == 'BFA'")
-
+unlink('C:/Users/weny/AppData/Local/Temp/RtmpuqaK45/file40f46963532')
 BFApopF    <- merge(BFApopF, undercount[, c("name", "undercount")], by = "name")
 BFApopF$sum_age <- BFApopF$sum_age*(1+BFApopF$undercount)
 
