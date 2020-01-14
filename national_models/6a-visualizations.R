@@ -18,8 +18,7 @@ pop$Age <- as.character(pop$Age)
 
 pop$Age <- ifelse(pop$Age == "'5-9'", "5-9",
                   ifelse(pop$Age == "'10-14'", "10-14", 
-                         ifelse(pop$Age == "'1-4'", "1-4",
-                                ifelse(pop$Age == "'0-1'", "0-1", pop$Age))))
+                         ifelse(pop$Age == "'0-4'", "0-4", pop$Age)))
 
 pop.plot <- as.data.frame(dplyr::select(pop, c("ADM1_EN", "ADM1_PCODE", "Age", "Sex", "pop_2020")))
 

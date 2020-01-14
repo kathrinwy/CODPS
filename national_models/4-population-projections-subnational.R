@@ -65,4 +65,4 @@ setwd(code)
 # Visual inspection
 #region <- "Central"
 #pop.trajectories.plot(regpop.pred, region, sum.over.ages = TRUE)
-#pop.pyramid(regpop.pred, "Central", year = 2020)
+#pop.pyramid(regpop.pred, "South East", year = 2020)
