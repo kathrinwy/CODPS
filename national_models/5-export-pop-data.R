@@ -123,7 +123,7 @@ names(pop)  <- c("ADM1_EN", "ADM1_PCODE", "Sex", "Age", "pop_2015", "pop_2020")
 
 # Export ------------------------------------------------------------------
 
-# commented out as usually factors in Excel and CSV format are messed up and require manual manipulation
 write.csv(pop, file = file.path(paste0(iso,"_adm1_pop_2015_2020.csv")), row.names = FALSE, quote = FALSE)
+
 # Note in the case of Zamiba, regions divided by a ',' will be put into different columns --- currently manual adjustment needed
 setwd(code)

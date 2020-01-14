@@ -67,6 +67,22 @@ source("5-export-pop-data.R")
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BGD.R")
 
+# Bangladesh --------------------------------------------------------------
+
+country <- "Botswana"
+iso     <- "BWA"
+p.code  <- "BWA"
+country.code <- iso3166[iso3166$name == country, ][,4]
+year <- 2011
+
+source("2-read-input-data-BWA.R")                          
+source("3-tfr-subnational-projections.R")                    
+source("4-population-projections-subnational.R")    
+source("5-export-pop-data.R")                        
+source("6a-visualizations.R") 
+source("6b-visualizations-maps-BWA.R")
+
+
 # Cameroon --------------------------------------------------------------
 
 country <- "Cameroon"
