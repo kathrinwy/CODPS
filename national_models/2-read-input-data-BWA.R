@@ -29,11 +29,7 @@ BWA.census.2012         <- "ipumsi_00024.dat"
 census.ddi              <- read_ipums_ddi("ipumsi_00024.xml")
 census.data             <- read_ipums_micro(census.ddi, verbose = FALSE)
 
-unique(census.data$GEOLEV1)
 
-# Age 999 is an NA
-census.data$AGE[which(census.data$AGE == 999)] <- NA
-table(census.data$AGE)
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
 
 ## Age-Sex distribution, ADM0
@@ -45,77 +41,72 @@ asd.adm1 <- table(census.data$AGE,
                   census.data$SEX,
                   census.data$GEOLEV1)*census.data$PERWT[1]
 
-###########################################################################################
-# Smoothing
+#############################################################################
+# Smoothing -----------------------------------------------------------------
+# Calculate Noumbissi Index for ADM1 level data by male and female separately
+#############################################################################
 
-f.pop.all <- list()
+f.pop.all   <- list()
 m.pop.all   <- list()
-##Calculate Noumbissi Index for ADM1 level data:
+
+# For humanitarian use: if either male/female Noubmissi in any given adm1 region exceeds .25 deviation
+# from perfeciton (1) in any of the 10-digit Noumbissis → whole country is smoothed (by region and sex)  [impliying 
+# that smoothing relatively good data is less disadvantagous than not smoothing bad data]
+
+# Decided on 13 March 2020 by PDB, TD
 
 #asd.adm1[1,2,3]
 #c("age", "sex", "region")
 
-female.Noumbissi0 <- rep(0,length(asd.adm1[1,2,])) # length across all regions
-male.Noumbissi0   <- rep(0,length(asd.adm1[1,1,]))
+row.names      <- c(0:9)
+column.names   <- c(1:2) # 1- female || 2- male
+matrix.names   <- c(unique(census.data$GEOLEV1))
+noumbissi      <- array(data = NA, dim =c(10,2,length(asd.adm1[1,1,])), dimnames = list(row.names,column.names, matrix.names)) 
 
-for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi0[j] <- Noumbissi(asd.adm1[,2,j],0:94,ageMin = 20, ageMax = 85,digit=0)
-  male.Noumbissi0[j] <- Noumbissi(asd.adm1[,1,j],0:94,ageMin = 20, ageMax = 85,digit=0)
-} 
+for(k in row.names){                             # all age digits
+  for(j in column.names){                        # both sexes 1- female || 2- male
+    for(i in 1:length(asd.adm1[1,1,])){          # all ADM1 levels
+      
+      noumbissi[k+1, j, i] <- check_heaping_noumbissi(asd.adm1[,j,i],0:94,ageMin = 20,ageMax = 80,digit=k) 
+    }
+  }
+}
 
-female.Noumbissi5 <- rep(0,length(asd.adm1[1,2,]))
-male.Noumbissi5 <- rep(0,length(asd.adm1[1,1,]))
 
-for (j in 1:length(asd.adm1[1,1,])){
-  female.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:94,ageMin = 20, ageMax = 85,digit=5)
-  male.Noumbissi5[j] <- Noumbissi(asd.adm1[,2,j],0:94,ageMin = 20, ageMax = 85,digit=5)
-} 
-
-##Calculate mean relative difference for digit preference between ages 
-## ending in -0 and -5  
-rel.diff.female.05 <- 100*(female.Noumbissi0 - female.Noumbissi5)/(0.5*(female.Noumbissi0 + female.Noumbissi5))
-rel.diff.male.05 <- 100*(male.Noumbissi0 - male.Noumbissi5)/(0.5*(male.Noumbissi0 + male.Noumbissi5))
-mean(rel.diff.female.05)
-mean(rel.diff.male.05)
-
-##If female age preference for ages ending  0s and 5s differs by moe than 15%,
-##then smooth single-year ages for females using Spencer's smoothing technique 
-##(for ages 10-89), else use the raw data directly
-
+# Female
 f.pop <- asd.adm1[,2,]
 
 for(i in 1:length(asd.adm1[1,2,])){
-ifelse(mean(rel.diff.female.05) > 15, 
-       f.pop <- spencer(asd.adm1[,2,i],0:94),
-       f.pop <- asd.adm1[,2,i]
-)
-# Replace 0-9 and ages above 90 with asd.adm1 by default
-f.pop[1:10]    <- asd.adm1[1:10,2,i]
-f.pop[91:100]  <- c(asd.adm1[91:94,2,i], NA)
-
-f.pop.all[[i]] <- f.pop
+  
+  ifelse(any(noumbissi > 1.25 | noumbissi < 0.75) == T, 
+         f.pop <- spencer(asd.adm1[,2,i],0:94),
+         f.pop <- asd.adm1[,2,i]
+  )
+  
+  # Replace 0-9 and ages above 90 with asd.adm1 by default
+  f.pop[1:10]    <- asd.adm1[1:10,2,i]
+  f.pop[90:94]  <- c(asd.adm1[91:95,2,i])
+  
+  f.pop.all[[i]] <- f.pop
 }
-##If male age preference for ages ending  0s and 5s differs by moe than 15%,
-##then smooth single-year ages for males using Spencer's smoothing technique 
-##(for ages 10-89), else use the raw data directly
 
 
+# Male
 m.pop <- asd.adm1[,1,]
 
 for(i in 1:length(asd.adm1[1,1,])){
-ifelse(mean(rel.diff.male.05) > 15, 
-       m.pop <- spencer(asd.adm1[,1,i],0:94),
-       m.pop <- asd.adm1[,1,i]
-)
-
-# Replace 0-9 and ages above 90 with asd.adm1 by default
-m.pop[1:10]    <- asd.adm1[1:10,1,i]
-m.pop[91:100]  <- c(asd.adm1[91:94,1,i], NA)
-
-m.pop.all[[i]] <- m.pop
+  
+  ifelse(any(noumbissi > 1.25 | noumbissi < 0.75) == T, 
+         m.pop <- spencer(asd.adm1[,1,i],0:94),
+         m.pop <- asd.adm1[,1,i]
+  )
+  
+  # Replace 0-9 and ages above 90 with asd.adm1 by default
+  m.pop[1:10]    <- asd.adm1[1:10,1,i]
+  m.pop[90:94]  <- c(asd.adm1[91:95,1,i])
+  
+  m.pop.all[[i]] <- m.pop
 }
-
-
 
 ###########################################################################################
 
