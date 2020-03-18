@@ -31,6 +31,13 @@ census.data             <- read_ipums_micro(census.ddi, verbose = FALSE)
 
 
 ## Construct age/sex and age distributions, both by 1-yr and 5-yr
+table(census.data$AGE2)
+# Age2 98 is an NA
+census.data$AGE2[which(census.data$AGE2 == 98)] <- NA
+
+table(census.data$AGE)
+# Age 999 is an NA
+census.data$AGE[which(census.data$AGE == 999)] <- NA
 
 ## Age-Sex distribution, ADM0
 asd.adm0 <- census.data$PERWT[1] * table(census.data$AGE,
@@ -89,7 +96,6 @@ for(i in 1:length(asd.adm1[1,2,])){
   
   f.pop.all[[i]] <- f.pop
 }
-
 
 # Male
 m.pop <- asd.adm1[,1,]

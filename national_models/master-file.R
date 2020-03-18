@@ -67,7 +67,7 @@ source("5-export-pop-data.R")
 source("6a-visualizations.R") 
 source("6b-visualizations-maps-BGD.R")
 
-# Bangladesh --------------------------------------------------------------
+# Botswana ---------------------------------------------------------------
 
 country <- "Botswana"
 iso     <- "BWA"
